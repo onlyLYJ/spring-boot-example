@@ -58,7 +58,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
                 Date date = null;
                 try {
-                    date = sdf.parse((String) source);
+                    date = sdf.parse(source);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

@@ -24,7 +24,7 @@ spring:
         druid:
             url: jdbc:mysql://127.0.0.1:3306/jc_apply?useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull&autoReconnect=true&idleConnectionTestPeriod=120&preferredTestQuery=select now()&allowMultiQueries=true
             username: root
-            password: root
+            password: admin
             initial-size: 1
             min-idle: 1
             max-active: 20

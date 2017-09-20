@@ -1,0 +1,52 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Java template
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+*.iml
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+.idea/compiler.xml
+.idea/dictionaries/
+.idea/encodings.xml
+.idea/inspectionProfiles/
+.idea/libraries/
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+.idea/workspace.xml
+target/classes/META-INF/
+target/classes/application-dev.yml
+target/classes/application.yml
+target/classes/ehcache.xml
+target/classes/generator/
+target/classes/logback-spring.xml
+target/classes/mapper/
+target/classes/static/
+target/classes/templates/
+target/generated-sources/
+target/generated-test-sources/
+target/jc_apply-0.0.1-SNAPSHOT.jar.original
+target/maven-archiver/
+target/maven-status/
+.idea/dataSources.local.xml
+.idea/dataSources/

@@ -73,10 +73,7 @@ public class RateLimitUtil {
         if (i == 1L) {
             redisTemplate.expire(key, second, TimeUnit.SECONDS);
         }
-        if (i > acceptCount) {
-            return false;
-        }
-        return true;
+        return i <= acceptCount;
     }
 
     /**

@@ -12,6 +12,12 @@
         <plugin type="${mapper.plugin}">
             <property name="mappers" value="${mapper.Mapper}"/>
         </plugin>
+        <!--mybatis-generator-lombok插件-->
+        <plugin type="com.softwareloop.mybatis.generator.plugins.LombokPlugin">
+            <!-- enable annotations -->
+            <property name="builder" value="true"/>
+            <property name="allArgsConstructor" value="false"/>
+        </plugin>
 
         <commentGenerator>
             <property name="suppressDate" value="true"/>
@@ -25,7 +31,7 @@
         <javaTypeResolver>
             <property name="forceBigDecimals" value="true"/>
         </javaTypeResolver>
-        <javaModelGenerator targetPackage="${targetModelPackage}" targetProject="${targetJavaProject}">
+        <javaModelGenerator targetPackage="${targetBusinessModelPackage}" targetProject="${targetJavaProject}">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
@@ -41,10 +47,15 @@
         <!--<table tableName="%" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">-->
             <!--<generatedKey column="id" sqlStatement="Mysql" identity="true" />-->
         <!--</table>-->
+        <table tableName="meetingroom_book_change" domainObjectName="MeetingroomBookChange" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="meetingroom_book_detail" domainObjectName="MeetingroomBookDetail" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+
+        <!--<table tableName="meetingroom_daily_book_schedule" domainObjectName="MeetingroomDailyBookSchedule" enableCountByExample="false" enableUpdateByExample="true" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="false"></table>-->
+        <!--<table tableName="meetingroom" domainObjectName="Meetingroom" enableCountByExample="false" enableUpdateByExample="true" enableDeleteByExample="false" enableSelectByExample="true" selectByExampleQueryId="true"></table>-->
         <!--<table tableName="user" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
         <!--<table tableName="role" domainObjectName="Role" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
         <!--<table tableName="user_role" domainObjectName="UserRole" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
-        <table tableName="permission" domainObjectName="Permission" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <!--<table tableName="permission" domainObjectName="Permission" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
         <!--<table tableName="role_permission" domainObjectName="RolePermission" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
         <!--<table tableName="project_repay" domainObjectName="ProjectRepay" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
     </context>
