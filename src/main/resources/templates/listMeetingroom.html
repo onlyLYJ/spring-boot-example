@@ -1,0 +1,57 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: htmlhead" th:with="title='查询'"></head>
+
+<body>
+<div th:replace="layout :: navbar-admin">(navbar)</div>
+
+<div class="container-fluid">
+    <div class="starter-template">
+        <h1>会议室预定查询系统</h1>
+        <p>The current time is <span th:text="${currentTime}">(time)</span></p>
+    </div>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>会议室名</th>
+            <th>可容纳人数</th>
+            <th>可使用状态</th>
+            <th>备注</th>
+            <th>创建时间</th>
+            <th>更新时间</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-th-each="meetringroom : ${meetingroomList}">
+            <td data-th-text="${meetringroom.roomname}">...</td>
+            <td data-th-text="${meetringroom.capacity}">...</td>
+            <td data-th-text="${meetringroom.status}">...</td>
+            <td data-th-text="${meetringroom.remark}">...</td>
+            <td data-th-text="${#dates.format(meetringroom.createTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
+            <td data-th-text="${#dates.format(meetringroom.updateTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div th:include="layout :: footer" id="footer">(footer)</div>
+<script th:inline="javascript">
+    function goApplyList(id) {
+        alert(id);
+    }
+
+    var basePath = /*[[@{/}]]*/ '';
+    $("#addDefaultOvertimeMeals").click(function () {
+        $.post(basePath + "admin/addDefaultOvertimeMeals",
+            {}, function (data, status) {
+                if (data.c == '100') {
+                    alert("生成当天加班餐成功");
+                } else {
+                    alert(data.m);
+                }
+            });
+    });
+</script>
+</body>
+</html>
