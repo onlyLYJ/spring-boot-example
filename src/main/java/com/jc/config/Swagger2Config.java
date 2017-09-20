@@ -59,7 +59,7 @@ public class Swagger2Config {
         return new Docket(DocumentationType.SWAGGER_2)
                 //开关 生产环境关闭
                 .enable(enable)
-//					.host("127.0.0.1:8081")
+				.host("localhost:8080")
                 .pathProvider(new RelativePathProvider(servletContext) {
                     @Override
                     public String getApplicationBasePath() {
@@ -81,7 +81,7 @@ public class Swagger2Config {
                 .title("Spring Boot中使用Swagger2构建RESTful APIs")
                 .description("测试环境使用")
                 //创建人
-                .contact(new Contact("jasonzhu", "https://github.com/zsr251", "zsr251@163.com"))
+                .contact(new Contact("onlyLYJ", "https://github.com/onlyLYJ/", "stevenliyijun@163.com"))
                 .version("1.0")
                 .build();
     }

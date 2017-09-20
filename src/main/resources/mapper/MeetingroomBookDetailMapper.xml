@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jc.mapper.MeetingroomBookDetailMapper">
+    <resultMap id="BaseResultMap" type="com.jc.model.MeetingroomBookDetail">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="employee_id" property="employeeId" jdbcType="INTEGER"/>
+        <result column="meetingroom_id" property="meetingroomId" jdbcType="INTEGER"/>
+        <result column="book_reason" property="bookReason" jdbcType="VARCHAR"/>
+        <result column="attend_num" property="attendNum" jdbcType="INTEGER"/>
+        <result column="audit_status" property="auditStatus" jdbcType="VARCHAR"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--
+          WARNING - @mbg.generated
+        -->
+        id, employee_id, meetingroom_id, book_reason, attend_num, audit_status, remark, create_time,
+        update_time
+    </sql>
+</mapper>
