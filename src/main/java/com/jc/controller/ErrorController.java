@@ -2,8 +2,7 @@ package com.jc.controller;
 
 import com.jc.constant.ResultModel;
 import com.jc.exception.ApplyException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -17,15 +16,15 @@ import java.sql.SQLException;
  * Created by jasonzhu on 2017/7/14.
  */
 @ControllerAdvice
+@Slf4j
 public class ErrorController extends BaseController{
-    Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
      * 业务验证异常
      */
     @ExceptionHandler(value = ApplyException.class)
     @ResponseBody
     public ResultModel authException(ApplyException exception){
-        logger.warn("业务验证异常",exception);
+        log.warn("业务验证异常", exception);
         return buildErrorResponse(exception.getMessage());
     }
     /**
@@ -34,7 +33,7 @@ public class ErrorController extends BaseController{
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public ResultModel exception(Exception exception){
-        logger.error("未预期异常",exception);
+        log.error("未预期异常", exception);
         if (exception.getClass() == MethodArgumentNotValidException.class || exception.getClass() == HttpMessageNotReadableException.class)
             return buildErrorResponse("提交的参数异常，请检查后再提交");
         if (exception.getClass() == SQLException.class)

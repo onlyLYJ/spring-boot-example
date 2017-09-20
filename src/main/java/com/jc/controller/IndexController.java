@@ -14,9 +14,8 @@ import com.jc.util.RateLimitUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
@@ -60,6 +58,7 @@ import java.util.concurrent.TimeUnit;
 
 @Api(description = "员工使用接口")
 @Controller
+@Slf4j
 public class IndexController extends BaseController {
     @Autowired
     private ApplyService applyService;
@@ -67,7 +66,6 @@ public class IndexController extends BaseController {
     private ActivityService activityService;
     @Autowired
     private EmployeeService employeeService;
-    private Logger logger = LoggerFactory.getLogger(IndexController.class);
     //每秒五条请求 等待1秒
     private RateLimitUtil rateLimitUtil = new RateLimitUtil(5, 1);
 //    @Resource(name = "applyRateLimitUtil")
@@ -114,10 +112,10 @@ public class IndexController extends BaseController {
     @ResponseBody
     public ResultModel apply(HttpServletRequest request, @ApiParam(value = "英文名", defaultValue = "jasonzhu") @RequestParam String englishName, @RequestParam Integer activityId, String remark) {
         Future<Boolean> future = CompletableFuture.supplyAsync(rateLimitUtil::tryAcquire);
-        logger.debug("用户【{}】申请预约【{}】备注【{}】ip【{}】", englishName, activityId, remark, getRemoteIp(request));
+        log.debug("用户【{}】申请预约【{}】备注【{}】ip【{}】", englishName, activityId, remark, getRemoteIp(request));
         try {
             if (!future.get(3, TimeUnit.SECONDS)) {
-                logger.warn("访问频次限制触发，用户【{}】申请预约【{}】", englishName, activityId);
+                log.warn("访问频次限制触发，用户【{}】申请预约【{}】", englishName, activityId);
                 return buildLimitResponse();
             }
         } catch (Exception e) {
@@ -126,12 +124,12 @@ public class IndexController extends BaseController {
         englishName = englishName.trim();
         GetEmployeeCommand getEmployeeCommand = new GetEmployeeCommand(employeeService::getEmployee, englishName);
         Future<Employee> getEmployeeFuture = getEmployeeCommand.queue();
-        logger.debug("查询用户【{}】是否存在", englishName);
+        log.debug("查询用户【{}】是否存在", englishName);
         Employee employee;
         try {
             employee = getEmployeeFuture.get(2, TimeUnit.SECONDS);
         } catch (Exception e) {
-            logger.warn("查询用户【{}】失败 原因:{}", englishName, e.getMessage());
+            log.warn("查询用户【{}】失败 原因:{}", englishName, e.getMessage());
             return buildErrorResponse("查询用户失败");
         }
         if (employee == null) return buildErrorResponse("请先注册");
