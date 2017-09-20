@@ -51,7 +51,7 @@ public class TimeStatisticsAspect {
         TimeStatistics timeStatistics = method.getAnnotation(TimeStatistics.class);
         long begin = 0;
         Map<String, Long> timeMap = threadLocalTime.get();
-        if (timeMap!=null){
+        if (timeMap != null) {
             begin = timeMap.get(method.getName());
         }
         long now = System.currentTimeMillis();

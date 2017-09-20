@@ -17,22 +17,23 @@ import java.sql.SQLException;
  */
 @ControllerAdvice
 @Slf4j
-public class ErrorController extends BaseController{
+public class ErrorController extends BaseController {
     /**
      * 业务验证异常
      */
     @ExceptionHandler(value = ApplyException.class)
     @ResponseBody
-    public ResultModel authException(ApplyException exception){
+    public ResultModel authException(ApplyException exception) {
         log.warn("业务验证异常", exception);
         return buildErrorResponse(exception.getMessage());
     }
+
     /**
      * 未知异常或参数异常
      */
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public ResultModel exception(Exception exception){
+    public ResultModel exception(Exception exception) {
         log.error("未预期异常", exception);
         if (exception.getClass() == MethodArgumentNotValidException.class || exception.getClass() == HttpMessageNotReadableException.class)
             return buildErrorResponse("提交的参数异常，请检查后再提交");

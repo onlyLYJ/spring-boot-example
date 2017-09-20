@@ -11,7 +11,6 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -59,11 +58,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 //静态文件和首页 允许所有人访问
-                .antMatchers("/","/index", "/webjarslocator/**", "/static/**", "/webjars/**").permitAll()
+                .antMatchers("/", "/index", "/webjarslocator/**", "/static/**", "/webjars/**").permitAll()
 //                //swagger相关链接
 //                .antMatchers("/swagger-ui.html", "/v2/api-docs").permitAll()
                 //报名相关 不需要登录
-                .antMatchers("/apply","/cancelApply","/addEmployee","/getCanApply").permitAll()
+                .antMatchers("/apply", "/cancelApply", "/addEmployee", "/getCanApply").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().fullyAuthenticated()
                 .and()

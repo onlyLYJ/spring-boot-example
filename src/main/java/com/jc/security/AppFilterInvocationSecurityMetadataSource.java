@@ -25,17 +25,17 @@ public class AppFilterInvocationSecurityMetadataSource implements FilterInvocati
     @Autowired
     private PermissionMapper permissionMapper;
 
-    private HashMap<String, Collection<ConfigAttribute>> map =null;
+    private HashMap<String, Collection<ConfigAttribute>> map = null;
 
     /**
      * 加载资源，初始化资源变量
      */
-    public void loadResourceDefine(){
+    public void loadResourceDefine() {
         map = new HashMap<>();
         Collection<ConfigAttribute> array;
         ConfigAttribute cfg;
         List<Permission> permissions = permissionMapper.selectAll();
-        for(Permission permission : permissions) {
+        for (Permission permission : permissions) {
             array = new ArrayList<>();
             cfg = new SecurityConfig(permission.getName());
             array.add(cfg);
@@ -45,12 +45,12 @@ public class AppFilterInvocationSecurityMetadataSource implements FilterInvocati
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
-        if(map ==null) loadResourceDefine();
+        if (map == null) loadResourceDefine();
         HttpServletRequest request = ((FilterInvocation) o).getHttpRequest();
         AntPathRequestMatcher matcher;
         for (String key : map.keySet()) {
             matcher = new AntPathRequestMatcher(key);
-            if (matcher.matches(request)){
+            if (matcher.matches(request)) {
                 return map.get(key);
             }
         }

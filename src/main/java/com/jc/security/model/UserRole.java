@@ -1,6 +1,8 @@
 package com.jc.security.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Table(name = "user_role")
 public class UserRole {

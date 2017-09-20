@@ -1,6 +1,6 @@
 package com.jc.security.model;
 
-import javax.persistence.*;
+import javax.persistence.Id;
 
 public class Role {
     /**

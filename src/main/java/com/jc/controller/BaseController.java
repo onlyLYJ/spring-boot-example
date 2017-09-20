@@ -19,107 +19,112 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 public class BaseController {
     public static final Logger logger = LoggerFactory.getLogger(BaseController.class);
 
-	protected <T extends Serializable> ResultModel<T> buildErrorResponse(String msg) {
-		ResultModel<T> model = new ResultModel<T>();
-		model.setCode(ResultModel.RESULT_ERROR);
-		model.setMsg(msg);
-		return model;
-	}
+    protected <T extends Serializable> ResultModel<T> buildErrorResponse(String msg) {
+        ResultModel<T> model = new ResultModel<T>();
+        model.setCode(ResultModel.RESULT_ERROR);
+        model.setMsg(msg);
+        return model;
+    }
 
-	protected <T extends Serializable> ResultModel<T> buildErrorResponse(String msg, T obj) {
-		ResultModel<T> model = new ResultModel<T>();
-		model.setCode(ResultModel.RESULT_ERROR);
-		model.setMsg(msg);
-		model.setData(obj);
-		return model;
-	}
+    protected <T extends Serializable> ResultModel<T> buildErrorResponse(String msg, T obj) {
+        ResultModel<T> model = new ResultModel<T>();
+        model.setCode(ResultModel.RESULT_ERROR);
+        model.setMsg(msg);
+        model.setData(obj);
+        return model;
+    }
 
-	protected <T extends Serializable> ResultModel<T>  buildNoPermissionResponse() {
-		return buildNoPermissionResponse("没有权限访问");
-	}
-	protected <T extends Serializable> ResultModel<T> buildNoPermissionResponse(String msg) {
-		ResultModel<T> model = new ResultModel<T>();
-		model.setCode(ResultModel.RESULT_NOPERMISSION);
-		model.setMsg(msg);
-		return model;
-	}
-	protected <T extends Serializable> ResultModel<T> buildLimitResponse() {
-		return buildLimitResponse("访问过于频繁，请稍后再试!");
-	}
-	protected <T extends Serializable> ResultModel<T> buildLimitResponse(String msg) {
-		ResultModel<T> model = new ResultModel<T>();
-		model.setCode(ResultModel.RESULT_NOPERMISSION_LIMIT);
-		model.setMsg(msg);
-		return model;
-	}
-	protected <T extends Serializable> ResultModel<T> buildAuthInvalidResponse(String msg) {
-		ResultModel<T> model = new ResultModel<T>();
-		model.setCode(ResultModel.RESULT_AUTH_INVALID);
-		model.setMsg(msg);
-		return model;
-	}
+    protected <T extends Serializable> ResultModel<T> buildNoPermissionResponse() {
+        return buildNoPermissionResponse("没有权限访问");
+    }
 
-	protected <T extends Serializable> ResultModel<T> buildJCErrorResponse(String msg, T obj) {
-		ResultModel<T> model = new ResultModel<T>();
-		model.setCode(ResultModel.RESULT_JIECAI_ERROR);
-		model.setMsg(msg);
-		model.setData(obj);
-		return model;
-	}
-	protected <T extends Serializable> ResultModel<T> buildSuccessResponse() {
-		return buildSuccessResponse(null);
-	}
-	protected <T extends Serializable> ResultModel<T> buildSuccessResponse(T obj) {
-		ResultModel<T> model = new ResultModel<T>();
-		model.setCode(ResultModel.RESULT_SUCCESS);
-		model.setMsg("成功");
-		model.setData(obj);
-		return model;
-	}
+    protected <T extends Serializable> ResultModel<T> buildNoPermissionResponse(String msg) {
+        ResultModel<T> model = new ResultModel<T>();
+        model.setCode(ResultModel.RESULT_NOPERMISSION);
+        model.setMsg(msg);
+        return model;
+    }
 
-	private <T> Map<String, Object> parseDTO(T obj) {
-		Map<String, Object> map = new HashMap<>();
-		if (obj != null) {
-			Set<Field> fset = new HashSet<>();
-			fset.addAll(getAllFields(obj.getClass()));
-			for (Field f: fset) {
-				f.setAccessible(true);
-				if (f.getType() == BigDecimal.class) {
-					try {
-						map.put(f.getName(), f.get(obj) != null ?  String.valueOf((f.get(obj))) : null );
-					} catch ( Exception e) {
-						logger.error(f.getName() + "解析失败");
-					}
-				} else if (f.getType().getName().endsWith("DTO")) {
-					try {
-						map.put(f.getName(), parseDTO(f.get(obj)));
-					} catch ( Exception e) {
-						logger.error(f.getName() + "解析失败");
-					}
-				}
-				else {
-					try {
-						map.put(f.getName(),f.get(obj));
-					} catch ( Exception e) {
-						logger.error(f.getName() + "解析失败");
-					}
-				}
-			}
-		}
+    protected <T extends Serializable> ResultModel<T> buildLimitResponse() {
+        return buildLimitResponse("访问过于频繁，请稍后再试!");
+    }
 
-		return map;
-	}
+    protected <T extends Serializable> ResultModel<T> buildLimitResponse(String msg) {
+        ResultModel<T> model = new ResultModel<T>();
+        model.setCode(ResultModel.RESULT_NOPERMISSION_LIMIT);
+        model.setMsg(msg);
+        return model;
+    }
+
+    protected <T extends Serializable> ResultModel<T> buildAuthInvalidResponse(String msg) {
+        ResultModel<T> model = new ResultModel<T>();
+        model.setCode(ResultModel.RESULT_AUTH_INVALID);
+        model.setMsg(msg);
+        return model;
+    }
+
+    protected <T extends Serializable> ResultModel<T> buildJCErrorResponse(String msg, T obj) {
+        ResultModel<T> model = new ResultModel<T>();
+        model.setCode(ResultModel.RESULT_JIECAI_ERROR);
+        model.setMsg(msg);
+        model.setData(obj);
+        return model;
+    }
+
+    protected <T extends Serializable> ResultModel<T> buildSuccessResponse() {
+        return buildSuccessResponse(null);
+    }
+
+    protected <T extends Serializable> ResultModel<T> buildSuccessResponse(T obj) {
+        ResultModel<T> model = new ResultModel<T>();
+        model.setCode(ResultModel.RESULT_SUCCESS);
+        model.setMsg("成功");
+        model.setData(obj);
+        return model;
+    }
+
+    private <T> Map<String, Object> parseDTO(T obj) {
+        Map<String, Object> map = new HashMap<>();
+        if (obj != null) {
+            Set<Field> fset = new HashSet<>();
+            fset.addAll(getAllFields(obj.getClass()));
+            for (Field f : fset) {
+                f.setAccessible(true);
+                if (f.getType() == BigDecimal.class) {
+                    try {
+                        map.put(f.getName(), f.get(obj) != null ? String.valueOf((f.get(obj))) : null);
+                    } catch (Exception e) {
+                        logger.error(f.getName() + "解析失败");
+                    }
+                } else if (f.getType().getName().endsWith("DTO")) {
+                    try {
+                        map.put(f.getName(), parseDTO(f.get(obj)));
+                    } catch (Exception e) {
+                        logger.error(f.getName() + "解析失败");
+                    }
+                } else {
+                    try {
+                        map.put(f.getName(), f.get(obj));
+                    } catch (Exception e) {
+                        logger.error(f.getName() + "解析失败");
+                    }
+                }
+            }
+        }
+
+        return map;
+    }
 
 
-	private Set<Field> getAllFields(Class t) {
-		Set<Field> fset = new HashSet<>();
-		Field[] deClaredFields = t.getDeclaredFields();
-		fset.addAll(Arrays.asList(deClaredFields));
-		Class c = t.getSuperclass();
-		if ( c != null)
-			fset.addAll(getAllFields(c));
-		return fset;
-	}
+    private Set<Field> getAllFields(Class t) {
+        Set<Field> fset = new HashSet<>();
+        Field[] deClaredFields = t.getDeclaredFields();
+        fset.addAll(Arrays.asList(deClaredFields));
+        Class c = t.getSuperclass();
+        if (c != null)
+            fset.addAll(getAllFields(c));
+        return fset;
+    }
 
 
 //    public User getUser () throws AuthException {
@@ -142,26 +147,27 @@ public class BaseController {
 //		return u;
 //	}
 
-	protected boolean isMoblieClient(HttpServletRequest request) {
-		boolean flag = false;
-		String agent = request.getHeader("user-agent");
-		String[] keywords = {"Android", "iPhone", "iPod", "iPad", "Windows Phone", "MQQBrowser"};
-		if (!agent.contains("Windows NT") ||
-				(agent.contains("Windows NT") && agent.contains("compatible; MSIE 9.0;"))) {
-			if (!agent.contains("Windows NT") && !agent.contains("Macintosh")) {
-				for (String item : keywords) {
-					if (agent.contains(item)) {
-						flag = true;
-						break;
-					}
-				}
-			}
-		}
-		return flag;
-	}
+    protected boolean isMoblieClient(HttpServletRequest request) {
+        boolean flag = false;
+        String agent = request.getHeader("user-agent");
+        String[] keywords = {"Android", "iPhone", "iPod", "iPad", "Windows Phone", "MQQBrowser"};
+        if (!agent.contains("Windows NT") ||
+                (agent.contains("Windows NT") && agent.contains("compatible; MSIE 9.0;"))) {
+            if (!agent.contains("Windows NT") && !agent.contains("Macintosh")) {
+                for (String item : keywords) {
+                    if (agent.contains(item)) {
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return flag;
+    }
 
     /**
      * 获得真实ip
+     *
      * @param request
      * @return
      */
@@ -184,7 +190,7 @@ public class BaseController {
             ip = request.getRemoteAddr();
         }
         // 可是，如果通过了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP值
-        if(ip != null && ip.length() > 15) {
+        if (ip != null && ip.length() > 15) {
             int index = ip.indexOf(",");
             if (index > -1) {
                 ip = ip.substring(0, index);
@@ -193,18 +199,19 @@ public class BaseController {
         return ip;
     }
 
-	/**
-	 * 通用框架校验异常处理
-	 * @param res
-	 * @return
-	 */
-	ResultModel commonValidate(BindingResult res) {
-		if (res.getErrorCount() > 0) {
-			StringBuilder errorMsg = new StringBuilder();
-			res.getFieldErrors().forEach(error -> errorMsg.append("[").append(error.getDefaultMessage()).append("]"));
-			return buildErrorResponse(errorMsg.toString());
-		}
-		return null;
-	}
+    /**
+     * 通用框架校验异常处理
+     *
+     * @param res
+     * @return
+     */
+    ResultModel commonValidate(BindingResult res) {
+        if (res.getErrorCount() > 0) {
+            StringBuilder errorMsg = new StringBuilder();
+            res.getFieldErrors().forEach(error -> errorMsg.append("[").append(error.getDefaultMessage()).append("]"));
+            return buildErrorResponse(errorMsg.toString());
+        }
+        return null;
+    }
 
 }

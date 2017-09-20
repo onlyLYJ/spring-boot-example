@@ -3,7 +3,7 @@ package com.jc.security.model;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-import javax.persistence.*;
+import javax.persistence.Id;
 
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)

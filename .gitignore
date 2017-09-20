@@ -51,13 +51,3 @@ target/maven-status/
 .idea/dataSources.local.xml
 .idea/dataSources/
 /.idea/
-src/main/java/com/jc/mapper/MeetingroomBookChangeMapper.java
-src/main/java/com/jc/mapper/MeetingroomBookDetailMapper.java
-src/main/java/com/jc/mapper/MeetingroomDailyBookScheduleMapper.java
-src/main/java/com/jc/mapper/MeetingroomMapper.java
-src/main/java/com/jc/mapper/example/
-src/main/resources/mapper/MeetingroomBookChangeMapper.xml
-src/main/resources/mapper/MeetingroomBookDetailMapper.xml
-src/main/resources/mapper/MeetingroomDailyBookScheduleMapper.xml
-src/main/resources/mapper/MeetingroomMapper.xml
-!/.idea/

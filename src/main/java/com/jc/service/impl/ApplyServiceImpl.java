@@ -13,9 +13,7 @@ import com.jc.model.Activity;
 import com.jc.model.ActivityApply;
 import com.jc.model.Employee;
 import com.jc.service.ApplyService;
-import io.swagger.models.auth.In;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
@@ -26,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by jasonzhu on 2017/7/13.
@@ -42,7 +39,7 @@ public class ApplyServiceImpl implements ApplyService {
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
-    @CacheEvict(value = "demoCache",key = "new String('canApplyActivity')")
+    @CacheEvict(value = "demoCache", key = "new String('canApplyActivity')")
     @TimeStatistics(name = "报名")
     public ActivityApply addApply(Integer activityId, Integer employeeId, String remark) throws ApplyException {
         Preconditions.checkNotNull(activityId, "活动ID不能为空");
@@ -82,7 +79,7 @@ public class ApplyServiceImpl implements ApplyService {
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
-    @CacheEvict(value = "demoCache",key = "new String('canApplyActivity')")
+    @CacheEvict(value = "demoCache", key = "new String('canApplyActivity')")
     @TimeStatistics(name = "取消报名")
     public boolean cancelApply(Integer activityId, Integer employeeId) {
         Preconditions.checkNotNull(activityId, "活动ID不能为空");
@@ -137,10 +134,10 @@ public class ApplyServiceImpl implements ApplyService {
     }
 
     @Override
-    public List<ActivityApply> getApplyList(Integer activityId){
+    public List<ActivityApply> getApplyList(Integer activityId) {
         Preconditions.checkNotNull(activityId, "参数不能为空");
         List<ActivityApply> list = applyMapper.getApplyList(activityId);
-        return list==null?Lists.newArrayList():list;
+        return list == null ? Lists.newArrayList() : list;
     }
 
     @Override

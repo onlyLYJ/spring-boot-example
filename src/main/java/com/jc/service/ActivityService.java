@@ -11,19 +11,22 @@ import java.util.List;
 public interface ActivityService {
     /**
      * 增加活动
-      * @param record
+     *
+     * @param record
      * @return
      */
     Activity addActivity(Activity record);
 
     /**
      * 增加默认加班晚餐
+     *
      * @return
      */
     Activity addDefaultOvertimeMeals();
 
     /**
      * 修改活动
+     *
      * @param record
      * @return
      */
@@ -31,17 +34,21 @@ public interface ActivityService {
 
     /**
      * 获得可预约活动
+     *
      * @return
      */
     List<Activity> getCanApplyActivity();
 
     /**
      * 刷新可预约活动缓存
+     *
      * @return
      */
     boolean updateCanApplyActivityCache();
+
     /**
      * 获得活动
+     *
      * @param record
      * @return
      */
@@ -49,9 +56,10 @@ public interface ActivityService {
 
     /**
      * 获得活动
+     *
      * @param pageNum
      * @param pageSize
      * @return
      */
-    PageInfo<Activity> getActivity(int pageNum,int pageSize);
+    PageInfo<Activity> getActivity(int pageNum, int pageSize);
 }

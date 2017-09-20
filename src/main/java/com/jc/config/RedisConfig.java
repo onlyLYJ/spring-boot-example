@@ -23,11 +23,12 @@ public class RedisConfig {
 
     /**
      * 流量限制器
+     *
      * @param redisTemplate
      * @return
      */
     @Bean("applyRateLimitUtil")
-    public RateLimitUtil applyRateLimitUtil(RedisTemplate redisTemplate){
-        return new RateLimitUtil(redisTemplate,"apply",5, 1);
+    public RateLimitUtil applyRateLimitUtil(RedisTemplate redisTemplate) {
+        return new RateLimitUtil(redisTemplate, "apply", 5, 1);
     }
 }

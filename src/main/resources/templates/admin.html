@@ -3,7 +3,7 @@
 <head th:include="layout :: htmlhead" th:with="title='管理'"></head>
 
 <body>
-<div th:replace="layout :: navbar-admin" >(navbar)</div>
+<div th:replace="layout :: navbar-admin">(navbar)</div>
 
 <div class="container-fluid">
     <div class="starter-template">
@@ -36,8 +36,10 @@
     </table>
     <nav aria-label="...">
         <ul class="pager">
-            <li class="previous"><a th:href="@{'/admin/index?pageNum='+${page.prePage}}"><span aria-hidden="true">&larr;</span> 上一页</a></li>
-            <li class="next"><a th:href="@{'/admin/index?pageNum='+${page.nextPage}}">下一页 <span aria-hidden="true">&rarr;</span></a></li>
+            <li class="previous"><a th:href="@{'/admin/index?pageNum='+${page.prePage}}"><span
+                    aria-hidden="true">&larr;</span> 上一页</a></li>
+            <li class="next"><a th:href="@{'/admin/index?pageNum='+${page.nextPage}}">下一页 <span aria-hidden="true">&rarr;</span></a>
+            </li>
         </ul>
     </nav>
 </div>
@@ -45,18 +47,20 @@
 <div th:include="layout :: footer" id="footer">(footer)</div>
 <script th:inline="javascript">
     var basePath = /*[[@{/}]]*/ '';
+
     function goApplyList(id) {
-        window.open(basePath + 'admin/applyList?activityId='+id);
+        window.open(basePath + 'admin/applyList?activityId=' + id);
     }
+
     $("#addDefaultOvertimeMeals").click(function () {
         $.post(basePath + "admin/addDefaultOvertimeMeals",
-                {}, function (data, status) {
-                    if (data.c == '100'){
-                        alert("生成当天加班餐成功");
-                    }else{
-                        alert(data.m);
-                    }
-                });
+            {}, function (data, status) {
+                if (data.c == '100') {
+                    alert("生成当天加班餐成功");
+                } else {
+                    alert(data.m);
+                }
+            });
     });
 </script>
 </body>

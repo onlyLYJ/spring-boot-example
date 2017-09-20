@@ -69,12 +69,14 @@
 <div th:include="layout :: footer" id="footer">(footer)</div>
 <script th:inline="javascript">
     var basePath = /*[[@{/}]]*/ '';
+
     function initApplyModel(id, activityName, remark) {
         $("#activityId").val(id);
         $("#showEnglishName").text($("#englishName").val());
         $("#showActivityName").text(activityName);
         $("#showRemark").text(remark);
     }
+
     $("#apply").click(function () {
         var englishName = $("#englishName").val();
         var activityId = $("#activityId").val();
@@ -87,17 +89,17 @@
             return;
         }
         $.post(basePath + "apply",
-                {
-                    englishName: englishName,
-                    activityId: activityId
-                }, function (data, status) {
-                    if (data.c == '100'){
-                        alert("报名成功");
-                        window.location.reload();
-                    }else{
-                        alert(data.m);
-                    }
-                });
+            {
+                englishName: englishName,
+                activityId: activityId
+            }, function (data, status) {
+                if (data.c == '100') {
+                    alert("报名成功");
+                    window.location.reload();
+                } else {
+                    alert(data.m);
+                }
+            });
     });
     $("#cancelApply").click(function () {
         var englishName = $("#englishName").val();
@@ -111,17 +113,17 @@
             return;
         }
         $.post(basePath + "cancelApply",
-                {
-                    englishName: englishName,
-                    activityId: activityId
-                }, function (data, status) {
-                    if (data.c == '100'){
-                        alert("取消报名成功");
-                        window.location.reload();
-                    }else{
-                        alert(data.m);
-                    }
-                });
+            {
+                englishName: englishName,
+                activityId: activityId
+            }, function (data, status) {
+                if (data.c == '100') {
+                    alert("取消报名成功");
+                    window.location.reload();
+                } else {
+                    alert(data.m);
+                }
+            });
     });
 </script>
 </body>

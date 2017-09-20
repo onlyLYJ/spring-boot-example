@@ -1,11 +1,8 @@
 package com.jc.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.springframework.format.annotation.DateTimeFormat;
-
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.*;
 
 public class Activity implements Serializable {
     private static final long serialVersionUID = 8737272002167661539L;

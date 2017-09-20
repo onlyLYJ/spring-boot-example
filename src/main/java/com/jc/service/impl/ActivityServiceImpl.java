@@ -9,7 +9,6 @@ import com.jc.exception.ApplyException;
 import com.jc.mapper.ActivityMapper;
 import com.jc.model.Activity;
 import com.jc.service.ActivityService;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -17,9 +16,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
-import javax.annotation.Resource;
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -59,7 +55,7 @@ public class ActivityServiceImpl implements ActivityService {
     public Activity addDefaultOvertimeMeals() {
         Activity record = new Activity();
         record.setActivityName("加班餐（晚餐）");
-        Date d = DateUtils.setMilliseconds(DateUtils.setMinutes(DateUtils.setSeconds(new Date(), 0), 0),0);
+        Date d = DateUtils.setMilliseconds(DateUtils.setMinutes(DateUtils.setSeconds(new Date(), 0), 0), 0);
         record.setStartTime(DateUtils.setHours(d, 18));
         record.setApplyBeginTime(DateUtils.setHours(d, 9));
         record.setApplyEndTime(DateUtils.setHours(d, 16));
@@ -68,7 +64,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    @CacheEvict(value = "demoCache",key = "#record.id",condition = "#record.id != null")
+    @CacheEvict(value = "demoCache", key = "#record.id", condition = "#record.id != null")
     public boolean updateActivity(Activity record) {
         Preconditions.checkNotNull(record, "参数不能为空");
         Preconditions.checkNotNull(record.getId(), "活动ID不能为空");
@@ -76,7 +72,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    @Cacheable(value = "demoCache",key = "new String('canApplyActivity')")
+    @Cacheable(value = "demoCache", key = "new String('canApplyActivity')")
     @TimeStatistics(name = "获得可报名活动")
     public List<Activity> getCanApplyActivity() {
         Date now = new Date();
@@ -86,13 +82,13 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    @CacheEvict(value = "demoCache",key = "new String('canApplyActivity')")
+    @CacheEvict(value = "demoCache", key = "new String('canApplyActivity')")
     public boolean updateCanApplyActivityCache() {
         return true;
     }
 
     @Override
-    @Cacheable(value = "demoCache",key = "#record.id",condition = "#record.id != null")
+    @Cacheable(value = "demoCache", key = "#record.id", condition = "#record.id != null")
     public List<Activity> getActivity(Activity record) {
         Preconditions.checkNotNull(record, "参数不能为空");
         List<Activity> activities = Lists.newArrayList();
@@ -115,25 +111,26 @@ public class ActivityServiceImpl implements ActivityService {
 
     /**
      * 根据数据修改状态
+     *
      * @param activity
      */
-    public static void setStatus(Activity activity){
-        if (activity==null) return;
+    public static void setStatus(Activity activity) {
+        if (activity == null) return;
         if ("1".equals(activity.getStatus())) {
             activity.setStatus("已取消");
             return;
         }
         Date now = new Date();
-        if ("0".equals(activity.getStatus())){
+        if ("0".equals(activity.getStatus())) {
             if (activity.getApplyBeginTime().after(now)) {
                 activity.setStatus("报名未开始");
                 return;
             }
-            if (activity.getApplyEndTime().after(now)){
+            if (activity.getApplyEndTime().after(now)) {
                 activity.setStatus("报名中");
                 return;
             }
-            if (activity.getApplyEndTime().before(now)){
+            if (activity.getApplyEndTime().before(now)) {
                 activity.setStatus("报名已结束");
                 return;
             }

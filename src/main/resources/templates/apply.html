@@ -3,7 +3,7 @@
 <head th:include="layout :: htmlhead" th:with="title='查询'"></head>
 
 <body>
-<div th:replace="layout :: navbar-admin" >(navbar)</div>
+<div th:replace="layout :: navbar-admin">(navbar)</div>
 
 <div class="container-fluid">
     <div class="starter-template">
@@ -22,7 +22,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr data-th-each="activityApply : ${list}" >
+        <tr data-th-each="activityApply : ${list}">
             <td data-th-text="${activityApply.activityName}">...</td>
             <td data-th-text="${activityApply.department}">...</td>
             <td data-th-text="${activityApply.realName}">...</td>
@@ -38,16 +38,17 @@
     function goApplyList(id) {
         alert(id);
     }
+
     var basePath = /*[[@{/}]]*/ '';
     $("#addDefaultOvertimeMeals").click(function () {
         $.post(basePath + "admin/addDefaultOvertimeMeals",
-                {}, function (data, status) {
-                    if (data.c == '100'){
-                        alert("生成当天加班餐成功");
-                    }else{
-                        alert(data.m);
-                    }
-                });
+            {}, function (data, status) {
+                if (data.c == '100') {
+                    alert("生成当天加班餐成功");
+                } else {
+                    alert(data.m);
+                }
+            });
     });
 </script>
 </body>

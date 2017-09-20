@@ -12,6 +12,7 @@ import java.util.List;
 public interface UserService {
     /**
      * 根据用户名查找用户
+     *
      * @param username
      * @return
      */
@@ -19,6 +20,7 @@ public interface UserService {
 
     /**
      * 根据用户ID查找角色
+     *
      * @param userId
      * @return
      */
@@ -26,6 +28,7 @@ public interface UserService {
 
     /**
      * 根据用户ID查找权限
+     *
      * @param userId
      * @return
      */

@@ -73,8 +73,7 @@ public class GetEmployeeCommand extends HystrixCommand<Employee> {
                 //开关闭合情况下 失败率判断之前一个采样周期必须进行N个请求 默认20
                 .withCircuitBreakerRequestVolumeThreshold(20)
                 //熔断后重试窗口 只允许一次重试 默认5000ms
-                .withCircuitBreakerSleepWindowInMilliseconds(5000)
-                ;
+                .withCircuitBreakerSleepWindowInMilliseconds(5000);
 
         return HystrixCommand.Setter.withGroupKey(groupKey)
                 .andCommandKey(commandKey)
@@ -87,17 +86,18 @@ public class GetEmployeeCommand extends HystrixCommand<Employee> {
      * 信号量隔离配置
      * 只限制了总的并发数 同步调用 没有线程池
      */
-    private static Setter semaphoreSetter(){
+    private static Setter semaphoreSetter() {
         //服务分组 全局唯一服务分组名，相同分组的服务会聚合在一起
         HystrixCommandGroupKey groupKey = HystrixCommandGroupKey.Factory.asKey("employee");
         //服务标识 全局唯一标识服务名 默认简单类名
         HystrixCommandKey commandKey = HystrixCommandKey.Factory.asKey("getEmployee");
-        HystrixCommandProperties.Setter commandProperties =  HystrixCommandProperties.Setter()
+        HystrixCommandProperties.Setter commandProperties = HystrixCommandProperties.Setter()
                 .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE)
                 .withExecutionIsolationSemaphoreMaxConcurrentRequests(50);
         return HystrixCommand.Setter.withGroupKey(groupKey)
                 .andCommandPropertiesDefaults(commandProperties);
     }
+
     @Override
     protected Employee run() throws Exception {
         return function.apply(record);

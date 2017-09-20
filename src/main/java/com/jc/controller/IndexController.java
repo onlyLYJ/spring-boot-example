@@ -91,6 +91,7 @@ public class IndexController extends BaseController {
 
     /**
      * 刷新缓存
+     *
      * @return
      */
     @RequestMapping(value = "refresh", method = RequestMethod.GET)
