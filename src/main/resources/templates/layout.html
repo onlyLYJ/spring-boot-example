@@ -25,6 +25,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" th:href="@{/index}">报名系统</a>
+            <a class="navbar-brand" th:href="@{/meetingroom}">会议室预定系统</a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -46,6 +47,8 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" th:href="@{/index}">报名系统</a>
+            <a class="navbar-brand" th:href="@{/meetingroom}">会议室预定系统</a>
+
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
@@ -263,41 +266,41 @@
             } else {
                 meetingroomStatusA = '0'
             }
-
-//            $.post(basePath + "meetingroom/add",
-//                {
-//                    roomname: roomnameA,
-//                    capacity: meetingroomCapacityA,
-//                    status: meetingroomStatusA,
-//                    remark: meetingroomRemarkA
-//                }, function (data, status) {
-//                    if (data.c == '100') {
-//                        alert("会议室创建成功");
-//                    } else {
-//                        alert(data.m);
-//                    }
-//                });
             var meetingroomPath = "http://localhost:8080"
-            $.ajax({
-                type: "POST",
-                async: false,
-                url: meetingroomPath + "/meetingroom/add",
-                dataType: "html",
-                contentType: "application/json",
-                data: JSON.stringify({
+            $.post(meetingroomPath + "/meetingroom/add",
+                {
                     roomname: roomnameA,
                     capacity: meetingroomCapacityA,
                     status: meetingroomStatusA,
                     remark: meetingroomRemarkA
-                }),
-                success: function (data, status) {
+                }, function (data, status) {
                     if (data.c == '100') {
                         alert("会议室创建成功");
                     } else {
                         alert(data.m);
                     }
-                }
-            });
+                });
+
+//            $.ajax({
+//                type: "POST",
+//                async: false,
+//                url: meetingroomPath + "/meetingroom/add",
+//                dataType: "html",
+//                contentType: "application/json",
+//                data: JSON.stringify({
+//                    roomname: roomnameA,
+//                    capacity: meetingroomCapacityA,
+//                    status: meetingroomStatusA,
+//                    remark: meetingroomRemarkA
+//                }),
+//                success: function (data, status) {
+//                    if (data.c == '100') {
+//                        alert("会议室创建成功");
+//                    } else {
+//                        alert(data.m);
+//                    }
+//                }
+//            });
 
         });
 

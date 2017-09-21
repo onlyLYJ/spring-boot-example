@@ -33,7 +33,7 @@ public class MeetingroomController extends BaseController {
 
     private static final String addFailed = "会议室名：{} 已存在，增加失败";
 
-    @RequestMapping(value = {"/", "/list"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"", "/list"}, method = RequestMethod.GET)
     public String list(Model model, Integer id) {
         log.info("查询成功!");
         List<Meetingroom> meetingroomList = null;
