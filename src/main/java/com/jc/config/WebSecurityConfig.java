@@ -60,7 +60,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //静态文件和首页 允许所有人访问
                 .antMatchers("/", "/index", "/webjarslocator/**", "/static/**", "/webjars/**").permitAll()
 //                //swagger相关链接
-//                .antMatchers("/swagger-ui.html", "/v2/api-docs").permitAll()
+                .antMatchers("/swagger-ui.html", "/v2/api-docs", "/swagger*/**").permitAll()
                 //报名相关 不需要登录
                 .antMatchers("/apply", "/cancelApply", "/addEmployee", "/getCanApply", "/meetingroom*/**").permitAll()
                 .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")

@@ -9,7 +9,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Data
 @ApiModel(description = "增加会议室VO")
 @JsonIgnoreProperties(ignoreUnknown = true)
-
 public class MeetingroomVO {
 
     @ApiModelProperty(value = "会议室名", required = true)

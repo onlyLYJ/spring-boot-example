@@ -57,7 +57,7 @@ public class MeetingroomController extends BaseController {
      * @return
      */
     @ApiOperation(value = "增加会议室", notes = "会议室名，可容纳人数是必须输入的")
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST, consumes = "application/json")
     public ResultModel addMeetingroom(@ApiParam("会议室增加参数") @Valid @RequestBody MeetingroomVO meetingroomVO) {
 
         String roomname = meetingroomVO.getRoomname();

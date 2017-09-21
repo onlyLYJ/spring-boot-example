@@ -49,7 +49,7 @@ public class Swagger2Config {
      * 传统的输入URL的测试方式对于post请求的传参比较麻烦（当然，可以使用postman这样的浏览器插件）
      * spring-boot与swagger的集成简单的一逼
      */
-    @Value("${swagger.enable:false}")
+    @Value("${swagger.enable:true}")
     private boolean enable;
     @Value("${swagger.baseUrl:'/'}")
     private String baseUrl;
@@ -59,7 +59,7 @@ public class Swagger2Config {
         return new Docket(DocumentationType.SWAGGER_2)
                 //开关 生产环境关闭
                 .enable(enable)
-				.host("localhost:8080")
+                .host("localhost:8080")
                 .pathProvider(new RelativePathProvider(servletContext) {
                     @Override
                     public String getApplicationBasePath() {

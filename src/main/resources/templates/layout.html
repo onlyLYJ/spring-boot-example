@@ -139,6 +139,43 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="addMeetingroomModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>新增会议室</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="roomnameA">会议室名称</label>
+                        <input type="text" class="form-control" id="roomnameA">
+                    </div>
+                    <div class="form-group">
+                        <label for="meetingroomCapacityA">可容纳人数</label>
+                        <input type="text" class="form-control" id="meetingroomCapacityA"
+                               th:value="${10}">
+                    </div>
+                    <div class="form-group">
+                        <label for="meetingroomStatusA">可使用状态（0可使用，1不可使用）</label>
+                        <input type="text" class="form-control" id="meetingroomStatusA"
+                               th:value="${0}">
+                    </div>
+                    <div class="form-group">
+                        <label for="meetingroomRemarkA">备注</label>
+                        <textarea class="form-control" rows="3" id="meetingroomRemarkA"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="addMeetingroom">新增</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="container">
         <p class="muted credit">觉得丑？不要在意这些细节嘛～老铁</p>
     </div>
@@ -208,6 +245,62 @@
                     }
                 });
         });
+        $("#addMeetingroom").click(function () {
+            var roomnameA = $("#roomnameA").val();
+            var meetingroomCapacityA = $("#meetingroomCapacityA").val();
+            var meetingroomStatusA = $("#meetingroomStatusA").val();
+            var meetingroomRemarkA = $("#meetingroomRemarkA").val();
+            if (roomnameA == '') {
+                alert("会议室名不能为空");
+                return;
+            }
+            if (meetingroomCapacityA == '') {
+                alert("会议室可容纳人数不能为空");
+                return;
+            }
+            if (meetingroomStatusA != '不可使用' || meetingroomStatusA != '1') {
+                meetingroomStatusA != '1'
+            } else {
+                meetingroomStatusA = '0'
+            }
+
+//            $.post(basePath + "meetingroom/add",
+//                {
+//                    roomname: roomnameA,
+//                    capacity: meetingroomCapacityA,
+//                    status: meetingroomStatusA,
+//                    remark: meetingroomRemarkA
+//                }, function (data, status) {
+//                    if (data.c == '100') {
+//                        alert("会议室创建成功");
+//                    } else {
+//                        alert(data.m);
+//                    }
+//                });
+            var meetingroomPath = "http://localhost:8080"
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: meetingroomPath + "/meetingroom/add",
+                dataType: "html",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    roomname: roomnameA,
+                    capacity: meetingroomCapacityA,
+                    status: meetingroomStatusA,
+                    remark: meetingroomRemarkA
+                }),
+                success: function (data, status) {
+                    if (data.c == '100') {
+                        alert("会议室创建成功");
+                    } else {
+                        alert(data.m);
+                    }
+                }
+            });
+
+        });
+
     </script>
 </div>
 
