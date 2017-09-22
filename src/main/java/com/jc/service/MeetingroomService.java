@@ -27,15 +27,13 @@ public interface MeetingroomService {
     boolean updateMeetingroom(MeetingroomVO meetingroomVO);
 
     /**
-     * 根据会议室名称获得会议室
+     * 根据会议室名称查找
      *
      * @param roomname
      * @return
      */
-    Meetingroom getMeetingroom(String roomname);
+    List<Meetingroom> getMeetingroomByName(String roomname);
 
-
-    List<Meetingroom> getMeetingroom(Meetingroom meetingroom);
 
     /**
      * 获取所有会议室列表
@@ -43,4 +41,10 @@ public interface MeetingroomService {
      * @return
      */
     List<Meetingroom> listMeetingroom();
+
+    Meetingroom addMeetingroom(String roomname, Integer capacity, String status, String remark);
+
+    List<Meetingroom> getMeetingroomById(Integer id);
+
+    Integer deleteMeetingroomByName(String roomname);
 }

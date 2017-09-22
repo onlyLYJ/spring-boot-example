@@ -179,6 +179,43 @@
     </div>
 
 
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="updateMeetingroomModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4>更新会议室信息</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="roomnameB">会议室名称</label>
+                        <input type="text" class="form-control" id="roomnameB"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="meetingroomCapacityB">可容纳人数</label>
+                        <input type="text" class="form-control" id="meetingroomCapacityB"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="meetingroomStatusB">可使用状态（0可使用，1不可使用）</label>
+                        <input type="text" class="form-control" id="meetingroomStatusB"
+                        />
+                    </div>
+                    <div class="form-group">
+                        <label for="meetingroomRemarkB">备注</label>
+                        <textarea class="form-control" rows="3" id="meetingroomRemarkB"
+                        />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" id="updateMeetingroom">更新
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <p class="muted credit">觉得丑？不要在意这些细节嘛～老铁</p>
     </div>
@@ -186,6 +223,7 @@
     <script th:src="@{/webjarslocator/bootstrap/js/bootstrap.min.js}"></script>
     <script th:inline="javascript">
         var basePath = /*[[@{/}]]*/ '';
+        var meetingroomPath = "http://localhost:8080"
         $("#addEmployee").click(function () {
             var regRealName = $("#regRealName").val();
             var regEnglishName = $("#regEnglishName").val();
@@ -266,43 +304,142 @@
             } else {
                 meetingroomStatusA = '0'
             }
-            var meetingroomPath = "http://localhost:8080"
-            $.post(meetingroomPath + "/meetingroom/add",
-                {
-                    roomname: roomnameA,
-                    capacity: meetingroomCapacityA,
-                    status: meetingroomStatusA,
-                    remark: meetingroomRemarkA
-                }, function (data, status) {
-                    if (data.c == '100') {
-                        alert("会议室创建成功");
-                    } else {
-                        alert(data.m);
-                    }
-                });
 
-//            $.ajax({
-//                type: "POST",
-//                async: false,
-//                url: meetingroomPath + "/meetingroom/add",
-//                dataType: "html",
-//                contentType: "application/json",
-//                data: JSON.stringify({
+//            $.post(meetingroomPath + "/meetingroom/add",
+//                {
 //                    roomname: roomnameA,
 //                    capacity: meetingroomCapacityA,
 //                    status: meetingroomStatusA,
 //                    remark: meetingroomRemarkA
-//                }),
-//                success: function (data, status) {
+//                }, function (data, status) {
 //                    if (data.c == '100') {
 //                        alert("会议室创建成功");
 //                    } else {
 //                        alert(data.m);
 //                    }
-//                }
-//            });
-
+//                });
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: meetingroomPath + "/meetingroom/add",
+                dataType: "html",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    roomname: roomnameA,
+                    capacity: meetingroomCapacityA,
+                    status: meetingroomStatusA,
+                    remark: meetingroomRemarkA
+                }),
+                success: function (data, status) {
+                    if (data.c == '100') {
+                        alert("会议室创建成功");
+                    } else {
+                        alert(data.m);
+                    }
+                }
+            });
         });
+
+
+        $("#updateMeetingroom").click(function () {
+            var roomnameB = $("#roomnameB").val();
+            var meetingroomCapacityB = $("#meetingroomCapacityB").val();
+            var meetingroomStatusB = $("#meetingroomStatusB").val();
+            var meetingroomRemarkB = $("#meetingroomRemarkB").val();
+            if (roomnameB == '') {
+                alert("会议室名不能为空");
+                return;
+            }
+            if (meetingroomCapacityB == '') {
+                alert("会议室可容纳人数不能为空");
+                return;
+            }
+            if (meetingroomStatusB == '不可使用' || meetingroomStatusB == '1') {
+                meetingroomStatusB = '1'
+            } else {
+                meetingroomStatusB = '0'
+            }
+
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: meetingroomPath + "/update",
+                dataType: "html",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    roomname: roomnameB,
+                    capacity: meetingroomCapacityB,
+                    status: meetingroomStatusB,
+                    remark: meetingroomRemarkB
+                }),
+                success: function (data, status) {
+                    if (data.c == '100') {
+                        alert("会议室更新成功！");
+                    } else {
+                        alert(data.m);
+                    }
+                }
+            });
+            window.location.reload();
+        });
+
+        function editInfo(obj) {
+            var id = $(obj).attr("meetingroomId");
+            var roomname = document.getElementById("meetingroomTable").rows[id].cells[1].innerText;
+            var capacity = document.getElementById("meetingroomTable").rows[id].cells[2].innerText;
+            var status = document.getElementById("meetingroomTable").rows[id].cells[3].innerText;
+            var remark = document.getElementById("meetingroomTable").rows[id].cells[4].innerText;
+            $('#roomnameB').val(roomname);
+            $('#meetingroomCapacityB').val(capacity);
+            $('#meetingroomStatusB').val(status);
+            $('#meetingroomRemarkB').val(remark);
+            $('#updateMeetingroomModal').modal('show');
+        }
+
+        function delInfo(obj) {
+            if (confirm("确认要删除？")) {
+
+                var roomnameB = $("#roomnameB").val();
+                var meetingroomCapacityB = $("#meetingroomCapacityB").val();
+                var meetingroomStatusB = $("#meetingroomStatusB").val();
+                var meetingroomRemarkB = $("#meetingroomRemarkB").val();
+                if (roomnameB == '') {
+                    alert("会议室名不能为空");
+                    return;
+                }
+                if (meetingroomCapacityB == '') {
+                    alert("会议室可容纳人数不能为空");
+                    return;
+                }
+                if (meetingroomStatusB == '不可使用' || meetingroomStatusB == '1') {
+                    meetingroomStatusB = '1'
+                } else {
+                    meetingroomStatusB = '0'
+                }
+
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: meetingroomPath + "/delete",
+                    dataType: "html",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        roomname: roomnameB,
+                        capacity: meetingroomCapacityB,
+                        status: meetingroomStatusB,
+                        remark: meetingroomRemarkB
+                    }),
+                    success: function (data, status) {
+                        if (data.c == '100') {
+                            alert("会议室删除成功！");
+                        } else {
+                            alert(data.m);
+                        }
+                    }
+                });
+            }
+            window.location.reload();
+        }
 
     </script>
 </div>

@@ -22,28 +22,49 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `activity`;
 CREATE TABLE `activity` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `activity_name` varchar(100) DEFAULT NULL COMMENT '活动名',
-  `start_time` datetime DEFAULT NULL COMMENT '开始时间',
-  `apply_begin_time` datetime DEFAULT NULL COMMENT '报名开始时间',
-  `apply_end_time` datetime DEFAULT NULL COMMENT '报名结束时间',
-  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
-  `apply_num` int(11) DEFAULT '0' COMMENT '报名人数',
-  `status` varchar(2) DEFAULT NULL COMMENT '0 正常 1 关闭',
-  `create_time` datetime DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
+  `id`               INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `activity_name`    VARCHAR(100)              DEFAULT NULL
+  COMMENT '活动名',
+  `start_time`       DATETIME                  DEFAULT NULL
+  COMMENT '开始时间',
+  `apply_begin_time` DATETIME                  DEFAULT NULL
+  COMMENT '报名开始时间',
+  `apply_end_time`   DATETIME                  DEFAULT NULL
+  COMMENT '报名结束时间',
+  `remark`           VARCHAR(500)              DEFAULT NULL
+  COMMENT '备注',
+  `apply_num`        INT(11)                   DEFAULT '0'
+  COMMENT '报名人数',
+  `status`           VARCHAR(2)                DEFAULT NULL
+  COMMENT '0 正常 1 关闭',
+  `create_time`      DATETIME                  DEFAULT NULL,
+  `update_time`      DATETIME                  DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='活动';
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 6
+  DEFAULT CHARSET = utf8
+  COMMENT ='活动';
 
 -- ----------------------------
 -- Records of activity
 -- ----------------------------
 BEGIN;
-INSERT INTO `activity` VALUES (1, '加班餐（晚餐）', '2017-07-17 18:00:01', '2017-07-17 09:00:01', '2017-07-17 16:00:01', '加班餐，未报名但加班用餐者扣十元！', 0, '0', '2017-07-17 00:40:02', NULL);
-INSERT INTO `activity` VALUES (2, '123', '2017-09-21 09:00:00', '2017-09-21 09:00:00', '2017-09-21 18:00:00', '123', 0, '0', '2017-09-21 11:19:46', NULL);
-INSERT INTO `activity` VALUES (3, '加班餐（晚餐）', '2017-09-21 18:00:00', '2017-09-21 09:00:00', '2017-09-21 16:00:00', '加班餐，未报名但加班用餐者扣十元！', 0, '0', '2017-09-21 11:33:12', NULL);
-INSERT INTO `activity` VALUES (4, '1234', '2017-09-21 09:00:00', '2017-09-21 09:00:00', '2017-09-21 18:00:00', '1234', 0, '0', '2017-09-21 11:48:11', NULL);
-INSERT INTO `activity` VALUES (5, '44', '2017-09-21 09:00:00', '2017-09-21 09:00:00', '2017-09-21 18:00:00', '444', 0, '0', '2017-09-21 11:56:51', NULL);
+INSERT INTO `activity` VALUES
+  (1, '加班餐（晚餐）', '2017-07-17 18:00:01', '2017-07-17 09:00:01', '2017-07-17 16:00:01', '加班餐，未报名但加班用餐者扣十元！', 0, '0',
+   '2017-07-17 00:40:02', NULL);
+INSERT INTO `activity` VALUES
+  (2, '123', '2017-09-21 09:00:00', '2017-09-21 09:00:00', '2017-09-21 18:00:00', '123', 0, '0', '2017-09-21 11:19:46',
+   NULL);
+INSERT INTO `activity` VALUES
+  (3, '加班餐（晚餐）', '2017-09-21 18:00:00', '2017-09-21 09:00:00', '2017-09-21 16:00:00', '加班餐，未报名但加班用餐者扣十元！', 0, '0',
+   '2017-09-21 11:33:12', NULL);
+INSERT INTO `activity` VALUES
+  (4, '1234', '2017-09-21 09:00:00', '2017-09-21 09:00:00', '2017-09-21 18:00:00', '1234', 0, '0',
+   '2017-09-21 11:48:11', NULL);
+INSERT INTO `activity` VALUES
+  (5, '44', '2017-09-21 09:00:00', '2017-09-21 09:00:00', '2017-09-21 18:00:00', '444', 0, '0', '2017-09-21 11:56:51',
+   NULL);
 COMMIT;
 
 -- ----------------------------
@@ -51,17 +72,27 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `activity_apply`;
 CREATE TABLE `activity_apply` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `activity_id` int(11) DEFAULT NULL COMMENT '活动id',
-  `employee_id` int(11) DEFAULT NULL COMMENT '员工id',
-  `activity_name` varchar(200) DEFAULT NULL COMMENT '活动名',
-  `real_name` varchar(50) DEFAULT NULL COMMENT '真是姓名',
-  `remark` varchar(200) DEFAULT NULL COMMENT '备注',
-  `status` varchar(2) DEFAULT NULL COMMENT '0 报名 1 取消报名',
-  `create_time` datetime DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
+  `id`            INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `activity_id`   INT(11)                   DEFAULT NULL
+  COMMENT '活动id',
+  `employee_id`   INT(11)                   DEFAULT NULL
+  COMMENT '员工id',
+  `activity_name` VARCHAR(200)              DEFAULT NULL
+  COMMENT '活动名',
+  `real_name`     VARCHAR(50)               DEFAULT NULL
+  COMMENT '真是姓名',
+  `remark`        VARCHAR(200)              DEFAULT NULL
+  COMMENT '备注',
+  `status`        VARCHAR(2)                DEFAULT NULL
+  COMMENT '0 报名 1 取消报名',
+  `create_time`   DATETIME                  DEFAULT NULL,
+  `update_time`   DATETIME                  DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='活动报名表';
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 2
+  DEFAULT CHARSET = utf8
+  COMMENT ='活动报名表';
 
 -- ----------------------------
 -- Records of activity_apply
@@ -75,14 +106,21 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `employee`;
 CREATE TABLE `employee` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `department` varchar(50) DEFAULT '未知' COMMENT '部门',
-  `real_name` varchar(50) DEFAULT NULL COMMENT '姓名',
-  `english_name` varchar(50) DEFAULT NULL COMMENT '英文名',
-  `create_time` datetime DEFAULT NULL,
-  `update_time` datetime DEFAULT NULL,
+  `id`           INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `department`   VARCHAR(50)               DEFAULT '未知'
+  COMMENT '部门',
+  `real_name`    VARCHAR(50)               DEFAULT NULL
+  COMMENT '姓名',
+  `english_name` VARCHAR(50)               DEFAULT NULL
+  COMMENT '英文名',
+  `create_time`  DATETIME                  DEFAULT NULL,
+  `update_time`  DATETIME                  DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='员工';
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 6
+  DEFAULT CHARSET = utf8
+  COMMENT ='员工';
 
 -- ----------------------------
 -- Records of employee
@@ -99,15 +137,25 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `meetingroom`;
 CREATE TABLE `meetingroom` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `roomname` varchar(50) DEFAULT NULL COMMENT '会议室名',
-  `status` varchar(2) DEFAULT '0' COMMENT '使用状态 0正常 1关闭',
-  `capacity` int(11) unsigned DEFAULT '10' COMMENT '可容纳人数',
-  `remark` varchar(200) DEFAULT NULL COMMENT '备注',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `id`          INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `roomname`    VARCHAR(50)               DEFAULT NULL
+  COMMENT '会议室名',
+  `status`      VARCHAR(2)                DEFAULT '0'
+  COMMENT '使用状态 0正常 1关闭',
+  `capacity`    INT(11) UNSIGNED          DEFAULT '10'
+  COMMENT '可容纳人数',
+  `remark`      VARCHAR(200)              DEFAULT NULL
+  COMMENT '备注',
+  `create_time` DATETIME                  DEFAULT NULL
+  COMMENT '创建时间',
+  `update_time` DATETIME                  DEFAULT NULL
+  COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='会议室';
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 4
+  DEFAULT CHARSET = utf8
+  COMMENT ='会议室';
 
 -- ----------------------------
 -- Records of meetingroom
@@ -123,14 +171,23 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `meetingroom_book_change`;
 CREATE TABLE `meetingroom_book_change` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `meetingroom_book_details_id` int(11) unsigned DEFAULT NULL COMMENT '会议室预定详情id',
-  `change_reason` varchar(200) DEFAULT NULL COMMENT '预定变化原因',
-  `audit_status` varchar(2) DEFAULT NULL COMMENT '状态 0待审核，1审核通过，2审核不通过, 3取消',
-  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `id`                          INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `meetingroom_book_details_id` INT(11) UNSIGNED          DEFAULT NULL
+  COMMENT '会议室预定详情id',
+  `change_reason`               VARCHAR(200)              DEFAULT NULL
+  COMMENT '预定变化原因',
+  `audit_status`                VARCHAR(2)                DEFAULT NULL
+  COMMENT '状态 0待审核，1审核通过，2审核不通过, 3取消',
+  `create_time`                 DATETIME                  DEFAULT NULL
+  COMMENT '创建时间',
+  `update_time`                 DATETIME                  DEFAULT NULL
+  COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='会议室预定变更请求';
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 2
+  DEFAULT CHARSET = utf8
+  COMMENT ='会议室预定变更请求';
 
 -- ----------------------------
 -- Records of meetingroom_book_change
@@ -144,23 +201,36 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `meetingroom_book_detail`;
 CREATE TABLE `meetingroom_book_detail` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `employee_id` int(11) unsigned DEFAULT NULL COMMENT '员工id',
-  `meetingroom_id` int(11) unsigned DEFAULT NULL COMMENT '会议室id',
-  `book_reason` varchar(200) DEFAULT NULL COMMENT '申请原因',
-  `attend_num` int(5) unsigned DEFAULT NULL COMMENT '与会人数',
-  `audit_status` varchar(2) DEFAULT NULL COMMENT '状态 0待审核，1审核通过，2审核不通过，3取消',
-  `remark` varchar(200) DEFAULT NULL COMMENT '备注',
-  `create_time` datetime DEFAULT NULL COMMENT '申请提交时间',
-  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `id`             INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `employee_id`    INT(11) UNSIGNED          DEFAULT NULL
+  COMMENT '员工id',
+  `meetingroom_id` INT(11) UNSIGNED          DEFAULT NULL
+  COMMENT '会议室id',
+  `book_reason`    VARCHAR(200)              DEFAULT NULL
+  COMMENT '申请原因',
+  `attend_num`     INT(5) UNSIGNED           DEFAULT NULL
+  COMMENT '与会人数',
+  `audit_status`   VARCHAR(2)                DEFAULT NULL
+  COMMENT '状态 0待审核，1审核通过，2审核不通过，3取消',
+  `remark`         VARCHAR(200)              DEFAULT NULL
+  COMMENT '备注',
+  `create_time`    DATETIME                  DEFAULT NULL
+  COMMENT '申请提交时间',
+  `update_time`    DATETIME                  DEFAULT NULL
+  COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='会议室预定详情';
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 2
+  DEFAULT CHARSET = utf8
+  COMMENT ='会议室预定详情';
 
 -- ----------------------------
 -- Records of meetingroom_book_detail
 -- ----------------------------
 BEGIN;
-INSERT INTO `meetingroom_book_detail` VALUES (1, 1, 1, '架构选型说明', 12, '1', '重要！！', '2017-08-29 08:58:51', '2017-09-21 06:31:22');
+INSERT INTO `meetingroom_book_detail`
+VALUES (1, 1, 1, '架构选型说明', 12, '1', '重要！！', '2017-08-29 08:58:51', '2017-09-21 06:31:22');
 COMMIT;
 
 -- ----------------------------
@@ -168,13 +238,21 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `permission`;
 CREATE TABLE `permission` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) DEFAULT NULL COMMENT '权限名',
-  `description` varchar(200) DEFAULT NULL COMMENT '介绍',
-  `url` varchar(500) DEFAULT NULL COMMENT '链接',
-  `method` varchar(11) DEFAULT NULL COMMENT '调用方法',
+  `id`          INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name`        VARCHAR(50)               DEFAULT NULL
+  COMMENT '权限名',
+  `description` VARCHAR(200)              DEFAULT NULL
+  COMMENT '介绍',
+  `url`         VARCHAR(500)              DEFAULT NULL
+  COMMENT '链接',
+  `method`      VARCHAR(11)               DEFAULT NULL
+  COMMENT '调用方法',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='权限表';
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 5
+  DEFAULT CHARSET = utf8
+  COMMENT ='权限表';
 
 -- ----------------------------
 -- Records of permission
@@ -191,10 +269,16 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `role`;
 CREATE TABLE `role` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '角色ID',
-  `name` varchar(50) DEFAULT NULL COMMENT '角色名',
+  `id`   INT(11) UNSIGNED NOT NULL AUTO_INCREMENT
+  COMMENT '角色ID',
+  `name` VARCHAR(50)               DEFAULT NULL
+  COMMENT '角色名',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='角色表';
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 3
+  DEFAULT CHARSET = utf8
+  COMMENT ='角色表';
 
 -- ----------------------------
 -- Records of role
@@ -209,11 +293,17 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `role_permission`;
 CREATE TABLE `role_permission` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `role_id` int(11) DEFAULT NULL COMMENT '角色ID',
-  `permission_id` int(11) DEFAULT NULL COMMENT '权限ID',
+  `id`            INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `role_id`       INT(11)                   DEFAULT NULL
+  COMMENT '角色ID',
+  `permission_id` INT(11)                   DEFAULT NULL
+  COMMENT '权限ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='角色权限表';
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 5
+  DEFAULT CHARSET = utf8
+  COMMENT ='角色权限表';
 
 -- ----------------------------
 -- Records of role_permission
@@ -230,11 +320,17 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) DEFAULT NULL COMMENT '用户名',
-  `password` varchar(100) DEFAULT NULL COMMENT '密码',
+  `id`       INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(50)               DEFAULT NULL
+  COMMENT '用户名',
+  `password` VARCHAR(100)              DEFAULT NULL
+  COMMENT '密码',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='用户表';
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 3
+  DEFAULT CHARSET = utf8
+  COMMENT ='用户表';
 
 -- ----------------------------
 -- Records of user
@@ -249,11 +345,17 @@ COMMIT;
 -- ----------------------------
 DROP TABLE IF EXISTS `user_role`;
 CREATE TABLE `user_role` (
-  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-  `user_id` int(11) DEFAULT NULL COMMENT '用户ID',
-  `role_id` int(11) DEFAULT NULL COMMENT '角色ID',
+  `id`      INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `user_id` INT(11)                   DEFAULT NULL
+  COMMENT '用户ID',
+  `role_id` INT(11)                   DEFAULT NULL
+  COMMENT '角色ID',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='用户角色表';
+)
+  ENGINE = InnoDB
+  AUTO_INCREMENT = 5
+  DEFAULT CHARSET = utf8
+  COMMENT ='用户角色表';
 
 -- ----------------------------
 -- Records of user_role

@@ -24,18 +24,18 @@
     </sql>
     <select id="getApplyList" resultType="com.jc.model.ActivityApply">
         SELECT
-            e.department,
-            e.english_name   englishName,
-            aa.id,
-            aa.activity_id   activityId,
-            aa.employee_id   employeeId,
-            aa.activity_name activityName,
-            aa.real_name     realName,
-            aa.remark,
-            aa.status,
-            aa.create_time   createTime
+        e.department,
+        e.english_name englishName,
+        aa.id,
+        aa.activity_id activityId,
+        aa.employee_id employeeId,
+        aa.activity_name activityName,
+        aa.real_name realName,
+        aa.remark,
+        aa.status,
+        aa.create_time createTime
         FROM activity_apply aa
-            LEFT JOIN employee e ON aa.employee_id = e.id
+        LEFT JOIN employee e ON aa.employee_id = e.id
         WHERE status = '0' AND aa.activity_id = #{0}
     </select>
 </mapper>

@@ -63,7 +63,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui.html", "/v2/api-docs", "/swagger*/**").permitAll()
                 //报名相关 不需要登录
                 .antMatchers("/apply", "/cancelApply", "/addEmployee", "/getCanApply", "/meetingroom*/**").permitAll()
-                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/admin/**", "/meetingroom*/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().fullyAuthenticated()
                 .and()
                 .formLogin()

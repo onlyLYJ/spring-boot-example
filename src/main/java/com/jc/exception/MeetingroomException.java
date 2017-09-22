@@ -6,7 +6,10 @@ package com.jc.exception;
  */
 public class MeetingroomException extends RuntimeException {
 
-    public static final String ALREADY_EXIST = "同名会议室: {} 已存在";
+    public static final String ALREADY_EXIST = "同名会议室已存在";
+
+    public static final String NOT_EXIST = "需要更新的会议室不存在";
+
 
     public MeetingroomException() {
     }

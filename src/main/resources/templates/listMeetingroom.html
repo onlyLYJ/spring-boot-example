@@ -1,9 +1,10 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="layout :: htmlhead" th:with="title='查询'"></head>
-
+<div th:include="layout :: footer" id="footer">(footer)</div>
 <body>
 <div th:replace="layout :: navbar-admin">(navbar)</div>
+
 
 <div class="container-fluid">
     <div class="starter-template">
@@ -15,7 +16,7 @@
         <li><a href="javascript:" data-toggle="modal" data-target="#addMeetingroomModal">新增会议室</a></li>
     </div>
 
-    <table class="table table-hover">
+    <table class="table table-hover" id="meetingroomTable">
         <thead>
         <tr>
             <th>会议室名</th>
@@ -27,35 +28,27 @@
         </tr>
         </thead>
         <tbody>
-        <tr data-th-each="meetringroom : ${meetingroomList}">
-            <td data-th-text="${meetringroom.roomname}">...</td>
-            <td data-th-text="${meetringroom.capacity}">...</td>
-            <td data-th-text="${meetringroom.status == '1'} ? ${'不可使用'} : ${'可使用'}"></td>
-            <td data-th-text="${meetringroom.remark}">...</td>
-            <td data-th-text="${#dates.format(meetringroom.createTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
-            <td data-th-text="${#dates.format(meetringroom.updateTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
+        <tr data-th-each="meetingroom,meetingroomStat : ${meetingroomList}">
+            <td data-th-text="${meetingroom.roomname}">...</td>
+            <td data-th-text="${meetingroom.capacity}">...</td>
+            <td data-th-text="${meetingroom.status == '1'} ? ${'不可使用'} : ${'可使用'}"></td>
+            <td data-th-text="${meetingroom.remark}">...</td>
+            <td data-th-text="${#dates.format(meetingroom.createTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
+            <td data-th-text="${#dates.format(meetingroom.updateTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
+            <td class="edit" data-toggle="modal"
+                data-target="#updateMeetingroomModal" id="${meetingroomStat.index+1}"
+                class="btn btn-primary" type="button"
+                onclick="editInfo(this)">编辑
+            </td>
+            <td class="delete" id="${meetingroom.id}"
+                class="btn btn-danger" type="button" value="删除"
+                onclick="delInfo(this)">删除
+            </td>
         </tr>
         </tbody>
     </table>
 </div>
 
-<div th:include="layout :: footer" id="footer">(footer)</div>
-<script th:inline="javascript">
-    function goApplyList(id) {
-        alert(id);
-    }
 
-    var basePath = /*[[@{/}]]*/ '';
-    $("#addDefaultOvertimeMeals").click(function () {
-        $.post(basePath + "admin/addDefaultOvertimeMeals",
-            {}, function (data, status) {
-                if (data.c == '100') {
-                    alert("生成当天加班餐成功");
-                } else {
-                    alert(data.m);
-                }
-            });
-    });
-</script>
 </body>
 </html>

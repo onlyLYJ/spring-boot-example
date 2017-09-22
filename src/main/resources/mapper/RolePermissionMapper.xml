@@ -17,15 +17,15 @@
     </sql>
     <select id="findPermissionByUserId" resultType="com.jc.security.model.Permission">
         SELECT DISTINCT
-            P.id,
-            P.name,
-            P.description,
-            P.url,
-            P.method
+        P.id,
+        P.name,
+        P.description,
+        P.url,
+        P.method
         FROM user_role ur
-            LEFT JOIN role R ON ur.role_id = R.id
-            LEFT JOIN role_permission rp ON R.id = rp.role_id
-            LEFT JOIN permission P ON rp.permission_id = P.id
+        LEFT JOIN role R ON ur.role_id = R.id
+        LEFT JOIN role_permission rp ON R.id = rp.role_id
+        LEFT JOIN permission P ON rp.permission_id = P.id
         WHERE ur.user_id = #{0}
     </select>
 </mapper>

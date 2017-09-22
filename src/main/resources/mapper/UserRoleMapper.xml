@@ -17,8 +17,8 @@
     </sql>
     <select id="findRoleByUserId" parameterType="integer" resultType="com.jc.security.model.Role">
         SELECT DISTINCT
-            R.id,
-            R.name
+        R.id,
+        R.name
         FROM user_role ur LEFT JOIN role R ON ur.`role_id` = R.id
         WHERE ur.`user_id` = #{0}
     </select>

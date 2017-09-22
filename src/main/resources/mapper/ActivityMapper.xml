@@ -26,7 +26,7 @@
     <update id="addApplyNum" parameterType="com.jc.model.Activity">
         UPDATE activity
         SET apply_num = apply_num + #{applyNum}, update_time = now()
-  <![CDATA[ WHERE id = #{id} AND status = '0' AND apply_begin_time < now() AND apply_end_time > now()
+        <![CDATA[ WHERE id = #{id} AND status = '0' AND apply_begin_time < now() AND apply_end_time > now()
         ]]>
     </update>
 </mapper>
