@@ -19,4 +19,6 @@
         -->
         id, roomname, status, capacity, remark, create_time, update_time
     </sql>
+
+
 </mapper>

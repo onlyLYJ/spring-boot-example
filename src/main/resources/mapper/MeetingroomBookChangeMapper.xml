@@ -6,7 +6,7 @@
           WARNING - @mbg.generated
         -->
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="meetingroom_book_details_id" property="meetingroomBookDetailsId" jdbcType="INTEGER"/>
+        <result column="meetingroom_book_detail_id" property="meetingroomBookDetailId" jdbcType="INTEGER"/>
         <result column="change_reason" property="changeReason" jdbcType="VARCHAR"/>
         <result column="audit_status" property="auditStatus" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
@@ -16,6 +16,6 @@
         <!--
           WARNING - @mbg.generated
         -->
-        id, meetingroom_book_details_id, change_reason, audit_status, create_time, update_time
+        id, meetingroom_book_detail_id, change_reason, audit_status, create_time, update_time
     </sql>
 </mapper>

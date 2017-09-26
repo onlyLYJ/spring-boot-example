@@ -43,12 +43,22 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
+
     @Bean
     public Converter<String, Date> addNewConvert() {
         return new Converter<String, Date>() {
             @Override
             public Date convert(String source) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
+
+                if (source.equals(""))
+                    return null;
+
+                if (source.contains("T")) {
+                    source = source.replace('T', ' ');
+                    source += ":00";
+                }
+
                 Date date = null;
                 try {
                     date = sdf.parse(source);
@@ -56,6 +66,16 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                     e.printStackTrace();
                 }
                 return date;
+            }
+        };
+    }
+
+    @Bean
+    public Converter<String, String> stringTrimConvert() {
+        return new Converter<String, String>() {
+            @Override
+            public String convert(String source) {
+                return source.trim();
             }
         };
     }

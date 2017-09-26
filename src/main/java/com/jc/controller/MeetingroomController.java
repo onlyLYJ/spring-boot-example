@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +18,12 @@ import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 
-@Api(description = "会议室预定接口")
+/**
+ * 会议室管理Controller
+ * Create by onlyLYJ on 2017/9/23
+ **/
+
+@Api(description = "会议室管理接口")
 @Controller
 @RequestMapping("/meetingroom")
 @Slf4j
@@ -36,11 +40,11 @@ public class MeetingroomController extends BaseController {
 
     private static final String NOT_EXIST = "会议室不存在";
 
-    private static final String DUPLICATE_NAME = "错误，请删除同名会议室";
+    private static final String DUPLICATE_NAME = "英雄所见略同！不过，会议室名不能重复哦~";
 
     private static final String DELETE_SUCCESS = "会议室删除成功";
 
-
+    @ApiOperation(value = "列出所有会议室", notes = "会议室管理首页", httpMethod = "GET")
     @GetMapping(value = {"", "/list"})
     public String list(Model model, Integer id) {
 
@@ -83,37 +87,32 @@ public class MeetingroomController extends BaseController {
     @ApiOperation(value = "修改会议室信息", notes = "会议室名，可容纳人数是必须输入的")
     @PostMapping(value = "/update")
     @ResponseBody
-    public ResultModel updateMeetingroom(@RequestBody @Valid @ApiParam("会议室增加参数") MeetingroomVO meetingroomVO) {
+    public ResultModel updateMeetingroom(@RequestBody @Valid @ApiParam("会议室更新参数") MeetingroomVO meetingroomVO) {
 
-        List<Meetingroom> meetingroomList = meetingroomService.getMeetingroomByName(meetingroomVO.getRoomname());
-        if (meetingroomList == null) {
-            log.error(NOT_EXIST);
-            return buildErrorResponse(NOT_EXIST);
-        }
-        if (meetingroomList.size() > 1) {
+        String roomname = meetingroomVO.getRoomname();
+        List<Meetingroom> meetingroomList = meetingroomService.getMeetingroomByName(roomname);
+        if (meetingroomList != null && meetingroomList.size() > 0 && meetingroomList.get(0).getId() != meetingroomVO.getId()) {
             log.error(DUPLICATE_NAME);
             return buildErrorResponse(DUPLICATE_NAME);
         }
         meetingroomService.updateMeetingroom(meetingroomVO);
         log.info(UPDATE_SUCCESS);
         return buildSuccessResponse(UPDATE_SUCCESS);
-
     }
 
     @ApiOperation(value = "删除会议室")
     @PostMapping(value = "/delete")
     @ResponseBody
-    public ResultModel deleteMeetingroom(@RequestParam @NotEmpty String roomname) {
+    public ResultModel deleteMeetingroom(@RequestParam @ApiParam("通过id删除会议室") Integer id) {
 
-        List<Meetingroom> meetingroomList = meetingroomService.getMeetingroomByName(roomname);
-        if (meetingroomList == null && meetingroomList.size() > 1) {
+        if (id == null || meetingroomService.deleteMeetingroomById(id) != 1) {
             log.error(NOT_EXIST);
             return buildErrorResponse(NOT_EXIST);
         }
-        meetingroomService.deleteMeetingroomByName(roomname);
+
         log.info(DELETE_SUCCESS);
         return buildSuccessResponse(DELETE_SUCCESS);
-    }
 
+    }
 
 }

@@ -169,7 +169,7 @@ public class IndexController extends BaseController {
     @ApiOperation(value = "增加员工")
     @RequestMapping(value = "/addEmployee", method = RequestMethod.POST)
     @ResponseBody
-    public ResultModel addEmployee(@RequestParam String department, @RequestParam String realName, @RequestParam String englishName) {
+    public ResultModel addEmployee(@RequestParam String department, @RequestParam String realName, @RequestParam String englishName, String password) {
         return buildSuccessResponse(employeeService.addEmployee(DepartmentEnum.match(department), realName, englishName));
     }
 

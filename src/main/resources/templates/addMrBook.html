@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: htmlhead" th:with="title='新增'"></head>
+
+<body>
+<div th:replace="layout :: navbar-admin">(navbar)</div>
+
+<table class="table table-hover" border="0" width="50%">
+    <form id="addMrBook-form" th:action="@{/meetingroom/book/newBook/add}"
+          th:object="${meetingroomBookDetailVO}" method="post">
+        <input id="employeeId" type="hidden" text="1" th:field="*{employeeId}"></input>
+        <thead>
+        <tr>
+            <th width="15%" align="left">栏目</th>
+            <th width="35%" align="left">内容</th>
+        </tr>
+        </thead>
+        <tr>
+            <div class="form-group">
+                <td width="15%"><label>请选择会议室</label></td>
+                <td width="35%">
+                    <select th:field="*{meetingroomId}">
+                        <option th:each="meetingroom : ${roomnameList}"
+                                th:value="${meetingroom.id}" th:text="${meetingroom.roomname}">...
+                        </option>
+                    </select>
+                </td>
+            </div>
+        </tr>
+        <tr>
+            <div class="form-group">
+                <td width="15%"><label for="bookReason">预定原因</label></td>
+                <td width="35%"><input id="bookReason" type="text" value="" th:field="*{bookReason}"></input></td>
+            </div>
+        </tr>
+        <tr>
+            <div class="form-group">
+                <td width="15%"><label for="meetingBeginTime">会议开始时间</label></td>
+                <td width="35%"><input id="meetingBeginTime" type="datetime-local" value=""
+                                       th:field="*{meetingBeginTime}"></input></td>
+            </div>
+        </tr>
+        <tr>
+            <div class="form-group">
+                <td width="15%"><label for="meetingEndTime">会议结束时间</label></td>
+                <td width="35%"><input id="meetingEndTime"
+                                       th:text="${#dates.format(*{meetingEndTime},'yyyy-MM-dd HH:mm:ss')}"
+                                       value="" th:field="*{meetingEndTime}"></input></td>
+            </div>
+        </tr>
+        <tr>
+            <div class="form-group">
+                <td width="15%"><label>是否生成周期预定（一周）</label>
+                    <input id="weeklyBook" type="checkbox" value="false" onchange="showWeeklyBookEndDate()"
+                           th:field="*{isWeeklyBook}"></input>
+                </td>
+                <td width="30%"><input style="display:none" id="weeklyBookEndTime" type="datetime-local" value=""
+                                       th:field="*{weeklyBookEndDate}"></input></td>
+            </div>
+        </tr>
+        <tr>
+            <div class="form-group">
+                <td width="15%"><label for="attendNum">与会人数</label></td>
+                <td width="35%"><input id="attendNum" type="number" max="999" min="1" value=""
+                                       th:field="*{attendNum}"></input></td>
+            </div>
+        </tr>
+        <tr>
+            <div class="form-group">
+                <td width="15%"><label for="remark">备注</label></td>
+                <td width="35%"><textarea id="remark" class="form-control" rows="3" th:field="*{remark}"></textarea>
+                </td>
+            </div>
+        </tr>
+        <tr>
+            <div class="form-group" width="50%">
+                <td><input id="addBookBtn" onclick="checkValidBook()" type="button" value="添加新预订"/></td>
+            </div>
+        </tr>
+    </form>
+</table>
+
+
+<div th:include="layout :: footer" id="footer">(footer)</div>
+<script th:inline="javascript">
+    var mbrBasePath = '/meetingroom/book/newBook';
+
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+    function convertTime(time) {
+
+        if (time == null | time == '') {
+            return time;
+        }
+        var result = time.replace('T', ' ');
+        return result += ":00";
+    }
+
+    function addBookCheck() {
+        var bookReason = $("#bookReason").val();
+        var meetingBeginTime = $("#meetingBeginTime").val();
+        var meetingEndTime = $("#meetingEndTime").val();
+        var attendNum = $("#attendNum").val();
+        var remark = $("#remark").val();
+        if (bookReason == '') {
+            alert("预定原因不能为空");
+            return false;
+        }
+        if (meetingBeginTime == '') {
+            alert("会议开始时间不能为空");
+            return false;
+        }
+        var now = new Date().Format("yyyy-MM-dd hh:mm:ss")
+
+        meetingBeginTime = convertTime(meetingBeginTime);
+        meetingEndTime = convertTime(meetingEndTime);
+
+        console.log('time is ' + now + "|| begin " + meetingBeginTime + "|| end " + meetingEndTime);
+        if (meetingBeginTime < now) {
+            alert("穿越回去开会嘛？");
+            return false;
+        }
+
+        if (meetingEndTime == '') {
+            alert("会议结束时间不能为空");
+            return false;
+        }
+
+        if (meetingBeginTime > meetingEndTime) {
+            alert("开始和结束时间是不是写反啦！");
+            return false;
+        }
+
+        if (attendNum == '' || isNaN(attendNum)) {
+            alert("与会人数错误");
+            return false;
+        }
+
+        return true;
+    }
+
+    $("#addMrBook-form").submit(function () {
+        $.ajax({
+            type: 'POST',
+            data: $(this).serialize(),
+            url: mbrBasePath + "/add",
+            success: function (data, status) {
+                if (data.c == '100') {
+                    alert("会议室预定成功");
+                } else {
+                    alert(data.m);
+                }
+            }
+        });
+        window.location.href = mbrBasePath
+    });
+
+
+    function checkValidBook() {
+        if (addBookCheck()) {
+            $("#addMrBook-form").submit();
+        }
+    }
+
+    function showWeeklyBookEndDate() {
+        var isChecked = $('#weeklyBook').is(":checked");
+        if (isChecked != null && isChecked == true) {
+            document.getElementById("weeklyBookEndTime").style.display = "";//显
+        } else {
+            document.getElementById("weeklyBookEndTime").style.display = "none";//隐
+        }
+    }
+
+</script>
+</body>
+</html>

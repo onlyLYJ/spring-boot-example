@@ -1,14 +1,20 @@
 package com.jc.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class Meetingroom {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Meetingroom implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /**
@@ -42,4 +48,17 @@ public class Meetingroom {
      */
     @Column(name = "update_time")
     private Date updateTime;
+
+    @Override
+    public String toString() {
+        return "Meetingroom{" +
+                "id=" + id +
+                ", roomname='" + roomname + '\'' +
+                ", status='" + status + '\'' +
+                ", capacity=" + capacity +
+                ", remark='" + remark + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }

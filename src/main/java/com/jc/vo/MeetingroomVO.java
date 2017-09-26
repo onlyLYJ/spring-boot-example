@@ -9,7 +9,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import javax.validation.constraints.Min;
 
 @Data
-@ApiModel(description = "增加会议室VO")
+@ApiModel(description = "会议室VO")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MeetingroomVO {
 
@@ -25,5 +25,6 @@ public class MeetingroomVO {
     private String status;
     @ApiModelProperty(value = "备注")
     private String remark;
+
 
 }

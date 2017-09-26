@@ -1,6 +1,7 @@
 package com.jc.service.impl;
 
 import com.jc.exception.MeetingroomException;
+import com.jc.mapper.MeetingroomBookDetailMapper;
 import com.jc.mapper.MeetingroomMapper;
 import com.jc.model.Meetingroom;
 import com.jc.service.MeetingroomService;
@@ -20,6 +21,9 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 
     @Autowired
     private MeetingroomMapper meetingroomMapper;
+
+    @Autowired
+    private MeetingroomBookDetailMapper meetingroomBookDetailMapper;
 
     @Override
     public Meetingroom addMeetingroom(MeetingroomVO meetingroomVO) {
@@ -43,7 +47,7 @@ public class MeetingroomServiceImpl implements MeetingroomService {
     }
 
     @Override
-    public boolean updateMeetingroom(MeetingroomVO meetingroomVO) {
+    public Integer updateMeetingroom(MeetingroomVO meetingroomVO) {
 
         Integer id = meetingroomVO.getId();
         if (id == null || id == 0)
@@ -56,8 +60,7 @@ public class MeetingroomServiceImpl implements MeetingroomService {
         meetingroom.setStatus(meetingroomVO.getStatus());
         meetingroom.setRemark(meetingroomVO.getRemark());
         meetingroom.setUpdateTime(new Date());
-        meetingroomMapper.updateByPrimaryKey(meetingroom);
-        return true;
+        return meetingroomMapper.updateByPrimaryKey(meetingroom);
     }
 
     @Override
@@ -109,6 +112,12 @@ public class MeetingroomServiceImpl implements MeetingroomService {
         }
 
         return deleteNum;
+    }
+
+    @Override
+    public Integer deleteMeetingroomById(Integer id) {
+        meetingroomBookDetailMapper.cancelMeetingroomBookDetailByMeetingroomId(id);
+        return meetingroomMapper.deleteByPrimaryKey(id);
     }
 
 }

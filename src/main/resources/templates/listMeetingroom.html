@@ -8,7 +8,7 @@
 
 <div class="container-fluid">
     <div class="starter-template">
-        <h1>会议室预定查询系统</h1>
+        <h1>会议室管理</h1>
         <p>The current time is <span th:text="${currentTime}">(time)</span></p>
     </div>
 
@@ -28,20 +28,19 @@
         </tr>
         </thead>
         <tbody>
-        <tr data-th-each="meetingroom,meetingroomStat : ${meetingroomList}">
-            <td data-th-text="${meetingroom.roomname}">...</td>
-            <td data-th-text="${meetingroom.capacity}">...</td>
-            <td data-th-text="${meetingroom.status == '1'} ? ${'不可使用'} : ${'可使用'}"></td>
-            <td data-th-text="${meetingroom.remark}">...</td>
-            <td data-th-text="${#dates.format(meetingroom.createTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
-            <td data-th-text="${#dates.format(meetingroom.updateTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
-            <td class="edit" data-toggle="modal"
-                data-target="#updateMeetingroomModal" id="${meetingroomStat.index+1}"
-                class="btn btn-primary" type="button"
+        <tr th:each="meetingroom : ${meetingroomList}">
+            <td th:id="'roomname'+${meetingroom.id}" th:text="${meetingroom.roomname}">...</td>
+            <td th:id="'capacity'+${meetingroom.id}" th:text="${meetingroom.capacity}">...</td>
+            <td th:id="'status'+${meetingroom.id}" th:text="${meetingroom.status == '1'} ? ${'不可使用'} : ${'可使用'}"></td>
+            <td th:id="'remark'+${meetingroom.id}" th:text="${meetingroom.remark}">...</td>
+            <td th:text="${#dates.format(meetingroom.createTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
+            <td th:text="${#dates.format(meetingroom.updateTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
+            <td class="edit" data-toggle="modal" data-target="#updateMeetingroomModal"
+                class="btn btn-primary" type="button" th:id="'update'+${meetingroom.id}"
                 onclick="editInfo(this)">编辑
             </td>
-            <td class="delete" id="${meetingroom.id}"
-                class="btn btn-danger" type="button" value="删除"
+            <td class="delete" th:id="'del'+${meetingroom.id}"
+                class="btn btn-danger" type="button"
                 onclick="delInfo(this)">删除
             </td>
         </tr>

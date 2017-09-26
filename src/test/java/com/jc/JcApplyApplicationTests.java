@@ -1,10 +1,13 @@
 package com.jc;
 
+import com.github.pagehelper.PageInfo;
 import com.jc.constant.DepartmentEnum;
 import com.jc.model.Employee;
+import com.jc.model.MeetingroomBookDetail;
 import com.jc.service.ActivityService;
 import com.jc.service.ApplyService;
 import com.jc.service.EmployeeService;
+import com.jc.service.MeetingroomBookDetailService;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -25,9 +29,22 @@ public class JcApplyApplicationTests {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
+    @Autowired
+    private MeetingroomBookDetailService meetingroomBookDetailService;
+
     @Test
     public void contextLoads() {
     }
+
+    @Transactional
+    @Test
+    public void testGetValidMBD() {
+        PageInfo<MeetingroomBookDetail> list = meetingroomBookDetailService.listValidMeetingroomBookDetail(1, 10);
+        Assert.assertNotNull(list.getList().size());
+        System.out.println(list.getList().size());
+        System.out.println(list.getList().toString());
+    }
+
 
     //	@Test
 //	@Transactional

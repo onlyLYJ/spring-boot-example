@@ -1,23 +1,25 @@
 package com.jc.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 @Table(name = "meetingroom_book_change")
 @Data
-public class MeetingroomBookChange {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class MeetingroomBookChange implements Serializable {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     /**
      * 会议室预定详情id
      */
-    @Column(name = "meetingroom_book_details_id")
-    private Integer meetingroomBookDetailsId;
+    @Column(name = "meetingroom_book_detail_id")
+    private Integer meetingroomBookDetailId;
 
     /**
      * 预定变化原因
@@ -42,4 +44,16 @@ public class MeetingroomBookChange {
      */
     @Column(name = "update_time")
     private Date updateTime;
+
+    @Override
+    public String toString() {
+        return "MeetingroomBookChange{" +
+                "id=" + id +
+                ", meetingroomBookDetailId=" + meetingroomBookDetailId +
+                ", changeReason='" + changeReason + '\'' +
+                ", auditStatus='" + auditStatus + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }
