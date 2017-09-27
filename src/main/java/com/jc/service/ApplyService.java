@@ -14,19 +14,19 @@ public interface ApplyService {
      * 新增申请
      *
      * @param activityId
-     * @param employeeId
+     * @param userId
      * @return
      */
-    ActivityApply addApply(Integer activityId, Integer employeeId, String remark) throws ApplyException;
+    ActivityApply addApply(Integer activityId, Integer userId, String remark) throws ApplyException;
 
     /**
      * 取消预约
      *
      * @param activityId
-     * @param employeeId
+     * @param userId
      * @return
      */
-    boolean cancelApply(Integer activityId, Integer employeeId);
+    boolean cancelApply(Integer activityId, Integer userId);
 
     /**
      * 取消预约

@@ -6,7 +6,7 @@
           WARNING - @mbg.generated
         -->
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="employee_id" property="employeeId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
         <result column="meetingroom_id" property="meetingroomId" jdbcType="INTEGER"/>
         <result column="meeting_begin_time" property="meetingBeginTime" jdbcType="TIMESTAMP"/>
         <result column="meeting_end_time" property="meetingEndTime" jdbcType="TIMESTAMP"/>
@@ -23,27 +23,27 @@
         <!--
           WARNING - @mbg.generated
         -->
-        id, employee_id, meetingroom_id, meeting_begin_time, meeting_end_time, book_reason,
+        id, user_id, meetingroom_id, meeting_begin_time, meeting_end_time, book_reason,
         attend_num, audit_status, remark, create_time, update_time, status
     </sql>
 
     <sql id="Base_Column_List_WithoutId">
-        employee_id, meetingroom_id, meeting_begin_time, meeting_end_time, book_reason,
+        user_id, meetingroom_id, meeting_begin_time, meeting_end_time, book_reason,
         attend_num, audit_status, remark, create_time, update_time, status
     </sql>
 
     <sql id="VO_Column_List_WithoutId">
-        #{employeeId}, #{meetingroomId}, #{meetingBeginTime}, #{meetingEndTime}, #{bookReason},
+        #{userId}, #{meetingroomId}, #{meetingBeginTime}, #{meetingEndTime}, #{bookReason},
         #{attendNum}, #{auditStatus}, #{remark}, #{createTime}, #{updateTime}, #{status}
     </sql>
 
     <sql id="Base_Column_List_WithoutIdAndCreateTime">
-        employee_id, meetingroom_id, meeting_begin_time, meeting_end_time, book_reason,
+        user_id, meetingroom_id, meeting_begin_time, meeting_end_time, book_reason,
         attend_num, audit_status, remark, update_time, status
     </sql>
 
     <sql id="VO_Column_List_WithoutIdAndCreateTime">
-        #{employeeId}, #{meetingroomId}, #{meetingBeginTime}, #{meetingEndTime}, #{bookReason},
+        #{userId}, #{meetingroomId}, #{meetingBeginTime}, #{meetingEndTime}, #{bookReason},
         #{attendNum}, #{auditStatus}, #{remark}, #{updateTime}, #{status}
     </sql>
 
@@ -51,7 +51,7 @@
         SELECT
             mbd.id,
             m.roomname,
-            e.real_name            realName,
+        u.real_name realName,
             mbd.status,
             mbd.audit_status       auditStatus,
             mbd.meeting_begin_time meetingBeginTime,
@@ -60,24 +60,9 @@
             mbd.attend_num         attendNum,
             mbd.remark
         FROM meetingroom_book_detail mbd
-            LEFT JOIN employee e ON mbd.employee_id = e.id
+        LEFT JOIN user u ON mbd.user_id = u.id
             LEFT JOIN meetingroom m ON mbd.meetingroom_id = m.id
     </sql>
-
-    <sql id="UPDATE_BOOK_DETAIL">
-        SELECT
-            mbd.id,
-            m.id                   meetingroomId,
-            mbd.meeting_begin_time meetingBeginTime,
-            mbd.meeting_end_time   meetingEndTime,
-            mbd.book_reason        bookReason,
-            mbd.attend_num         attendNum,
-            mbd.remark
-        FROM meetingroom_book_detail mbd
-            LEFT JOIN employee e ON mbd.employee_id = e.id
-            LEFT JOIN meetingroom m ON mbd.meetingroom_id = m.id
-    </sql>
-
 
     <select id="listValidMeetingroomBookDetail" resultType="com.jc.model.MeetingroomBookDetail">
         <include refid="SELECT_BOOK_DETAIL"/>
@@ -98,13 +83,13 @@
         SELECT
         mbd.id,
         m.roomname,
-        e.real_name realName,
+        u.real_name realName,
         mbd.meeting_begin_time meetingBeginTime,
         mbd.meeting_end_time meetingEndTime,
         mbd.book_reason bookReason,
         mbd.remark
         FROM meetingroom_book_detail mbd
-        LEFT JOIN employee e ON mbd.employee_id = e.id
+        LEFT JOIN user u ON mbd.user_id = u.id
         LEFT JOIN meetingroom m ON mbd.meetingroom_id = m.id
         <![CDATA[ WHERE mbd.meetingroom_id = #{meetingroomId} AND mbd.status = '0' AND ((#{meetingBeginTime} between mbd.meeting_begin_time AND mbd.meeting_end_time) OR
 (#{meetingEndTime} between mbd.meeting_begin_time AND mbd.meeting_end_time))]]>
@@ -122,7 +107,6 @@
 
     <!--通过id取消预定-->
     <update id="cancelMeetingroomBookDetailById" parameterType="java.lang.Integer">
-
         UPDATE meetingroom_book_detail
         SET status = '1', update_time = now()
         WHERE id = #{0}
@@ -130,7 +114,6 @@
 
     <!--通过会议室id取消预定-->
     <update id="cancelMeetingroomBookDetailByMeetingroomId" parameterType="java.lang.Integer">
-
         UPDATE meetingroom_book_detail
         SET status = '1', update_time = now()
         WHERE meetingroom_id = #{0}
@@ -140,7 +123,7 @@
         insert into meetingroom_book_detail (<include refid="Base_Column_List_WithoutId"/>)
         values
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.employeeId,jdbcType=INTEGER}, #{item.meetingroomId,jdbcType=INTEGER},
+            (#{item.userId,jdbcType=INTEGER}, #{item.meetingroomId,jdbcType=INTEGER},
             #{item.meetingBeginTime,jdbcType=TIMESTAMP}, #{item.meetingEndTime,jdbcType=TIMESTAMP},
             #{item.bookReason,jdbcType=VARCHAR},#{item.attendNum,jdbcType=INTEGER},
             #{item.auditStatus,jdbcType=VARCHAR},#{item.remark,jdbcType=VARCHAR},

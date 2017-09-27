@@ -10,7 +10,7 @@
           th:object="${updateMrBook}" method="post">
         <input id="mbdId" type="hidden" th:field="*{id}"></input>
         <!--//TODO需要修改成当前用户id-->
-        <input id="employeeId" type="hidden" value="1" th:field="*{employeeId}"></input>
+        <input id="userId" type="hidden" value="1" th:field="*{userId}"></input>
         <thead>
         <tr>
             <th width="15%" align="left">栏目</th>
@@ -40,7 +40,6 @@
                 <td width="15%"><label>会议开始时间</label></td>
                 <td width="35%"><input type="text" th:field="*{meetingBeginTime}">
                     </input></td>
-                <!--th:field="*{meetingBeginTime}"-->
                 <td><a th:text="${#dates.format(updateMrBook.meetingBeginTime,'yyyy-MM-dd HH:mm:ss')}"/></td>
             </div>
         </tr>

@@ -8,7 +8,7 @@
 <table class="table table-hover" border="0" width="50%">
     <form id="addMrBook-form" th:action="@{/meetingroom/book/newBook/add}"
           th:object="${meetingroomBookDetailVO}" method="post">
-        <input id="employeeId" type="hidden" text="1" th:field="*{employeeId}"></input>
+        <input id="userId" type="hidden" text="1" th:field="*{userId}"></input>
         <thead>
         <tr>
             <th width="15%" align="left">栏目</th>

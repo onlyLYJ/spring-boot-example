@@ -7,7 +7,7 @@
         -->
         <id column="id" property="id" jdbcType="INTEGER"/>
         <result column="activity_id" property="activityId" jdbcType="INTEGER"/>
-        <result column="employee_id" property="employeeId" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
         <result column="activity_name" property="activityName" jdbcType="VARCHAR"/>
         <result column="real_name" property="realName" jdbcType="VARCHAR"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
@@ -19,23 +19,23 @@
         <!--
           WARNING - @mbg.generated
         -->
-        id, activity_id, employee_id, activity_name, real_name, remark, status, create_time,
+        id, activity_id, user_id, activity_name, real_name, remark, status, create_time,
         update_time
     </sql>
     <select id="getApplyList" resultType="com.jc.model.ActivityApply">
         SELECT
         e.department,
-        e.english_name englishName,
+        e.username,
         aa.id,
         aa.activity_id activityId,
-        aa.employee_id employeeId,
+        aa.user_id userId,
         aa.activity_name activityName,
         aa.real_name realName,
         aa.remark,
         aa.status,
         aa.create_time createTime
         FROM activity_apply aa
-        LEFT JOIN employee e ON aa.employee_id = e.id
+        LEFT JOIN user e ON aa.user_id = e.id
         WHERE status = '0' AND aa.activity_id = #{0}
     </select>
 </mapper>

@@ -23,10 +23,10 @@ public class ActivityApply implements Serializable {
     private Integer activityId;
 
     /**
-     * 员工id
+     * 用户id
      */
-    @Column(name = "employee_id")
-    private Integer employeeId;
+    @Column(name = "user_id")
+    private Integer userId;
 
     /**
      * 活动名
@@ -60,14 +60,14 @@ public class ActivityApply implements Serializable {
     private String department;
 
     @Transient
-    private String englishName;
+    private String username;
 
     @Override
     public String toString() {
         return "ActivityApply{" +
                 "id=" + id +
                 ", activityId=" + activityId +
-                ", employeeId=" + employeeId +
+                ", userId=" + userId +
                 ", activityName='" + activityName + '\'' +
                 ", realName='" + realName + '\'' +
                 ", remark='" + remark + '\'' +
@@ -75,7 +75,9 @@ public class ActivityApply implements Serializable {
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
                 ", department='" + department + '\'' +
-                ", englishName='" + englishName + '\'' +
+                ", username='" + username + '\'' +
                 '}';
     }
+
+
 }

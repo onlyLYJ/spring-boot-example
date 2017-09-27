@@ -1,6 +1,6 @@
 package com.jc.hystrix;
 
-import com.jc.model.Employee;
+import com.jc.security.model.User;
 import com.netflix.hystrix.*;
 
 import java.util.function.Function;
@@ -10,8 +10,8 @@ import java.util.function.Function;
  * 如果是调用远程服务 则这个做法是有用的
  * Created by jasonzhu on 2017/7/16.
  */
-public class GetEmployeeCommand extends HystrixCommand<Employee> {
-    private Function<String, Employee> function;
+public class GetUserCommand extends HystrixCommand<User> {
+    private Function<String, User> function;
     private String record;
 
     /**
@@ -20,7 +20,7 @@ public class GetEmployeeCommand extends HystrixCommand<Employee> {
      * @param function 方法
      * @param record   搜索条件
      */
-    public GetEmployeeCommand(Function<String, Employee> function, String record) {
+    public GetUserCommand(Function<String, User> function, String record) {
         super(threadSetter());
         this.function = function;
         this.record = record;
@@ -31,11 +31,11 @@ public class GetEmployeeCommand extends HystrixCommand<Employee> {
      */
     private static Setter threadSetter() {
         //服务分组 全局唯一服务分组名，相同分组的服务会聚合在一起
-        HystrixCommandGroupKey groupKey = HystrixCommandGroupKey.Factory.asKey("employee");
+        HystrixCommandGroupKey groupKey = HystrixCommandGroupKey.Factory.asKey("user");
         //服务标识 全局唯一标识服务名 默认简单类名
-        HystrixCommandKey commandKey = HystrixCommandKey.Factory.asKey("getEmployee");
+        HystrixCommandKey commandKey = HystrixCommandKey.Factory.asKey("getUser");
         //线程池名称 全局唯一线程池名 默认分组名
-        HystrixThreadPoolKey threadPoolKey = HystrixThreadPoolKey.Factory.asKey("employee-pool");
+        HystrixThreadPoolKey threadPoolKey = HystrixThreadPoolKey.Factory.asKey("user-pool");
         //线程池配置
         HystrixThreadPoolProperties.Setter threadPoolProperties = HystrixThreadPoolProperties.Setter()
                 //核心线程池大小
@@ -99,16 +99,16 @@ public class GetEmployeeCommand extends HystrixCommand<Employee> {
     }
 
     @Override
-    protected Employee run() throws Exception {
+    protected User run() throws Exception {
         return function.apply(record);
     }
 
     //降级方法
     @Override
-    protected Employee getFallback() {
-        Employee employee = new Employee();
-        employee.setId(-1);
-        return employee;
+    protected User getFallback() {
+        User user = new User();
+        user.setId(-1);
+        return user;
     }
 
 }

@@ -17,10 +17,10 @@ public class MeetingroomBookDetail implements Serializable {
     private Integer id;
 
     /**
-     * 员工id
+     * 用户id
      */
-    @Column(name = "employee_id")
-    private Integer employeeId;
+    @Column(name = "user_id")
+    private Integer userId;
 
     /**
      * 会议室id
@@ -93,7 +93,7 @@ public class MeetingroomBookDetail implements Serializable {
     public String toString() {
         return "MeetingroomBookDetail{" +
                 "id=" + id +
-                ", employeeId=" + employeeId +
+                ", userId=" + userId +
                 ", meetingroomId=" + meetingroomId +
                 ", meetingBeginTime=" + meetingBeginTime +
                 ", meetingEndTime=" + meetingEndTime +

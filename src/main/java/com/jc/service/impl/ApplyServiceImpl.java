@@ -8,10 +8,10 @@ import com.jc.aop.TimeStatistics;
 import com.jc.exception.ApplyException;
 import com.jc.mapper.ActivityApplyMapper;
 import com.jc.mapper.ActivityMapper;
-import com.jc.mapper.EmployeeMapper;
 import com.jc.model.Activity;
 import com.jc.model.ActivityApply;
-import com.jc.model.Employee;
+import com.jc.security.mapper.UserMapper;
+import com.jc.security.model.User;
 import com.jc.service.ApplyService;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ import static com.jc.controller.BaseController.DATETIME_FORMAT;
 @Service
 public class ApplyServiceImpl implements ApplyService {
     @Autowired
-    private EmployeeMapper employeeMapper;
+    private UserMapper userMapper;
     @Autowired
     private ActivityMapper activityMapper;
     @Autowired
@@ -43,12 +43,12 @@ public class ApplyServiceImpl implements ApplyService {
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @CacheEvict(value = "demoCache", key = "new String('canApplyActivity')")
     @TimeStatistics(name = "报名")
-    public ActivityApply addApply(Integer activityId, Integer employeeId, String remark) throws ApplyException {
+    public ActivityApply addApply(Integer activityId, Integer userId, String remark) throws ApplyException {
         Preconditions.checkNotNull(activityId, "活动ID不能为空");
-        Preconditions.checkNotNull(employeeId, "员工ID不能为空");
+        Preconditions.checkNotNull(userId, "员工ID不能为空");
         ActivityApply record = new ActivityApply();
         record.setActivityId(activityId);
-        record.setEmployeeId(employeeId);
+        record.setId(userId);
         record.setStatus("0");
         List<ActivityApply> applyList = getApply(record);
         if (applyList != null && applyList.size() > 0)
@@ -64,14 +64,14 @@ public class ApplyServiceImpl implements ApplyService {
             throw new ApplyException(MessageFormat.format("报名未开始 报名开始时间{0}", DateFormatUtils.format(activity.getApplyBeginTime(), DATETIME_FORMAT)));
         if (activity.getApplyEndTime().before(now))
             throw new ApplyException(MessageFormat.format("报名已结束 报名结束时间{0}", DateFormatUtils.format(activity.getApplyEndTime(), DATETIME_FORMAT)));
-        Employee employee = employeeMapper.selectByPrimaryKey(employeeId);
-        if (employee == null)
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (user == null)
             throw new ApplyException("未找到该员工");
         if (!addApplyNum(activityId, 1)) {
             throw new ApplyException("报名失败或已过报名时间");
         }
         record.setActivityName(activity.getActivityName());
-        record.setRealName(employee.getRealName());
+        record.setRealName(user.getUsername());
         record.setRemark(remark);
         record.setCreateTime(now);
         applyMapper.insertUseGeneratedKeys(record);
@@ -83,12 +83,12 @@ public class ApplyServiceImpl implements ApplyService {
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     @CacheEvict(value = "demoCache", key = "new String('canApplyActivity')")
     @TimeStatistics(name = "取消报名")
-    public boolean cancelApply(Integer activityId, Integer employeeId) {
+    public boolean cancelApply(Integer activityId, Integer userId) {
         Preconditions.checkNotNull(activityId, "活动ID不能为空");
-        Preconditions.checkNotNull(employeeId, "用户ID不能为空");
+        Preconditions.checkNotNull(userId, "用户ID不能为空");
         ActivityApply record = new ActivityApply();
         record.setActivityId(activityId);
-        record.setEmployeeId(employeeId);
+        record.setId(userId);
         record.setStatus("0");
         List<ActivityApply> list = getApply(record);
         if (list == null || list.size() < 1)

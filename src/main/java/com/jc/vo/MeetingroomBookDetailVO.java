@@ -21,7 +21,7 @@ public class MeetingroomBookDetailVO extends MeetingroomBookDetail implements Cl
     @ApiModelProperty(value = "会议预定详情id")
     private Integer id;
     @ApiModelProperty(value = "员工id")
-    private Integer employeeId;
+    private Integer userId;
     @ApiModelProperty(value = "会议室id")
     private Integer meetingroomId;
     @ApiModelProperty(value = "员工真实姓名")
@@ -59,7 +59,7 @@ public class MeetingroomBookDetailVO extends MeetingroomBookDetail implements Cl
     public MeetingroomBookDetailVO clone() {
         MeetingroomBookDetailVO vo = new MeetingroomBookDetailVO();
 
-        vo.setEmployeeId(this.id);
+        vo.setUserId(this.id);
         vo.setMeetingroomId(this.meetingroomId);
         vo.setMeetingBeginTime(this.meetingBeginTime);
         vo.setMeetingEndTime(this.meetingEndTime);
