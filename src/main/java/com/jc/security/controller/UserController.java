@@ -1,7 +1,6 @@
 package com.jc.security.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.jc.aop.SerializedField;
 import com.jc.constant.DepartmentEnum;
 import com.jc.constant.ResultModel;
 import com.jc.controller.BaseController;
@@ -57,7 +56,6 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "根据查询用户")
     @GetMapping
-    @SerializedField(excludes = {"password"}, encode = false)
     public User getUserById(@RequestParam @ApiParam("通过id获取用户信息") @NonNull @Min(1) Integer id) {
         return userService.getUserById(id);
     }
@@ -65,7 +63,6 @@ public class UserController extends BaseController {
 
     @ApiOperation(value = "查询用户")
     @GetMapping(value = {"", "/list"})
-    @SerializedField(excludes = {"password"})
     public String listAllUser(Integer pageNum, Integer pageSize) {
         pageNum = pageNum == null ? 1 : pageNum;
         pageSize = pageSize == null ? 10 : pageSize;

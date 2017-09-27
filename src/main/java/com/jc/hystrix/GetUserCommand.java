@@ -88,9 +88,9 @@ public class GetUserCommand extends HystrixCommand<User> {
      */
     private static Setter semaphoreSetter() {
         //服务分组 全局唯一服务分组名，相同分组的服务会聚合在一起
-        HystrixCommandGroupKey groupKey = HystrixCommandGroupKey.Factory.asKey("employee");
+        HystrixCommandGroupKey groupKey = HystrixCommandGroupKey.Factory.asKey("user");
         //服务标识 全局唯一标识服务名 默认简单类名
-        HystrixCommandKey commandKey = HystrixCommandKey.Factory.asKey("getEmployee");
+        HystrixCommandKey commandKey = HystrixCommandKey.Factory.asKey("getUser");
         HystrixCommandProperties.Setter commandProperties = HystrixCommandProperties.Setter()
                 .withExecutionIsolationStrategy(HystrixCommandProperties.ExecutionIsolationStrategy.SEMAPHORE)
                 .withExecutionIsolationSemaphoreMaxConcurrentRequests(50);

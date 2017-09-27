@@ -103,7 +103,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button id="addEmployee" type="button" class="btn btn-primary" data-dismiss="modal"
+                    <button id="addUser" type="button" class="btn btn-primary" data-dismiss="modal"
                     >注册
                     </button>
                 </div>
@@ -259,7 +259,7 @@
         }
 
 
-        $("#addEmployee").click(function () {
+        $("#addUser").click(function () {
             var regRealName = $("#regRealName").val();
             var regEnglishName = $("#regEnglishName").val();
             var regPassword = $("#regPassword").val();
@@ -278,7 +278,7 @@
                 return;
             }
             var regDepartment = $("#regDepartment").val();
-            $.post(basePath + "addEmployee",
+            $.post(basePath + "addUser",
                 {
                     department: regDepartment,
                     englishName: regEnglishName,
