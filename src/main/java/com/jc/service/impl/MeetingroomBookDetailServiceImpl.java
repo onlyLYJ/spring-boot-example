@@ -126,6 +126,7 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
         Date endTime = mbdVO.getMeetingEndTime();
         Integer meetingroomId = mbdVO.getMeetingroomId();
         Integer inputId = mbdVO.getId();
+
         if (beginTime.compareTo(endTime) >= 0)
             throw new MeetingroomBookException(MeetingroomBookException.INVALID_DATA);
 
@@ -192,7 +193,7 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
         mbdVO.setStatus(VALID_STATUS);
         mbdVO.setUpdateTime(new Date());
 
-        Integer num = meetingroomBookDetailMapper.updateMeetingroomBookDetailByVO(mbdVO);
+        Integer num = meetingroomBookDetailMapper.updateByPrimaryKey(mbdVO);
 
         if (num != 1)
             throw new MeetingroomBookException(MeetingroomBookException.UPDATE_FAILED);

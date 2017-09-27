@@ -25,6 +25,8 @@ import java.text.MessageFormat;
 import java.util.Date;
 import java.util.List;
 
+import static com.jc.controller.BaseController.DATETIME_FORMAT;
+
 /**
  * Created by jasonzhu on 2017/7/13.
  */
@@ -59,9 +61,9 @@ public class ApplyServiceImpl implements ApplyService {
         if (!"0".equals(activity.getStatus()))
             throw new ApplyException("活动已取消");
         if (activity.getApplyBeginTime().after(now))
-            throw new ApplyException(MessageFormat.format("报名未开始 报名开始时间{0}", DateFormatUtils.format(activity.getApplyBeginTime(), "yyyy-MM-dd HH:mm:ss")));
+            throw new ApplyException(MessageFormat.format("报名未开始 报名开始时间{0}", DateFormatUtils.format(activity.getApplyBeginTime(), DATETIME_FORMAT)));
         if (activity.getApplyEndTime().before(now))
-            throw new ApplyException(MessageFormat.format("报名已结束 报名结束时间{0}", DateFormatUtils.format(activity.getApplyEndTime(), "yyyy-MM-dd HH:mm:ss")));
+            throw new ApplyException(MessageFormat.format("报名已结束 报名结束时间{0}", DateFormatUtils.format(activity.getApplyEndTime(), DATETIME_FORMAT)));
         Employee employee = employeeMapper.selectByPrimaryKey(employeeId);
         if (employee == null)
             throw new ApplyException("未找到该员工");

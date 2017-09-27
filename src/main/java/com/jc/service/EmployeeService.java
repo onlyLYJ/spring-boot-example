@@ -16,7 +16,7 @@ public interface EmployeeService {
      * @param englishName
      * @return
      */
-    Employee addEmployee(DepartmentEnum de, String realName, String englishName);
+    Employee addEmployee(DepartmentEnum de, String realName, String englishName, String password);
 
     /**
      * 更新员工信息

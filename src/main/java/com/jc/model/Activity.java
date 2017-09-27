@@ -67,12 +67,21 @@ public class Activity implements Serializable {
     @Transient
     private String other;
 
-    public String getOther() {
-        return other;
-    }
 
-    public void setOther(String other) {
-        this.other = other;
+    @Override
+    public String toString() {
+        return "Activity{" +
+                "id=" + id +
+                ", activityName='" + activityName + '\'' +
+                ", startTime=" + startTime +
+                ", applyBeginTime=" + applyBeginTime +
+                ", applyEndTime=" + applyEndTime +
+                ", remark='" + remark + '\'' +
+                ", applyNum=" + applyNum +
+                ", status='" + status + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", other='" + other + '\'' +
+                '}';
     }
-
 }

@@ -43,8 +43,7 @@
         <tr>
             <div class="form-group">
                 <td width="15%"><label for="meetingEndTime">会议结束时间</label></td>
-                <td width="35%"><input id="meetingEndTime"
-                                       th:text="${#dates.format(*{meetingEndTime},'yyyy-MM-dd HH:mm:ss')}"
+                <td width="35%"><input id="meetingEndTime" type="datetime-local" value=""
                                        value="" th:field="*{meetingEndTime}"></input></td>
             </div>
         </tr>
@@ -73,8 +72,12 @@
             </div>
         </tr>
         <tr>
-            <div class="form-group" width="50%">
+            <div class="form-group" width="25%">
                 <td><input id="addBookBtn" onclick="checkValidBook()" type="button" value="添加新预订"/></td>
+            </div>
+            <div class="form-group" width="25%">
+                <td><input id="returnBookList" type="button" name="Submit" value="返回"
+                           onclick="javascript:history.back(-1);"></td>
             </div>
         </tr>
     </form>
@@ -85,31 +88,10 @@
 <script th:inline="javascript">
     var mbrBasePath = '/meetingroom/book/newBook';
 
-    Date.prototype.Format = function (fmt) { //author: meizz
-        var o = {
-            "M+": this.getMonth() + 1, //月份
-            "d+": this.getDate(), //日
-            "h+": this.getHours(), //小时
-            "m+": this.getMinutes(), //分
-            "s+": this.getSeconds(), //秒
-            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-            "S": this.getMilliseconds() //毫秒
-        };
-        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        return fmt;
-    }
-
-    function convertTime(time) {
-
-        if (time == null | time == '') {
-            return time;
-        }
-        var result = time.replace('T', ' ');
-        return result += ":00";
-    }
-
+    /**
+     * 新增预定前检查
+     * @returns {boolean}
+     */
     function addBookCheck() {
         var bookReason = $("#bookReason").val();
         var meetingBeginTime = $("#meetingBeginTime").val();
@@ -129,7 +111,6 @@
         meetingBeginTime = convertTime(meetingBeginTime);
         meetingEndTime = convertTime(meetingEndTime);
 
-        console.log('time is ' + now + "|| begin " + meetingBeginTime + "|| end " + meetingEndTime);
         if (meetingBeginTime < now) {
             alert("穿越回去开会嘛？");
             return false;
@@ -153,6 +134,19 @@
         return true;
     }
 
+    /**
+     * 检查新增预定信息后提交
+     */
+
+    function checkValidBook() {
+        if (addBookCheck()) {
+            $("#addMrBook-form").submit();
+        }
+    }
+
+    /**
+     * 提交新增预定
+     */
     $("#addMrBook-form").submit(function () {
         $.ajax({
             type: 'POST',
@@ -166,16 +160,12 @@
                 }
             }
         });
-        window.location.href = mbrBasePath
+        return false;
     });
 
-
-    function checkValidBook() {
-        if (addBookCheck()) {
-            $("#addMrBook-form").submit();
-        }
-    }
-
+    /**
+     * 根据周期任务勾选框，显示日期时间选择框
+     */
     function showWeeklyBookEndDate() {
         var isChecked = $('#weeklyBook').is(":checked");
         if (isChecked != null && isChecked == true) {

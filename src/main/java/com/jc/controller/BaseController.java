@@ -1,8 +1,7 @@
 package com.jc.controller;
 
 import com.jc.constant.ResultModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,8 +15,10 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 /**
  * 基础Controller
  */
+@Slf4j
 public class BaseController {
-    public static final Logger logger = LoggerFactory.getLogger(BaseController.class);
+
+    public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     protected <T extends Serializable> ResultModel<T> buildErrorResponse(String msg) {
         ResultModel<T> model = new ResultModel<T>();
@@ -94,19 +95,19 @@ public class BaseController {
                     try {
                         map.put(f.getName(), f.get(obj) != null ? String.valueOf((f.get(obj))) : null);
                     } catch (Exception e) {
-                        logger.error(f.getName() + "解析失败");
+                        log.error(f.getName() + "解析失败");
                     }
                 } else if (f.getType().getName().endsWith("DTO")) {
                     try {
                         map.put(f.getName(), parseDTO(f.get(obj)));
                     } catch (Exception e) {
-                        logger.error(f.getName() + "解析失败");
+                        log.error(f.getName() + "解析失败");
                     }
                 } else {
                     try {
                         map.put(f.getName(), f.get(obj));
                     } catch (Exception e) {
-                        logger.error(f.getName() + "解析失败");
+                        log.error(f.getName() + "解析失败");
                     }
                 }
             }

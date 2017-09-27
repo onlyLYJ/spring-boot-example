@@ -70,6 +70,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         };
     }
 
+
     @Bean
     public Converter<String, String> stringTrimConvert() {
         return new Converter<String, String>() {

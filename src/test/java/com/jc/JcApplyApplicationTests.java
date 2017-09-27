@@ -49,7 +49,7 @@ public class JcApplyApplicationTests {
     //	@Test
 //	@Transactional
     public void testAddEmp() {
-        Employee employee = employeeService.addEmployee(DepartmentEnum.技术部, "朱圣然", "jasonzhu");
+        Employee employee = employeeService.addEmployee(DepartmentEnum.技术部, "朱圣然", "jasonzhu", "admin");
         Assert.assertNotNull(employee);
     }
 

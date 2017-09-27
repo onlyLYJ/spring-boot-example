@@ -7,6 +7,7 @@ import com.jc.vo.MeetingroomVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.Date;
 import java.util.List;
 
@@ -33,15 +35,10 @@ public class MeetingroomController extends BaseController {
     private MeetingroomService meetingroomService;
 
     private static final String ADD_SUCCESS = "会议室增加成功";
-
     private static final String ADD_FAILED = "同名会议室已存在，增加失败";
-
     private static final String UPDATE_SUCCESS = "同名会议室已存在，增加失败";
-
     private static final String NOT_EXIST = "会议室不存在";
-
     private static final String DUPLICATE_NAME = "英雄所见略同！不过，会议室名不能重复哦~";
-
     private static final String DELETE_SUCCESS = "会议室删除成功";
 
     @ApiOperation(value = "列出所有会议室", notes = "会议室管理首页", httpMethod = "GET")
@@ -57,11 +54,10 @@ public class MeetingroomController extends BaseController {
         }
 
         model.addAttribute("meetingroomList", meetingroomList);
-        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), DATETIME_FORMAT));
         log.info("查询会议室列表成功!");
         return "listMeetingroom";
     }
-
 
     /**
      * @param meetingroomVO
@@ -103,9 +99,9 @@ public class MeetingroomController extends BaseController {
     @ApiOperation(value = "删除会议室")
     @PostMapping(value = "/delete")
     @ResponseBody
-    public ResultModel deleteMeetingroom(@RequestParam @ApiParam("通过id删除会议室") Integer id) {
+    public ResultModel deleteMeetingroom(@RequestParam @ApiParam("通过id删除会议室") @NonNull @Min(1) Integer id) {
 
-        if (id == null || meetingroomService.deleteMeetingroomById(id) != 1) {
+        if (meetingroomService.deleteMeetingroomById(id) != 1) {
             log.error(NOT_EXIST);
             return buildErrorResponse(NOT_EXIST);
         }

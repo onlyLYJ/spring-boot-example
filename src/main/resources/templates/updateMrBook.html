@@ -10,7 +10,7 @@
           th:object="${updateMrBook}" method="post">
         <input id="mbdId" type="hidden" th:field="*{id}"></input>
         <!--//TODO需要修改成当前用户id-->
-        <input id="employeeId" type="hidden" th:field="*{employeeId}"></input>
+        <input id="employeeId" type="hidden" value="1" th:field="*{employeeId}"></input>
         <thead>
         <tr>
             <th width="15%" align="left">栏目</th>
@@ -37,16 +37,20 @@
         </tr>
         <tr>
             <div class="form-group">
-                <td width="15%"><label for="meetingBeginTime">会议开始时间</label></td>
-                <td width="35%"><input id="meetingBeginTime" type="text" displayFormat="yyyy-MM-dd HH:mm:ss"
-                                       value="" th:field="*{meetingBeginTime}"></input></td>
+                <td width="15%"><label>会议开始时间</label></td>
+                <td width="35%"><input type="text" th:field="*{meetingBeginTime}">
+                    </input></td>
+                <!--th:field="*{meetingBeginTime}"-->
+                <td><a th:text="${#dates.format(updateMrBook.meetingBeginTime,'yyyy-MM-dd HH:mm:ss')}"/></td>
             </div>
         </tr>
         <tr>
             <div class="form-group">
                 <td width="15%"><label for="meetingEndTime">会议结束时间</label></td>
-                <td width="35%"><input id="meetingEndTime" type="text" displayFormat="yyyy-MM-dd HH:mm:ss"
-                                       value="" th:field="*{meetingEndTime}"></input></td>
+                <td width="35%"><input id="meetingEndTime" th:type="text"
+                                       th:field="*{meetingEndTime}"></input>
+                <td><a th:text="${#dates.format(updateMrBook.meetingBeginTime,'yyyy-MM-dd HH:mm:ss')}"/></td>
+                </td>
             </div>
         </tr>
         <tr>
@@ -64,9 +68,17 @@
             </div>
         </tr>
         <tr>
-            <div class="form-group" width="50%">
+            <td>
+                <div class="form-group" width="50%">
                 <td><input id="updateBookBtn" onclick="checkValidBook()" type="button" value="更新预订"/></td>
             </div>
+            </td>
+            <td>
+                <div>
+                    <input id="returnBookList" type="button" name="Submit" value="返回"
+                           onclick="javascript:history.back(-1);">
+                </div>
+            </td>
         </tr>
     </form>
 </table>
@@ -75,30 +87,24 @@
 <div th:include="layout :: footer" id="footer">(footer)</div>
 <script th:inline="javascript">
     var mbrBasePath = '/meetingroom/book';
+    //      使用还不成功的bootstrap-datetimePicker
+    //    $("#meetingBeginTime").appendDtpicker({
+    //        "closeOnSelected": true,
+    //        'dateOnly': true,
+    //        "dateFormat": "yyyy-MM-DD hh:mm",
+    //        "locale": "cn",
+    //        "todayButton": false,
+    //        "autodateOnStart": false
+    //    });
 
-    Date.prototype.Format = function (fmt) { //author: meizz
-        var o = {
-            "M+": this.getMonth() + 1, //月份
-            "d+": this.getDate(), //日
-            "h+": this.getHours(), //小时
-            "m+": this.getMinutes(), //分
-            "s+": this.getSeconds(), //秒
-            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-            "S": this.getMilliseconds() //毫秒
-        };
-        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        return fmt;
-    }
-
-    function convertTime(time) {
-
-        if (time == null | time == '') {
-            return time;
+    /**
+     * 更新预定检查后提交
+     * @returns {boolean}
+     */
+    function checkValidBook() {
+        if (updateBookCheck()) {
+            $("#updateMrBook-form").submit();
         }
-        var result = time.replace('T', ' ');
-        return result += ":00";
     }
 
     function updateBookCheck() {
@@ -129,8 +135,8 @@
             return false;
         }
 
-        if (meetingBeginTime > meetingEndTime) {
-            alert("开始和结束时间是不是写反啦！");
+        if (meetingBeginTime >= meetingEndTime) {
+            alert("开始和结束时间得大于结束时间呀！");
             return false;
         }
 
@@ -142,28 +148,27 @@
         return true;
     }
 
+    /**
+     * POST提交更新预定表单
+     */
     $("#updateMrBook-form").submit(function () {
         $.ajax({
             type: 'POST',
             data: $(this).serialize(),
             url: mbrBasePath + "/update",
+            dataType: "json",
             success: function (data, status) {
                 if (data.c == '100') {
                     alert("会议室预定更新成功");
+                    $("#returnBookList").click();
                 } else {
+                    console.log(data.m);
                     alert(data.m);
                 }
             }
         });
-        window.location.href = mbrBasePath
+        return false;
     });
-
-
-    function checkValidBook() {
-        if (updateBookCheck()) {
-            $("#updateMrBook-form").submit();
-        }
-    }
 
 </script>
 </body>

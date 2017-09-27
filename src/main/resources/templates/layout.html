@@ -9,9 +9,11 @@
     <link rel="shortcut icon" type="image/png" th:href="@{/static/images/favicon.png}"></link>
 
     <title th:text="${title}">(title)</title>
-
     <link th:href="@{/webjarslocator/bootstrap/dist/css/bootstrap.css}" rel="stylesheet"></link>
     <link th:href="@{/static/css/starter.css}" rel="stylesheet"></link>
+    <link th:href="@{/static/css/jquery.simple-dtpicker.css}"
+          rel="stylesheet"/>
+    <script th:src="@{/static/js/jquery.simple-dtpicker.js}"></script>
 </head>
 
 <body>
@@ -32,9 +34,9 @@
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="javascript:">首页</a></li>
-                <li><a href="javascript:" data-toggle="modal" data-target="#registerModal">注册</a></li>
+                <li><a href="javascript:" data-toggle="modal" data-target="#registerModal">用户注册</a></li>
                 <li><a th:href="@{/admin/index}">管理</a></li>
-                <li><a href="javascript:alert('你猜怎么着！？我没写关于！')">关于</a></li>
+                <li><a href="javascript:alert('会议室管理与预定系统（试运行版！）\r遇到BUG请友善地联系辛勤工作的管理员')">关于</a></li>
             </ul>
         </div>
     </div>
@@ -55,9 +57,9 @@
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="javascript:">管理</a></li>
-                <li><a href="javascript:" data-toggle="modal" data-target="#addActivityModal">新增活动</a></li>
-                <li><a href="javascript:" data-toggle="modal" data-target="#registerModal">注册</a></li>
-                <li><a href="javascript:alert('你猜怎么着！？我没写关于！')">关于</a></li>
+                <!--<li><a href="javascript:" data-toggle="modal" data-target="#addActivityModal">新增活动</a></li>-->
+                <li><a href="javascript:" data-toggle="modal" data-target="#registerModal">用户注册注册</a></li>
+                <li><a href="javascript:alert('会议室管理与预定系统（试运行版！）\r遇到BUG请友善地联系辛勤工作的管理员~')">关于</a></li>
             </ul>
         </div>
     </div>
@@ -74,7 +76,6 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4>只需登记一次</h4>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
@@ -98,10 +99,16 @@
                         <label for="regEnglishName">英文名</label>
                         <input type="text" class="form-control" id="regEnglishName">
                     </div>
+                    <div class="form-group">
+                        <label for="regPassword">密码：（包含字母、数字。至少[6-20]位）</label>
+                        <input type="password" class="form-control" id="regPassword">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="addEmployee">注册</button>
+                    <button id="addEmployee" type="button" class="btn btn-primary" data-dismiss="modal"
+                    >注册
+                    </button>
                 </div>
             </div>
         </div>
@@ -145,81 +152,6 @@
         </div>
     </div>
 
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="updateMeetingroomModal">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4>更新会议室信息</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <input type="hidden" class="form-control" id="idC"/>
-                    </div>
-                    <div class="form-group">
-                        <label for="roomnameC">会议室名称</label>
-                        <input type="text" class="form-control" id="roomnameC"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label for="meetingroomCapacityC">可容纳人数</label>
-                        <input type="text" class="form-control" id="meetingroomCapacityC"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label for="meetingroomStatusC">可使用状态（不可使用请填1）</label>
-                        <input type="text" class="form-control" id="meetingroomStatusC"
-                        />
-                    </div>
-                    <div class="form-group">
-                        <label for="meetingroomRemarkC">备注</label>
-                        <textarea class="form-control" rows="3" id="meetingroomRemarkC"
-                        />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="updateMeetingroom">更新
-                    </button>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="addMeetingroomModal">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4>新增会议室</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="roomnameA">会议室名称</label>
-                        <input type="text" class="form-control" id="roomnameA">
-                    </div>
-                    <div class="form-group">
-                        <label for="meetingroomCapacityA">可容纳人数</label>
-                        <input type="text" class="form-control" id="meetingroomCapacityA"
-                               th:value="${10}">
-                    </div>
-                    <div class="form-group">
-                        <label for="meetingroomStatusA">可使用状态（不可使用请填1）</label>
-                        <input type="text" class="form-control" id="meetingroomStatusA"
-                               th:value="${0}">
-                    </div>
-                    <div class="form-group">
-                        <label for="meetingroomRemarkA">备注</label>
-                        <textarea class="form-control" rows="3" id="meetingroomRemarkA"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="addMeetingroom">新增</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
 
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
@@ -272,7 +204,6 @@
         </div>
     </div>
 
-
     <div class="container">
         <p class="muted credit">觉得丑？不要在意这些细节嘛～老铁</p>
     </div>
@@ -280,109 +211,61 @@
     <script th:src="@{/webjarslocator/bootstrap/js/bootstrap.min.js}"></script>
     <script th:inline="javascript">
         var basePath = /*[[@{/}]]*/ '';
-        var meetingroomPath = "http://localhost:8080/meetingroom"
 
-        $("#addMeetingroom").click(function () {
-            var roomnameA = $("#roomnameA").val();
-            var meetingroomCapacityA = $("#meetingroomCapacityA").val();
-            var meetingroomStatusA = $("#meetingroomStatusA").val();
-            var meetingroomRemarkA = $("#meetingroomRemarkA").val();
-            if (roomnameA == '') {
-                alert("会议室名不能为空");
-                return;
+        /**
+         * 将datetime-local时间格式转化为yyyy-MM-dd hh:mm:ss
+         * @param time
+         * @returns {*}
+         */
+        function convertTime(time) {
+            if (time == null | time == '') {
+                return time;
             }
-            if (meetingroomCapacityA == '') {
-                alert("会议室可容纳人数不能为空");
-                return;
-            }
-            if (meetingroomStatusA != '不可使用' || meetingroomStatusA != '1') {
-                meetingroomStatusA != '1'
-            } else {
-                meetingroomStatusA = '0'
-            }
+            var result = time.replace('T', ' ');
+            return result += ":00";
+        }
 
-            $.ajax({
-                type: "POST",
-                async: false,
-                url: meetingroomPath + "/add",
-                dataType: "json",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    roomname: roomnameA,
-                    capacity: meetingroomCapacityA,
-                    status: meetingroomStatusA,
-                    remark: meetingroomRemarkA
-                }),
-                success: function (data, status) {
-                    if (data.c == '100') {
-                        alert("会议室创建成功");
-                    } else {
-                        alert(data.m);
-                    }
-                }
-            });
-            window.location.reload();
-        });
+        //密码复杂要求：要求包含字母、数字。至少6位，至多20位
+        function checkValidPass(s) {
+            //返回'OK'表示合格
+            if (s.length < 6)
+                return '少于6位的密码可不能够！';
+            if (s.length > 20)
+                return '您的密码长度超过全国99.99%的人民，请设置小于20位~';
+            if (!s.match(/[0-9]/))
+                return '密码中必须包含数字';
+            if (!s.match(/[a-zA-Z]/))
+                return '密码中必须包含字母';
+            return 'OK';
+        }
 
-        function auditMeetingroomBook(obj) {
-            var id = $(obj).attr("id");
-            id = id.substring(5);
-            console.log("id is " + id);
-            $.ajax({
-                url: meetingroomPath + "/book/audit?id=" + id,
-                type: "get",
-                dataType: "json",
-                success: function (resData) {
-                    $('#idD').val(resData.id);
-                    $('#realNameD').val(resData.realName);
-                    $('#roomnameD').val(resData.roomname);
-                    $('#bookReasonD').val(resData.bookReason);
-                    $('#startTimeD').val(resData.meetingBeginTime);
-                    $('#endTimeD').val(resData.meetingEndTime);
-                    $('#remarkD').val(resData.remark);
-                    $('#auditStatusD').val(resData.auditStatus);
-                }
-            });
-        };
+        /**
+         * 日期时间自定义格式转换
+         * @param fmt
+         * @returns {*}
+         * @constructor
+         */
+        Date.prototype.Format = function (fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "h+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
 
-        $("#auditMeetingroomBookModal").click(function () {
-            var auditStatusD = $("#auditStatusD").val();
-            var idD = $("#idD").val();
-            if (auditStatusD == '') {
-                alert("审核意见不能为空");
-                return;
-            }
-
-            if (auditStatusD == '通过') {
-                auditStatusD = '1';
-            }
-
-            if (auditStatusD == '不通过') {
-                auditStatusD = '2';
-            }
-
-            if (auditStatusD != '0' && auditStatusD != '1' && auditStatusD != '2') {
-                alert("请输入审核意见：0待审核，1审核通过，2审核不通过");
-                return;
-            }
-
-            $.post(meetingroomPath + "/book/editAudit",
-                {
-                    id: idD,
-                    auditStatus: auditStatusD
-                }, function (data, status) {
-                    if (data.c == '100') {
-                        alert("审核状态修改成功");
-                    } else {
-                        alert(data.m);
-                    }
-                });
-            window.location.reload();
-        });
 
         $("#addEmployee").click(function () {
             var regRealName = $("#regRealName").val();
             var regEnglishName = $("#regEnglishName").val();
+            var regPassword = $("#regPassword").val();
             if (regRealName == '') {
                 alert("请先填写您的真实姓名");
                 return;
@@ -391,11 +274,18 @@
                 alert("请先填写您的英文名");
                 return;
             }
+
+            var passInfo = checkValidPass(regPassword);
+            if (passInfo != 'OK') {
+                alert(passInfo);
+                return;
+            }
             var regDepartment = $("#regDepartment").val();
             $.post(basePath + "addEmployee",
                 {
                     department: regDepartment,
                     englishName: regEnglishName,
+                    password: regPassword,
                     realName: regRealName
                 }, function (data, status) {
                     if (data.c == '100') {
@@ -405,6 +295,8 @@
                     }
                 });
         });
+
+
         $("#addActivity").click(function () {
             var activityNameA = $("#activityNameA").val();
             var startTimeA = $("#startTimeA").val();
@@ -442,171 +334,6 @@
                     }
                 });
         });
-
-        $("#addMeetingroom").click(function () {
-            var roomnameA = $("#roomnameA").val();
-            var meetingroomCapacityA = $("#meetingroomCapacityA").val();
-            var meetingroomStatusA = $("#meetingroomStatusA").val();
-            var meetingroomRemarkA = $("#meetingroomRemarkA").val();
-            if (roomnameA == '') {
-                alert("会议室名不能为空");
-                return;
-            }
-            if (meetingroomCapacityA == '') {
-                alert("会议室可容纳人数不能为空");
-                return;
-            }
-            if (meetingroomStatusA != '不可使用' || meetingroomStatusA != '1') {
-                meetingroomStatusA != '1'
-            } else {
-                meetingroomStatusA = '0'
-            }
-
-            $.ajax({
-                type: "POST",
-                async: false,
-                url: meetingroomPath + "/add",
-                dataType: "json",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    roomname: roomnameA,
-                    capacity: meetingroomCapacityA,
-                    status: meetingroomStatusA,
-                    remark: meetingroomRemarkA
-                }),
-                success: function (data, status) {
-                    if (data.c == '100') {
-                        alert("会议室创建成功");
-                    } else {
-                        alert(data.m);
-                    }
-                }
-            });
-            window.location.reload();
-        });
-
-        function editInfo(obj) {
-            var id = $(obj).attr("id");
-            id = id.substring(6);
-
-            var roomname = document.getElementById("roomname" + id).innerText;
-            var capacity = document.getElementById("capacity" + id).innerText;
-            var status = document.getElementById("status" + id).innerText;
-            var remark = document.getElementById("remark" + id).innerText;
-
-            $('#idC').val(id);
-            $('#roomnameC').val(roomname);
-            $('#meetingroomCapacityC').val(capacity);
-            $('#meetingroomStatusC').val(status);
-            $('#meetingroomRemarkC').val(remark);
-        };
-
-        $('#updateMeetingroom').click(function () {
-
-            var idC = $("#idC").val();
-            var roomnameC = $("#roomnameC").val();
-            var meetingroomCapacityC = $("#meetingroomCapacityC").val();
-            var meetingroomStatusC = $("#meetingroomStatusC").val();
-            var meetingroomRemarkC = $("#meetingroomRemarkC").val();
-            if (roomnameC == '') {
-                alert("会议室名不能为空");
-                return;
-            }
-            if (meetingroomCapacityC == '') {
-                alert("会议室可容纳人数不能为空");
-                return;
-            }
-            if (meetingroomStatusC == '不可使用' || meetingroomStatusC == '1') {
-                meetingroomStatusC = '1'
-            } else {
-                meetingroomStatusC = '0'
-            }
-
-            $.ajax({
-                type: "POST",
-                async: false,
-                url: meetingroomPath + "/update",
-                dataType: "json",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    id: idC,
-                    roomname: roomnameC,
-                    capacity: meetingroomCapacityC,
-                    status: meetingroomStatusC,
-                    remark: meetingroomRemarkC
-                }),
-                success: function (data, status) {
-                    if (data.c == '100') {
-                        alert("会议室更新成功！");
-                    } else {
-                        alert(data.m);
-                    }
-                }
-            });
-            window.location.reload();
-        });
-
-
-        function delInfo(obj) {
-            var id = $(obj).attr("id");
-            id = id.substring(3);
-            var roomname = document.getElementById("roomname" + id).innerText;
-
-            if (confirm("确认要删除" + roomname + "?")) {
-                $.post(meetingroomPath + "/delete",
-                    {
-                        id: id
-                    }, function (data, status) {
-                        if (data.c == '100') {
-                            alert("会议室: " + roomname + "删除成功");
-                        } else {
-                            alert(data.m);
-                        }
-                    });
-
-                window.location.reload();
-            }
-            ;
-
-        };
-
-        function cancelMeetingroomBook(obj) {
-            var id = $(obj).attr("id");
-            id = id.substring(6);
-
-            if (confirm("确认要取消预定?")) {
-                $.post(meetingroomPath + "/book/cancel",
-                    {
-                        id: id
-                    }, function (data, status) {
-                        if (data.c == '100') {
-                            alert("取消成功");
-                        } else {
-                            alert(data.m);
-                        }
-                    });
-
-                window.location.reload();
-            }
-            ;
-
-        };
-
-        $(function () {
-            $('#addMeetingroomBookModal').on('show.bs.modal', function () {
-
-                $.get(meetingroomPath + "/listRoomname",
-                    function (data, status) {
-                        if (data.c == '100') {
-                            alert("会议室名单获取成功");
-                        } else {
-                            alert(data.m);
-                        }
-                    });
-
-            })
-        });
-
 
     </script>
 </div>

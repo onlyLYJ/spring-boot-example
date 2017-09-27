@@ -11,11 +11,13 @@
         <result column="english_name" property="englishName" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="extra" property="englishName" jdbcType="VARCHAR"/>
+        <result column="enable" property="englishName" jdbcType="VARCHAR"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--
           WARNING - @mbg.generated
         -->
-        id, department, real_name, english_name, create_time, update_time
+        id, department, real_name, english_name, create_time, update_time, extra, enable
     </sql>
 </mapper>

@@ -113,12 +113,6 @@
         </if>
     </select>
 
-    <!--通过VO更新会议预定-->
-    <update id="updateMeetingroomBookDetailByVO" parameterType="com.jc.vo.MeetingroomVO">
-        UPDATE meetingroom_book_detail SET (<include refid="Base_Column_List_WithoutIdAndCreateTime"/>)
-        VALUES (<include refid="VO_Column_List_WithoutIdAndCreateTime"/>) WHERE id = #{id}
-    </update>
-
     <!--更新审核结果-->
     <update id="updateAuditStatusById">
         UPDATE meetingroom_book_detail

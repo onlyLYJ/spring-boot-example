@@ -64,14 +64,98 @@
 <script th:inline="javascript">
     var mbrBasePath = 'meetingroom/book';
 
-    th:onclick = "'javascript:goMRBList('+${mrb.id}+')'
-
+    /**
+     * 跳转需要更新的预定
+     * @param obj
+     */
     function updateMrBook(obj) {
         var id = $(obj).attr("id");
         id = id.substring(4);
-        window.open(mbrBasePath + '/newBook?id=' + id);
+        window.open(mbrBasePath + '/edit?id=' + id);
     }
 
+    /**
+     * 根据id获取需审核的预定信息
+     * @param obj
+     */
+    function auditMeetingroomBook(obj) {
+        var id = $(obj).attr("id");
+        id = id.substring(5);
+        $.ajax({
+            url: mbrBasePath + "/audit?id=" + id,
+            type: "get",
+            dataType: "json",
+            success: function (resData) {
+                $('#idD').val(resData.id);
+                $('#realNameD').val(resData.realName);
+                $('#roomnameD').val(resData.roomname);
+                $('#bookReasonD').val(resData.bookReason);
+                $('#startTimeD').val(resData.meetingBeginTime);
+                $('#endTimeD').val(resData.meetingEndTime);
+                $('#remarkD').val(resData.remark);
+                $('#auditStatusD').val('');
+            }
+        });
+    };
+
+    /**
+     * 审核预定检查并提交
+     */
+    $("#auditMeetingroomBookModal").click(function () {
+        var auditStatusD = $("#auditStatusD").val();
+        var idD = $("#idD").val();
+        if (auditStatusD == '') {
+            alert("审核意见不能为空");
+            return;
+        }
+        if (auditStatusD == '通过') {
+            auditStatusD = '1';
+        }
+        if (auditStatusD == '不通过') {
+            auditStatusD = '2';
+        }
+        if (auditStatusD != '0' && auditStatusD != '1' && auditStatusD != '2') {
+            alert("请输入审核意见：0待审核，1审核通过，2审核不通过");
+            return;
+        }
+        $.post(meetingroomPath + "/book/editAudit",
+            {
+                id: idD,
+                auditStatus: auditStatusD
+            }, function (data, status) {
+                if (data.c == '100') {
+                    alert("审核状态修改成功");
+                } else {
+                    alert(data.m);
+                }
+            });
+        window.location.reload();
+    });
+
+    /**
+     * 取消预定
+     * @param obj
+     */
+    function cancelMeetingroomBook(obj) {
+        var id = $(obj).attr("id");
+        id = id.substring(6);
+
+        if (confirm("确认要取消预定?")) {
+            $.post(meetingroomPath + "/book/cancel",
+                {
+                    id: id
+                }, function (data, status) {
+                    if (data.c == '100') {
+                        alert("取消成功");
+                    } else {
+                        alert(data.m);
+                    }
+                });
+
+            window.location.reload();
+        }
+        ;
+    };
 
 </script>
 </body>

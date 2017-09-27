@@ -11,7 +11,7 @@ import java.util.Date;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Employee implements Serializable {
-    private static final long serialVersionUID = 3527226708185200710L;
+    private static final long serialVersionUID = 9222366878800339736L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -39,4 +39,29 @@ public class Employee implements Serializable {
     @Column(name = "update_time")
     private Date updateTime;
 
+    /**
+     * 密码
+     */
+    @Column(name = "password")
+    private String password;
+
+    @Column(name = "extra")
+    private String extra;
+
+    @Column(name = "enable")
+    private String enable;
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", department='" + department + '\'' +
+                ", realName='" + realName + '\'' +
+                ", englishName='" + englishName + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", extra='" + extra + '\'' +
+                ", enable='" + enable + '\'' +
+                '}';
+    }
 }

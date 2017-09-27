@@ -85,7 +85,7 @@ public class IndexController extends BaseController {
         //设置状态
         activityList.forEach(ActivityServiceImpl::setStatus);
         model.addAttribute("activityList", activityList);
-        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), DATETIME_FORMAT));
         return "index";
     }
 
@@ -169,8 +169,10 @@ public class IndexController extends BaseController {
     @ApiOperation(value = "增加员工")
     @RequestMapping(value = "/addEmployee", method = RequestMethod.POST)
     @ResponseBody
-    public ResultModel addEmployee(@RequestParam String department, @RequestParam String realName, @RequestParam String englishName, String password) {
-        return buildSuccessResponse(employeeService.addEmployee(DepartmentEnum.match(department), realName, englishName));
+    public ResultModel addEmployee(@RequestParam String department, @RequestParam String realName, @RequestParam String englishName, @RequestParam String password) {
+
+
+        return buildSuccessResponse(employeeService.addEmployee(DepartmentEnum.match(department), realName, englishName, password));
     }
 
     /**
@@ -190,7 +192,7 @@ public class IndexController extends BaseController {
     @ApiOperation(value = "登录页")
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model) {
-        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), DATETIME_FORMAT));
         return "login";
     }
 }

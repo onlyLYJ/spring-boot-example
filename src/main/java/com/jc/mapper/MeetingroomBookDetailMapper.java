@@ -14,8 +14,6 @@ public interface MeetingroomBookDetailMapper extends MyMapper<MeetingroomBookDet
 
     List<MeetingroomBookDetailVO> getBookListWithinDatetimeRange(@Param(value = "meetingBeginTime") Date meetingBeginTime, @Param(value = "meetingEndTime") Date meetingEndTime, @Param(value = "meetingroomId") Integer meetingroomId, @Param(value = "inputId") Integer inputId);
 
-    Integer updateMeetingroomBookDetailByVO(MeetingroomBookDetailVO mbdVO);
-
     Integer updateAuditStatusById(@Param(value = "id") Integer id, @Param(value = "auditStatus") String auditStatus);
 
     List<MeetingroomBookDetail> listValidMeetingroomBookDetail();

@@ -62,4 +62,20 @@ public class ActivityApply implements Serializable {
     @Transient
     private String englishName;
 
+    @Override
+    public String toString() {
+        return "ActivityApply{" +
+                "id=" + id +
+                ", activityId=" + activityId +
+                ", employeeId=" + employeeId +
+                ", activityName='" + activityName + '\'' +
+                ", realName='" + realName + '\'' +
+                ", remark='" + remark + '\'' +
+                ", status='" + status + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", department='" + department + '\'' +
+                ", englishName='" + englishName + '\'' +
+                '}';
+    }
 }

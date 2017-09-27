@@ -36,14 +36,14 @@ public class AdminController extends BaseController {
         pageSize = pageSize == null ? 10 : pageSize;
         PageInfo<Activity> pageInfo = activityService.getActivity(pageNum, pageSize);
         pageInfo.getList().forEach(ActivityServiceImpl::setStatus);
-        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), DATETIME_FORMAT));
         model.addAttribute("page", pageInfo);
         return "admin";
     }
 
     @RequestMapping(value = "applyList", method = RequestMethod.GET)
     public String index(Model model, @RequestParam Integer activityId) {
-        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
+        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), DATETIME_FORMAT));
         model.addAttribute("list", applyService.getApplyList(activityId));
         return "apply";
     }

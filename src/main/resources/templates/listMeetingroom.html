@@ -37,17 +37,234 @@
             <td th:text="${#dates.format(meetingroom.updateTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
             <td class="edit" data-toggle="modal" data-target="#updateMeetingroomModal"
                 class="btn btn-primary" type="button" th:id="'update'+${meetingroom.id}"
-                onclick="editInfo(this)">编辑
+                onclick="editMrInfo(this)">编辑
             </td>
             <td class="delete" th:id="'del'+${meetingroom.id}"
                 class="btn btn-danger" type="button"
-                onclick="delInfo(this)">删除
+                onclick="delMrInfo(this)">删除
             </td>
         </tr>
         </tbody>
     </table>
 </div>
 
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="updateMeetingroomModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>更新会议室信息</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <input type="hidden" class="form-control" id="idC"/>
+                </div>
+                <div class="form-group">
+                    <label for="roomnameC">会议室名称</label>
+                    <input type="text" class="form-control" id="roomnameC"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="meetingroomCapacityC">可容纳人数</label>
+                    <input type="text" class="form-control" id="meetingroomCapacityC"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="meetingroomStatusC">可使用状态（不可使用请填1）</label>
+                    <input type="text" class="form-control" id="meetingroomStatusC"
+                    />
+                </div>
+                <div class="form-group">
+                    <label for="meetingroomRemarkC">备注</label>
+                    <textarea class="form-control" rows="3" id="meetingroomRemarkC"
+                    />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="updateMeetingroom">更新
+                </button>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="addMeetingroomModal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>新增会议室</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="roomnameA">会议室名称</label>
+                    <input type="text" class="form-control" id="roomnameA">
+                </div>
+                <div class="form-group">
+                    <label for="meetingroomCapacityA">可容纳人数</label>
+                    <input type="text" class="form-control" id="meetingroomCapacityA"
+                           th:value="${10}">
+                </div>
+                <div class="form-group">
+                    <label for="meetingroomStatusA">可使用状态（不可使用请填1）</label>
+                    <input type="text" class="form-control" id="meetingroomStatusA"
+                           th:value="${0}">
+                </div>
+                <div class="form-group">
+                    <label for="meetingroomRemarkA">备注</label>
+                    <textarea class="form-control" rows="3" id="meetingroomRemarkA"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="addMeetingroom">新增</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script th:inline="javascript">
+
+    var meetingroomPath = "http://localhost:8080/meetingroom"
+
+    /**
+     * 新增会议室检查并提交
+     */
+    $("#addMeetingroom").click(function () {
+        var roomnameA = $("#roomnameA").val();
+        var meetingroomCapacityA = $("#meetingroomCapacityA").val();
+        var meetingroomStatusA = $("#meetingroomStatusA").val();
+        var meetingroomRemarkA = $("#meetingroomRemarkA").val();
+        if (roomnameA == '') {
+            alert("会议室名不能为空");
+            return;
+        }
+        if (meetingroomCapacityA == '') {
+            alert("会议室可容纳人数不能为空");
+            return;
+        }
+        if (meetingroomStatusA != '不可使用' || meetingroomStatusA != '1') {
+            meetingroomStatusA != '1'
+        } else {
+            meetingroomStatusA = '0'
+        }
+
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: meetingroomPath + "/add",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({
+                roomname: roomnameA,
+                capacity: meetingroomCapacityA,
+                status: meetingroomStatusA,
+                remark: meetingroomRemarkA
+            }),
+            success: function (data, status) {
+                if (data.c == '100') {
+                    alert("会议室创建成功");
+                } else {
+                    alert(data.m);
+                }
+            }
+        });
+        window.location.reload();
+    });
+
+    /**
+     * 编辑会议室信息
+     * @param obj
+     */
+    function editMrInfo(obj) {
+        var id = $(obj).attr("id");
+        id = id.substring(6);
+
+        var roomname = document.getElementById("roomname" + id).innerText;
+        var capacity = document.getElementById("capacity" + id).innerText;
+        var status = document.getElementById("status" + id).innerText;
+        var remark = document.getElementById("remark" + id).innerText;
+
+        $('#idC').val(id);
+        $('#roomnameC').val(roomname);
+        $('#meetingroomCapacityC').val(capacity);
+        $('#meetingroomStatusC').val(status);
+        $('#meetingroomRemarkC').val(remark);
+    };
+
+    /**
+     * 更新会议室信息
+     */
+    $('#updateMeetingroom').click(function () {
+        var idC = $("#idC").val();
+        var roomnameC = $("#roomnameC").val();
+        var meetingroomCapacityC = $("#meetingroomCapacityC").val();
+        var meetingroomStatusC = $("#meetingroomStatusC").val();
+        var meetingroomRemarkC = $("#meetingroomRemarkC").val();
+        if (roomnameC == '') {
+            alert("会议室名不能为空");
+            return;
+        }
+        if (meetingroomCapacityC == '') {
+            alert("会议室可容纳人数不能为空");
+            return;
+        }
+        if (meetingroomStatusC == '不可使用' || meetingroomStatusC == '1') {
+            meetingroomStatusC = '1'
+        } else {
+            meetingroomStatusC = '0'
+        }
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: meetingroomPath + "/update",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify({
+                id: idC,
+                roomname: roomnameC,
+                capacity: meetingroomCapacityC,
+                status: meetingroomStatusC,
+                remark: meetingroomRemarkC
+            }),
+            success: function (data, status) {
+                if (data.c == '100') {
+                    alert("会议室更新成功！");
+                } else {
+                    alert(data.m);
+                }
+            }
+        });
+        window.location.reload();
+    });
+
+    /**
+     * 删除会议室
+     * @param obj
+     */
+    function delMrInfo(obj) {
+        var id = $(obj).attr("id");
+        id = id.substring(3);
+        var roomname = document.getElementById("roomname" + id).innerText;
+
+        if (confirm("确认要删除" + roomname + "?")) {
+            $.post(meetingroomPath + "/delete",
+                {
+                    id: id
+                }, function (data, status) {
+                    if (data.c == '100') {
+                        alert("会议室: " + roomname + "删除成功");
+                    } else {
+                        alert(data.m);
+                    }
+                });
+
+            window.location.reload();
+        }
+        ;
+    };
+
+</script>
 </body>
 </html>

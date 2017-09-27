@@ -24,7 +24,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeMapper employeeMapper;
 
     @Override
-    public Employee addEmployee(DepartmentEnum de, String realName, String englishName) {
+    public Employee addEmployee(DepartmentEnum de, String realName, String englishName, String password) {
         Preconditions.checkNotNull(de, "部门不能为空");
         Preconditions.checkNotNull(realName, "真是姓名不能为空");
         Preconditions.checkNotNull(englishName, "英文名不能为空");
@@ -33,6 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new ApplyException(MessageFormat.format("英文名已存在 ID【{0}】部门【{1}】姓名【{2}】英文名【{3}】", record.getId(), record.getDepartment(), record.getRealName(), record.getEnglishName()));
         record = new Employee();
         record.setDepartment(de.name());
+        record.setPassword(password);
         record.setRealName(realName);
         record.setEnglishName(englishName);
         record.setCreateTime(new Date());
