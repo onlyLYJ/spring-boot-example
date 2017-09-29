@@ -3,8 +3,10 @@ package com.jc.controller;
 import com.github.pagehelper.PageInfo;
 import com.jc.constant.ResultModel;
 import com.jc.exception.MeetingroomBookException;
+import com.jc.model.Department;
 import com.jc.model.Meetingroom;
 import com.jc.model.MeetingroomBookDetail;
+import com.jc.service.DepartmentService;
 import com.jc.service.MeetingroomBookDetailService;
 import com.jc.service.MeetingroomService;
 import com.jc.service.impl.MeetingroomBookDetailServiceImpl;
@@ -51,6 +53,9 @@ public class MeetingroomBookDetailController extends BaseController {
 
     @Autowired
     private MeetingroomService meetingroomService;
+
+    @Autowired
+    private DepartmentService departmentService;
 
     @ApiOperation(value = "分页显示预定信息", notes = "未过期的")
     @GetMapping(value = {"", "/list"})
@@ -144,6 +149,7 @@ public class MeetingroomBookDetailController extends BaseController {
 
         setTimeAttribute(model);
         setRoomlistAttribute(model);
+        setDeptlistAttribute(model);
         model.addAttribute("meetingroomBookDetailVO", new MeetingroomBookDetailVO());
 
         return "addMrBook";
@@ -155,6 +161,7 @@ public class MeetingroomBookDetailController extends BaseController {
 
         setTimeAttribute(model);
         setRoomlistAttribute(model);
+        setDeptlistAttribute(model);
 
         MeetingroomBookDetail updateMrBook = meetingroomBookDetailService.getMeetingroomBookDetailById(id);
         model.addAttribute("updateMrBook", updateMrBook);
@@ -248,4 +255,8 @@ public class MeetingroomBookDetailController extends BaseController {
         model.addAttribute("roomnameList", roomnameList);
     }
 
+    public void setDeptlistAttribute(Model model) {
+        List<Department> deptList = departmentService.listValidDepartment();
+        model.addAttribute("deptList", deptList);
+    }
 }

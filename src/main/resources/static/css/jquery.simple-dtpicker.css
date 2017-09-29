@@ -28,6 +28,7 @@ controls
     display: none;
     height: 0;
 }
+
 [hidden] {
     display: none;
 }
@@ -131,6 +132,7 @@ svg
 ) {
     overflow: hidden;
 }
+
 figure {
     margin: 0;
 }

@@ -20,6 +20,16 @@ public class BaseController {
 
     public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+
+//    @Controller
+//    public class MockController {
+//        @GetMapping(value="/mock")
+//        public String mock(ModelMap model, Principal principal ) {
+//            String name = principal.getName(); //get logged in username
+//            return "mock";
+//        }
+//    }
+
     protected <T extends Serializable> ResultModel<T> buildErrorResponse(String msg) {
         ResultModel<T> model = new ResultModel<T>();
         model.setCode(ResultModel.RESULT_ERROR);

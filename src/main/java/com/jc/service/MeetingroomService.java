@@ -41,11 +41,7 @@ public interface MeetingroomService {
      */
     List<Meetingroom> listMeetingroom();
 
-    Meetingroom addMeetingroom(String roomname, Integer capacity, String status, String remark);
-
     List<Meetingroom> getMeetingroomById(Integer id);
-
-    Integer deleteMeetingroomByName(String roomname);
 
     Integer deleteMeetingroomById(Integer id);
 }

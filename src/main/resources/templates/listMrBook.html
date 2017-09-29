@@ -17,24 +17,24 @@
     <table class="table table-hover">
         <thead>
         <tr>
+            <th>申请部门</th>
             <th>会议室名</th>
             <th>审核状态</th>
             <th>会议开始时间</th>
             <th>会议结束时间</th>
             <th>会议状态</th>
-            <th>申请人</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="mrb : ${page.list}">
+            <td th:id="'deptName'+${mrb.deptName}" th:text="${mrb.deptName}">...</td>
             <td th:id="'mbrRoomname'+${mrb.roomname}" th:text="${mrb.roomname}">...</td>
             <td th:id="'auditStatus'+${mrb.auditStatus}" th:text="${mrb.auditStatus}">...</td>
             <td th:text="${#dates.format(mrb.meetingBeginTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
             <td th:text="${#dates.format(mrb.meetingEndTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
             <td th:id="'status'+${mrb.status}" th:text="${mrb.status}">...</td>
-            <td th:id="'realName'+${mrb.realName}" th:text="${mrb.realName}">...</td>
             <td>
-                <button><a th:href="@{'/meetingroom/book/newBook?id='+${mrb.id}}"/>
+                <button><a th:href="@{'/meetingroom/book/editBook?id='+${mrb.id}}"/>
                     编辑预定
                 </button>
             </td>
@@ -62,17 +62,8 @@
 
 <div th:include="layout :: footer" id="footer">(footer)</div>
 <script th:inline="javascript">
-    var mbrBasePath = 'meetingroom/book';
 
-    /**
-     * 跳转需要更新的预定
-     * @param obj
-     */
-    function updateMrBook(obj) {
-        var id = $(obj).attr("id");
-        id = id.substring(4);
-        window.open(mbrBasePath + '/edit?id=' + id);
-    }
+    var mrbPath = "http://localhost:8080/meetingroom/book"
 
     /**
      * 根据id获取需审核的预定信息
@@ -82,12 +73,12 @@
         var id = $(obj).attr("id");
         id = id.substring(5);
         $.ajax({
-            url: mbrBasePath + "/audit?id=" + id,
+            url: mrbPath + "/audit?id=" + id,
             type: "get",
             dataType: "json",
             success: function (resData) {
                 $('#idD').val(resData.id);
-                $('#realNameD').val(resData.realName);
+                $('#deptNameD').val(resData.deptName);
                 $('#roomnameD').val(resData.roomname);
                 $('#bookReasonD').val(resData.bookReason);
                 $('#startTimeD').val(resData.meetingBeginTime);
@@ -101,7 +92,7 @@
     /**
      * 审核预定检查并提交
      */
-    $("#auditMeetingroomBookModal").click(function () {
+    $("#editAuditMrBook").click(function () {
         var auditStatusD = $("#auditStatusD").val();
         var idD = $("#idD").val();
         if (auditStatusD == '') {
@@ -118,7 +109,7 @@
             alert("请输入审核意见：0待审核，1审核通过，2审核不通过");
             return;
         }
-        $.post(meetingroomPath + "/book/editAudit",
+        $.post(mrbPath + "/editAudit",
             {
                 id: idD,
                 auditStatus: auditStatusD
@@ -141,7 +132,7 @@
         id = id.substring(6);
 
         if (confirm("确认要取消预定?")) {
-            $.post(meetingroomPath + "/book/cancel",
+            $.post(mrbPath + "/cancel",
                 {
                     id: id
                 }, function (data, status) {

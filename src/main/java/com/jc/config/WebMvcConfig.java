@@ -45,6 +45,20 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
 
+//    @Bean
+//    protected SpringSecurityDialect sec() {
+//        return new SpringSecurityDialect();
+//    }
+//
+//    @Bean
+//    public SpringTemplateEngine templateEngine(TemplateResolver templateResolver, SpringSecurityDialect sec) {
+//        final SpringTemplateEngine templateEngine = new SpringTemplateEngine();
+//        templateEngine.setTemplateResolver(templateResolver);
+//        templateEngine.addDialect(sec()); // Enable use of "sec"
+//        return templateEngine;
+//    }
+
+
     @Bean
     public Converter<String, Date> addNewConvert() {
         return new Converter<String, Date>() {

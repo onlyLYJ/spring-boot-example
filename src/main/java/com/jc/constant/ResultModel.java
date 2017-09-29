@@ -1,3 +1,7 @@
+/*
+ *The code is written by 51jiecai.com.
+ *All rights reserved.
+ */
 package com.jc.constant;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -6,8 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.Serializable;
 
 /**
- *
- *@author kenny
+ * @author kenny
  * Created on 2014年11月27日
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -47,20 +50,25 @@ public class ResultModel<T extends Serializable> implements Serializable {
     public String getCode() {
         return code;
     }
+
     public void setCode(String code) {
         this.code = code;
     }
+
     @JsonProperty("m")
     public String getMsg() {
         return msg;
     }
+
     public void setMsg(String msg) {
         this.msg = msg;
     }
+
     @JsonProperty("d")
     public T getData() {
         return data;
     }
+
     public void setData(T data) {
         this.data = data;
     }

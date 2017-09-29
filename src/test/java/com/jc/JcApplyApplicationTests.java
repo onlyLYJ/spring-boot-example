@@ -2,12 +2,11 @@ package com.jc;
 
 import com.github.pagehelper.PageInfo;
 import com.jc.constant.DepartmentEnum;
-import com.jc.constant.ResultModel;
+import com.jc.model.Employee;
 import com.jc.model.MeetingroomBookDetail;
-import com.jc.security.controller.UserController;
-import com.jc.security.service.UserService;
 import com.jc.service.ActivityService;
 import com.jc.service.ApplyService;
+import com.jc.service.EmployeeService;
 import com.jc.service.MeetingroomBookDetailService;
 import org.junit.Assert;
 import org.junit.Test;
@@ -26,9 +25,7 @@ public class JcApplyApplicationTests {
     @Autowired
     private ActivityService activityService;
     @Autowired
-    private UserService userService;
-    @Autowired
-    private UserController userController;
+    private EmployeeService employeeService;
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
 
@@ -49,14 +46,11 @@ public class JcApplyApplicationTests {
     }
 
 
-    @Test
-    @Transactional
+    //	@Test
+//	@Transactional
     public void testAddEmp() {
-//        User user = userService.addUser();
-        ResultModel model = userController.addUser(DepartmentEnum.技术部.toString(), "朱圣然", "admin1", "123456");
-
-        System.out.println(model.getCode());
-        Assert.assertNotNull(model);
+        Employee employee = employeeService.addEmployee(DepartmentEnum.技术部, "朱圣然", "jasonzhu", "admin");
+        Assert.assertNotNull(employee);
     }
 
     //	@Test

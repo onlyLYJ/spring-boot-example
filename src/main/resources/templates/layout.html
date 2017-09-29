@@ -1,6 +1,10 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" ,
+>
+</html>
+
 <head th:fragment="htmlhead">
+
     <meta charset="utf-8"></meta>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
@@ -33,11 +37,16 @@
                 <li class="active"><a href="javascript:">首页</a></li>
                 <li><a href="javascript:" data-toggle="modal" data-target="#registerModal">用户注册</a></li>
                 <li><a th:href="@{/admin/index}">管理</a></li>
-                <li><a href="javascript:alert('会议室管理与预定系统（试运行版！）\r遇到BUG请友善地联系辛勤工作的管理员')">关于</a></li>
+                <li><a href="javascript:alert('会议室管理与预定系统（试运行版）\r遇到BUG请友善地与辛勤工作的管理员联系~')">关于</a></li>
             </ul>
         </div>
+
+
     </div>
+
 </div>
+
+
 <div th:fragment="navbar-admin" class="navbar navbar-inverse navbar-fixed-top" role="navigation">
     <div class="container">
         <div class="navbar-header">
@@ -55,8 +64,8 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="javascript:">管理</a></li>
                 <!--<li><a href="javascript:" data-toggle="modal" data-target="#addActivityModal">新增活动</a></li>-->
-                <li><a href="javascript:" data-toggle="modal" data-target="#registerModal">用户注册注册</a></li>
-                <li><a href="javascript:alert('会议室管理与预定系统（试运行版！）\r遇到BUG请友善地联系辛勤工作的管理员~')">关于</a></li>
+                <li><a href="javascript:" data-toggle="modal" data-target="#registerModal">用户注册</a></li>
+                <li><a href="javascript:alert('会议室管理与预定系统（试运行版）\r遇到BUG请友善地与辛勤工作的管理员联系~')">关于</a></li>
             </ul>
         </div>
     </div>
@@ -89,21 +98,21 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="regRealName">姓名</label>
+                        <label for="regRealName">中文名</label>
                         <input type="text" class="form-control" id="regRealName">
                     </div>
                     <div class="form-group">
-                        <label for="regEnglishName">英文名</label>
+                        <label for="regEnglishName">账号（5-15位字母数字）</label>
                         <input type="text" class="form-control" id="regEnglishName">
                     </div>
                     <div class="form-group">
-                        <label for="regPassword">密码：（包含字母、数字。至少[6-20]位）</label>
+                        <label for="regPassword">密码（包含字母、数字 [6-20]位）</label>
                         <input type="password" class="form-control" id="regPassword">
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button id="addUser" type="button" class="btn btn-primary" data-dismiss="modal"
+                    <button id="addEmployee" type="button" class="btn btn-primary" data-dismiss="modal"
                     >注册
                     </button>
                 </div>
@@ -150,7 +159,6 @@
     </div>
 
 
-
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
          id="auditMeetingroomBookModal">
         <div class="modal-dialog modal-lg" role="document">
@@ -163,8 +171,8 @@
                         <input type="hidden" class="form-control" id="idD"/>
                     </div>
                     <div class="form-group">
-                        <label>申请人</label>
-                        <input type="text" class="form-control" id="realNameD"/>
+                        <label>申请部门</label>
+                        <input type="text" class="form-control" id="deptNameD"/>
                     </div>
                     <div class="form-group">
                         <label>会议室名称</label>
@@ -194,7 +202,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="auditMeetingroomBook">更新
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="editAuditMrBook">更新
                     </button>
                 </div>
             </div>
@@ -208,6 +216,7 @@
     <script th:src="@{/webjarslocator/bootstrap/js/bootstrap.min.js}"></script>
     <script th:inline="javascript">
         var basePath = /*[[@{/}]]*/ '';
+        var employeeBasePath = "http://localhost:8080/employee"
 
         /**
          * 将datetime-local时间格式转化为yyyy-MM-dd hh:mm:ss
@@ -236,6 +245,11 @@
             return 'OK';
         }
 
+        function isValidEnglishname(name) {
+            var regex = /^[0-9A-Za-z_]{5,15}$/;
+            return regex.exec(name)
+        }
+
         /**
          * 日期时间自定义格式转换
          * @param fmt
@@ -258,8 +272,7 @@
             return fmt;
         }
 
-
-        $("#addUser").click(function () {
+        $("#addEmployee").click(function () {
             var regRealName = $("#regRealName").val();
             var regEnglishName = $("#regEnglishName").val();
             var regPassword = $("#regPassword").val();
@@ -267,8 +280,8 @@
                 alert("请先填写您的真实姓名");
                 return;
             }
-            if (regEnglishName == '') {
-                alert("请先填写您的英文名");
+            if (!isValidEnglishname(regEnglishName)) {
+                alert("账号请输入5-15位字母数字组合");
                 return;
             }
 
@@ -278,19 +291,28 @@
                 return;
             }
             var regDepartment = $("#regDepartment").val();
-            $.post(basePath + "addUser",
-                {
+            console.log(regDepartment);
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: employeeBasePath + "/add",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({
                     department: regDepartment,
+                    realName: regRealName,
                     englishName: regEnglishName,
-                    password: regPassword,
-                    realName: regRealName
-                }, function (data, status) {
+                    password: regPassword
+                }),
+                success: function (data, status) {
                     if (data.c == '100') {
-                        alert("登记成功");
+                        alert("用户注册成功");
                     } else {
                         alert(data.m);
                     }
-                });
+                }
+            });
+            window.location.reload();
         });
 
 

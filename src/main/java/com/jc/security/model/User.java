@@ -1,12 +1,12 @@
 package com.jc.security.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-import javax.persistence.Column;
 import javax.persistence.Id;
-import java.util.Date;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
     @Id
     private Integer id;
@@ -20,37 +20,54 @@ public class User {
      * 密码
      */
     private String password;
-
-    /**
-     * 部门
-     */
-    private String department;
-
-    /**
-     * 中文名
-     */
-    @Column(name = "real_name")
-    private String realName;
-
-    /**
-     * 创建时间
-     */
-    @Column(name = "create_time")
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    @Column(name = "update_time")
-    private Date updateTime;
-
-    /**
-     * 其他
-     */
-    private String extra;
-
-    /**
-     * 可用状态 0可用 1不可用
-     */
-    private String enable;
+//
+//    /**
+//     * @return id
+//     */
+//    public Integer getId() {
+//        return id;
+//    }
+//
+//    /**
+//     * @param id
+//     */
+//    public void setId(Integer id) {
+//        this.id = id;
+//    }
+//
+//    /**
+//     * 获取用户名
+//     *
+//     * @return username - 用户名
+//     */
+//    public String getUsername() {
+//        return username;
+//    }
+//
+//    /**
+//     * 设置用户名
+//     *
+//     * @param username 用户名
+//     */
+//    public void setUsername(String username) {
+//        this.username = username == null ? null : username.trim();
+//    }
+//
+//    /**
+//     * 获取密码
+//     *
+//     * @return password - 密码
+//     */
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    /**
+//     * 设置密码
+//     *
+//     * @param password 密码
+//     */
+//    public void setPassword(String password) {
+//        this.password = password == null ? null : password.trim();
+//    }
 }

@@ -10,7 +10,7 @@
           th:object="${updateMrBook}" method="post">
         <input id="mbdId" type="hidden" th:field="*{id}"></input>
         <!--//TODO需要修改成当前用户id-->
-        <input id="userId" type="hidden" value="1" th:field="*{userId}"></input>
+        <input id="employeeId" type="hidden" value="1" th:field="*{employeeId}"></input>
         <thead>
         <tr>
             <th width="15%" align="left">栏目</th>
@@ -31,6 +31,18 @@
         </tr>
         <tr>
             <div class="form-group">
+                <td width="15%"><label>请选择部门</label></td>
+                <td width="35%">
+                    <select th:field="*{deptId}">
+                        <option th:each="dept : ${deptList}"
+                                th:value="${dept.id}" th:text="${dept.deptName}">...
+                        </option>
+                    </select>
+                </td>
+            </div>
+        </tr>
+        <tr>
+            <div class="form-group">
                 <td width="15%"><label for="bookReason">预定原因</label></td>
                 <td width="35%"><input id="bookReason" type="text" value="" th:field="*{bookReason}"></input></td>
             </div>
@@ -38,15 +50,16 @@
         <tr>
             <div class="form-group">
                 <td width="15%"><label>会议开始时间</label></td>
-                <td width="35%"><input type="text" th:field="*{meetingBeginTime}">
+                <td width="35%"><input type="datetime-local" th:field="*{meetingBeginTime}">
                     </input></td>
+                <!--th:field="*{meetingBeginTime}"-->
                 <td><a th:text="${#dates.format(updateMrBook.meetingBeginTime,'yyyy-MM-dd HH:mm:ss')}"/></td>
             </div>
         </tr>
         <tr>
             <div class="form-group">
                 <td width="15%"><label for="meetingEndTime">会议结束时间</label></td>
-                <td width="35%"><input id="meetingEndTime" th:type="text"
+                <td width="35%"><input id="meetingEndTime" type="datetime-local"
                                        th:field="*{meetingEndTime}"></input>
                 <td><a th:text="${#dates.format(updateMrBook.meetingBeginTime,'yyyy-MM-dd HH:mm:ss')}"/></td>
                 </td>
@@ -69,7 +82,7 @@
         <tr>
             <td>
                 <div class="form-group" width="50%">
-                <td><input id="updateBookBtn" onclick="checkValidBook()" type="button" value="更新预订"/></td>
+            <td><input id="updateBookBtn" onclick="checkValidBook()" type="button" value="更新预订"/></td>
             </div>
             </td>
             <td>
@@ -85,16 +98,8 @@
 
 <div th:include="layout :: footer" id="footer">(footer)</div>
 <script th:inline="javascript">
-    var mbrBasePath = '/meetingroom/book';
-    //      使用还不成功的bootstrap-datetimePicker
-    //    $("#meetingBeginTime").appendDtpicker({
-    //        "closeOnSelected": true,
-    //        'dateOnly': true,
-    //        "dateFormat": "yyyy-MM-DD hh:mm",
-    //        "locale": "cn",
-    //        "todayButton": false,
-    //        "autodateOnStart": false
-    //    });
+
+    var meetingroomPath = "http://localhost:8080/meetingroom"
 
     /**
      * 更新预定检查后提交
@@ -154,7 +159,7 @@
         $.ajax({
             type: 'POST',
             data: $(this).serialize(),
-            url: mbrBasePath + "/update",
+            url: meetingroomPath + "/book/update",
             dataType: "json",
             success: function (data, status) {
                 if (data.c == '100') {

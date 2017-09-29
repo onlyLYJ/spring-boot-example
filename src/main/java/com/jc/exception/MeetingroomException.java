@@ -4,7 +4,7 @@ package com.jc.exception;
  * 申请异常
  * Created by onlyLYJ on 2017/9/21.
  */
-public class MeetingroomException extends RuntimeException {
+public class MeetingroomException extends ApplyException {
 
     public static final String ALREADY_EXIST = "同名会议室已存在";
 

@@ -82,37 +82,36 @@ public class MeetingroomServiceImpl implements MeetingroomService {
         return meetingroomMapper.selectAll();
     }
 
-    @Override
-    public Meetingroom addMeetingroom(String roomname, Integer capacity, String status, String remark) {
-        Meetingroom meetingroom = new Meetingroom();
-        meetingroom.setRoomname(roomname);
-        meetingroom.setCapacity(capacity);
-        meetingroom.setStatus(status);
-        Date date = new Date();
-        meetingroom.setRemark(remark);
-        meetingroom.setCreateTime(date);
-        meetingroom.setUpdateTime(date);
-        meetingroomMapper.insertUseGeneratedKeys(meetingroom);
-        return meetingroom;
-    }
-
-
-    @Override
-    public Integer deleteMeetingroomByName(String roomname) {
-
-        List<Meetingroom> list = getMeetingroomByName(roomname);
-        int deleteNum = 0;
-
-        if (list == null || list.size() == 0) {
-            return deleteNum;
-        }
-
-        for (Meetingroom meetingroom : list) {
-            deleteNum += meetingroomMapper.delete(meetingroom);
-        }
-
-        return deleteNum;
-    }
+//    @Override
+//    public Meetingroom addMeetingroom(String roomname, Integer capacity, String status, String remark) {
+//        Meetingroom meetingroom = new Meetingroom();
+//        meetingroom.setRoomname(roomname);
+//        meetingroom.setCapacity(capacity);
+//        meetingroom.setStatus(status);
+//        Date date = new Date();
+//        meetingroom.setRemark(remark);
+//        meetingroom.setCreateTime(date);
+//        meetingroom.setUpdateTime(date);
+//        meetingroomMapper.insertUseGeneratedKeys(meetingroom);
+//        return meetingroom;
+//    }
+//
+//    @Override
+//    public Integer deleteMeetingroomByName(String roomname) {
+//
+//        List<Meetingroom> list = getMeetingroomByName(roomname);
+//        int deleteNum = 0;
+//
+//        if (list == null || list.size() == 0) {
+//            return deleteNum;
+//        }
+//
+//        for (Meetingroom meetingroom : list) {
+//            deleteNum += meetingroomMapper.delete(meetingroom);
+//        }
+//
+//        return deleteNum;
+//    }
 
     @Override
     public Integer deleteMeetingroomById(Integer id) {

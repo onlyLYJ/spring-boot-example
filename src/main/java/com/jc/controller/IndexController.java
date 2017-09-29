@@ -1,13 +1,13 @@
 package com.jc.controller;
 
 import com.jc.constant.ResultModel;
-import com.jc.hystrix.GetUserCommand;
+import com.jc.hystrix.GetEmployeeCommand;
 import com.jc.model.Activity;
 import com.jc.model.ActivityApply;
-import com.jc.security.model.User;
-import com.jc.security.service.UserService;
+import com.jc.model.Employee;
 import com.jc.service.ActivityService;
 import com.jc.service.ApplyService;
+import com.jc.service.EmployeeService;
 import com.jc.service.impl.ActivityServiceImpl;
 import com.jc.util.RateLimitUtil;
 import io.swagger.annotations.Api;
@@ -59,14 +59,12 @@ import java.util.concurrent.TimeUnit;
 @Controller
 @Slf4j
 public class IndexController extends BaseController {
-
     @Autowired
     private ApplyService applyService;
     @Autowired
     private ActivityService activityService;
     @Autowired
-    private UserService userService;
-
+    private EmployeeService employeeService;
     //每秒五条请求 等待1秒
     private RateLimitUtil rateLimitUtil = new RateLimitUtil(5, 1);
 //    @Resource(name = "applyRateLimitUtil")
@@ -105,55 +103,55 @@ public class IndexController extends BaseController {
     /**
      * 预约
      *
-     * @param username 英文名
+     * @param englishName 英文名
      * @param activityId  活动ID
      * @return
      */
     @ApiOperation(value = "申请预约", notes = "备注非必填")
     @RequestMapping(value = "/apply", method = RequestMethod.POST)
     @ResponseBody
-    public ResultModel apply(HttpServletRequest request, @ApiParam(value = "英文名", defaultValue = "jasonzhu") @RequestParam String username, @RequestParam Integer activityId, String remark) {
+    public ResultModel apply(HttpServletRequest request, @ApiParam(value = "英文名", defaultValue = "jasonzhu") @RequestParam String englishName, @RequestParam Integer activityId, String remark) {
         Future<Boolean> future = CompletableFuture.supplyAsync(rateLimitUtil::tryAcquire);
-        log.debug("用户【{}】申请预约【{}】备注【{}】ip【{}】", username, activityId, remark, getRemoteIp(request));
+        log.debug("用户【{}】申请预约【{}】备注【{}】ip【{}】", englishName, activityId, remark, getRemoteIp(request));
         try {
             if (!future.get(3, TimeUnit.SECONDS)) {
-                log.warn("访问频次限制触发，用户【{}】申请预约【{}】", username, activityId);
+                log.warn("访问频次限制触发，用户【{}】申请预约【{}】", englishName, activityId);
                 return buildLimitResponse();
             }
         } catch (Exception e) {
             return buildLimitResponse();
         }
-        username = username.trim();
-        GetUserCommand getUserCommand = new GetUserCommand(userService::getUserByUsername, username);
-        Future<User> getUserFuture = getUserCommand.queue();
-        log.debug("查询用户【{}】是否存在", username);
-        User user;
+        englishName = englishName.trim();
+        GetEmployeeCommand getEmployeeCommand = new GetEmployeeCommand(employeeService::findByEnglishName, englishName);
+        Future<Employee> getEmployeeFuture = getEmployeeCommand.queue();
+        log.debug("查询用户【{}】是否存在", englishName);
+        Employee employee;
         try {
-            user = getUserFuture.get(2, TimeUnit.SECONDS);
+            employee = getEmployeeFuture.get(2, TimeUnit.SECONDS);
         } catch (Exception e) {
-            log.warn("查询用户【{}】失败 原因:{}", username, e.getMessage());
+            log.warn("查询用户【{}】失败 原因:{}", englishName, e.getMessage());
             return buildErrorResponse("查询用户失败");
         }
-        if (user == null) return buildErrorResponse("请先注册");
-        ActivityApply apply = applyService.addApply(activityId, user.getId(), remark);
+        if (employee == null) return buildErrorResponse("请先注册");
+        ActivityApply apply = applyService.addApply(activityId, employee.getId(), remark);
         return buildSuccessResponse(apply);
     }
 
     /**
      * 取消预约
      *
-     * @param username 英文名
+     * @param englishName 英文名
      * @param activityId  活动ID
      * @return
      */
     @ApiOperation(value = "取消预约")
     @RequestMapping(value = "/cancelApply", method = RequestMethod.POST)
     @ResponseBody
-    public ResultModel cancelApply(@RequestParam String username, @RequestParam Integer activityId) {
-        username = username.trim();
-        User user = userService.getUserByUsername(username);
-        if (user == null) return buildErrorResponse("请先注册");
-        if (applyService.cancelApply(activityId, user.getId())) {
+    public ResultModel cancelApply(@RequestParam String englishName, @RequestParam Integer activityId) {
+        englishName = englishName.trim();
+        Employee employee = employeeService.findByEnglishName(englishName);
+        if (employee == null) return buildErrorResponse("请先注册");
+        if (applyService.cancelApply(activityId, employee.getId())) {
             return buildSuccessResponse("取消成功");
         }
         return buildErrorResponse("取消失败");

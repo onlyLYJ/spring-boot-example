@@ -21,7 +21,7 @@ public class MeetingroomBookDetailVO extends MeetingroomBookDetail implements Cl
     @ApiModelProperty(value = "会议预定详情id")
     private Integer id;
     @ApiModelProperty(value = "员工id")
-    private Integer userId;
+    private Integer employeeId;
     @ApiModelProperty(value = "会议室id")
     private Integer meetingroomId;
     @ApiModelProperty(value = "员工真实姓名")
@@ -54,18 +54,23 @@ public class MeetingroomBookDetailVO extends MeetingroomBookDetail implements Cl
     private Boolean isWeeklyBook;
     @ApiModelProperty(value = "周期预定结束时间")
     private Date weeklyBookEndDate;
+    @ApiModelProperty(value = "预定部门id")
+    private Integer deptId;
+    @ApiModelProperty(value = "预定部门名称")
+    private String deptName;
 
 
     public MeetingroomBookDetailVO clone() {
         MeetingroomBookDetailVO vo = new MeetingroomBookDetailVO();
 
-        vo.setUserId(this.id);
+        vo.setEmployeeId(this.id);
         vo.setMeetingroomId(this.meetingroomId);
         vo.setMeetingBeginTime(this.meetingBeginTime);
         vo.setMeetingEndTime(this.meetingEndTime);
         vo.setBookReason(this.bookReason);
         vo.setAttendNum(this.attendNum);
-
+        vo.setDeptName(this.deptName);
+        vo.setDeptId(this.deptId);
         Date date = new Date();
         vo.setCreateTime(date);
         vo.setUpdateTime(date);

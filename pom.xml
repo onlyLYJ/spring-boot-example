@@ -234,6 +234,12 @@
             <version>${lombok.version}</version>
         </dependency>
 
+        <!--&lt;!&ndash;spring security thymeleaf src标签&ndash;&gt;-->
+        <!--<dependency>-->
+        <!--<groupId>org.thymeleaf.extras</groupId>-->
+        <!--<artifactId>thymeleaf-extras-springsecurity3</artifactId>-->
+        <!--<version>2.1.2.RELEASE</version>-->
+        <!--</dependency>-->
 
     </dependencies>
 

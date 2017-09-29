@@ -42,7 +42,7 @@ public class MeetingroomController extends BaseController {
     private static final String DELETE_SUCCESS = "会议室删除成功";
 
     @ApiOperation(value = "列出所有会议室", notes = "会议室管理首页", httpMethod = "GET")
-    @GetMapping(value = {"/", "/list"})
+    @GetMapping(value = {"", "/list"})
     public String list(Model model, Integer id) {
 
         List<Meetingroom> meetingroomList = null;

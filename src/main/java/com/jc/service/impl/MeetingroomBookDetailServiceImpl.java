@@ -101,8 +101,8 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
         }
 
         //TODO 员工id输入需要加入
-        if (mbdVO.getUserId() == null)
-            mbdVO.setUserId(1);
+        if (mbdVO.getEmployeeId() == null)
+            mbdVO.setEmployeeId(1);
 
         mbdVO.setAuditStatus(WAIT_AUDIT_STATUS);
         mbdVO.setStatus(VALID_STATUS);

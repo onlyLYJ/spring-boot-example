@@ -17,10 +17,10 @@ public class MeetingroomBookDetail implements Serializable {
     private Integer id;
 
     /**
-     * 用户id
+     * 员工id
      */
-    @Column(name = "user_id")
-    private Integer userId;
+    @Column(name = "employee_id")
+    private Integer employeeId;
 
     /**
      * 会议室id
@@ -82,6 +82,11 @@ public class MeetingroomBookDetail implements Serializable {
     @Column(name = "status")
     private String status;
 
+    /**
+     * 预定部门id
+     */
+    @Column(name = "dept_id")
+    private Integer deptId;
 
     @Transient
     private String realName;
@@ -89,11 +94,14 @@ public class MeetingroomBookDetail implements Serializable {
     @Transient
     private String roomname;
 
+    @Transient
+    private String deptName;
+
     @Override
     public String toString() {
         return "MeetingroomBookDetail{" +
                 "id=" + id +
-                ", userId=" + userId +
+                ", employeeId=" + employeeId +
                 ", meetingroomId=" + meetingroomId +
                 ", meetingBeginTime=" + meetingBeginTime +
                 ", meetingEndTime=" + meetingEndTime +
