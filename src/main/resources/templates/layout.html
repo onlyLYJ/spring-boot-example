@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org" ,
->
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:th="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/html"
 </html>
 
 <head th:fragment="htmlhead">
@@ -27,21 +27,17 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" th:href="@{/meetingroom/book/}">预定管理</a>
-            <a class="navbar-brand" th:href="@{/meetingroom}">会议室管理系统</a>
-            <a class="navbar-brand" th:href="@{/meetingroom/book/}">会议预定系统</a>
-
+            <a class="navbar-brand" th:href="@{/book/}">会议室预定系统</a>
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a href="javascript:">首页</a></li>
-                <li><a href="javascript:" data-toggle="modal" data-target="#registerModal">用户注册</a></li>
+                <li class="active"><a th:href="@{/}">首页</a></li>
                 <li><a th:href="@{/admin/index}">管理</a></li>
                 <li><a href="javascript:alert('会议室管理与预定系统（试运行版）\r遇到BUG请友善地与辛勤工作的管理员联系~')">关于</a></li>
+                <li><a class="active" th:if="${englishName}" th:text="${englishName}+欢迎使用会议室系统">欢迎使用会议室系统</a></li>
+                <li><a class="navbar-brand" th:href="@{/logout}">登出</a></li>
             </ul>
         </div>
-
-
     </div>
 
 </div>
@@ -56,23 +52,23 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" th:href="@{/meetingroom/book/}">预定管理</a>
+            <a class="navbar-brand" th:href="@{/book/}">预定管理</a>
             <a class="navbar-brand" th:href="@{/meetingroom}">会议室管理</a>
-
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="javascript:">管理</a></li>
-                <!--<li><a href="javascript:" data-toggle="modal" data-target="#addActivityModal">新增活动</a></li>-->
-                <li><a href="javascript:" data-toggle="modal" data-target="#registerModal">用户注册</a></li>
                 <li><a href="javascript:alert('会议室管理与预定系统（试运行版）\r遇到BUG请友善地与辛勤工作的管理员联系~')">关于</a></li>
+                <li><a class="active" th:if="${englishName}" th:text="${englishName}+欢迎使用会议室系统">欢迎使用会议室系统</a></li>
+                <li><a class="navbar-brand" data-toggle="modal" data-target="#registerModal">用户注册</a></li>
+                <li><a class="navbar-brand" th:href="@{/logout}">登出</a></li>
             </ul>
         </div>
     </div>
 </div>
 <div class="container">
     <div class="starter-template">
-        <h1>简易报名系统</h1>
+        <h1>会议室预定系统</h1>
         <p class="lead" th:text="${greeting}">(greeting)</p>
     </div>
 </div>
@@ -176,7 +172,7 @@
                     </div>
                     <div class="form-group">
                         <label>会议室名称</label>
-                        <input type="text" class="form-control" id="roomnameD"/>
+                        <input type="text" class="form-control" id="roomNameD"/>
                     </div>
                     <div class="form-group">
                         <label>预定原因</label>
@@ -355,7 +351,7 @@
         });
 
     </script>
-</div>
+    </button></div>
 
 </body>
 </html>

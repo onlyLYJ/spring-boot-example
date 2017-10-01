@@ -4,6 +4,7 @@ import com.jc.constant.ResultModel;
 import com.jc.exception.ApplyException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,7 +18,9 @@ import java.sql.SQLException;
  */
 @ControllerAdvice
 @Slf4j
+@Controller
 public class ErrorController extends BaseController {
+
     /**
      * 业务验证异常
      */

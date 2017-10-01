@@ -26,8 +26,6 @@ import java.util.List;
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
 
-    private static final String ENABLE_STATUS = "0";
-    private static final String UNABLE_STATUS = "1";
     @Autowired
     private EmployeeMapper employeeMapper;
     @Autowired
@@ -49,7 +47,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         record.setRealName(realName);
         record.setEnglishName(englishName);
         record.setCreateTime(new Date());
-        record.setEnable(ENABLE_STATUS);
+        record.setEnable("0");
         employeeMapper.insertUseGeneratedKeys(record);
         return record;
     }
@@ -61,7 +59,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (record == null)
             throw new ApplyException(MessageFormat.format("用户不存在 ID【{0}】部门【{1}】姓名【{2}】英文名【{3}】", record.getId(), record.getDepartment(), record.getRealName(), record.getEnglishName()));
         record.setUpdateTime(new Date());
-        record.setEnable(UNABLE_STATUS);
+        record.setEnable("1");
         employeeMapper.updateByPrimaryKey(record);
         return record;
     }
@@ -92,6 +90,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public Integer findIdByEnglishName(String englishName) {
+        Preconditions.checkNotNull(englishName, "用户名不能为空");
+        List<Integer> list = employeeMapper.findIdByEnglishName(englishName);
+        return list == null || list.size() < 1 ? null : list.get(0);
+    }
+
+
+    @Override
     public List<Permission> findPermissionByEmployeeId(Integer employeeId) {
         Preconditions.checkNotNull(employeeId, "用户ID不能为空");
         List<Permission> list = rolePermissionMapper.findPermissionByUserId(employeeId);
@@ -112,7 +118,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         if (record != null)
             throw new ApplyException(MessageFormat.format("英文名已存在 ID【{0}】部门【{1}】姓名【{2}】英文名【{3}】", record.getId(), record.getDepartment(), record.getRealName(), record.getEnglishName()));
         employee.setCreateTime(new Date());
-        employee.setEnable(ENABLE_STATUS);
+        employee.setEnable("0");
         employeeMapper.insertUseGeneratedKeys(employee);
         return employee;
     }

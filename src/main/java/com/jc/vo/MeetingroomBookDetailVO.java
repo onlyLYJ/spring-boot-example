@@ -27,7 +27,7 @@ public class MeetingroomBookDetailVO extends MeetingroomBookDetail implements Cl
     @ApiModelProperty(value = "员工真实姓名")
     private String realName;
     @ApiModelProperty(value = "会议室名")
-    private String roomname;
+    private String roomName;
     @ApiModelProperty(value = "会议开始时间", required = true)
     @Future
     private Date meetingBeginTime;
@@ -59,6 +59,30 @@ public class MeetingroomBookDetailVO extends MeetingroomBookDetail implements Cl
     @ApiModelProperty(value = "预定部门名称")
     private String deptName;
 
+
+    @Override
+    public String toString() {
+        return "MeetingroomBookDetailVO{" +
+                "id=" + id +
+                ", employeeId=" + employeeId +
+                ", meetingroomId=" + meetingroomId +
+                ", realName='" + realName + '\'' +
+                ", roomName='" + roomName + '\'' +
+                ", meetingBeginTime=" + meetingBeginTime +
+                ", meetingEndTime=" + meetingEndTime +
+                ", bookReason='" + bookReason + '\'' +
+                ", attendNum=" + attendNum +
+                ", status='" + status + '\'' +
+                ", auditStatus='" + auditStatus + '\'' +
+                ", remark='" + remark + '\'' +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                ", isWeeklyBook=" + isWeeklyBook +
+                ", weeklyBookEndDate=" + weeklyBookEndDate +
+                ", deptId=" + deptId +
+                ", deptName='" + deptName + '\'' +
+                '}';
+    }
 
     public MeetingroomBookDetailVO clone() {
         MeetingroomBookDetailVO vo = new MeetingroomBookDetailVO();

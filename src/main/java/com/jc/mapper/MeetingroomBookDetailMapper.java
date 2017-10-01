@@ -3,13 +3,13 @@ package com.jc.mapper;
 import com.jc.model.MeetingroomBookDetail;
 import com.jc.util.mybatis.MyMapper;
 import com.jc.vo.MeetingroomBookDetailVO;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
 
-@Mapper
+@Component
 public interface MeetingroomBookDetailMapper extends MyMapper<MeetingroomBookDetail> {
 
     List<MeetingroomBookDetailVO> getBookListWithinDatetimeRange(@Param(value = "meetingBeginTime") Date meetingBeginTime, @Param(value = "meetingEndTime") Date meetingEndTime, @Param(value = "meetingroomId") Integer meetingroomId, @Param(value = "inputId") Integer inputId);
@@ -26,4 +26,5 @@ public interface MeetingroomBookDetailMapper extends MyMapper<MeetingroomBookDet
 
     MeetingroomBookDetailVO selectMeetingroomBookDetailById(Integer id);
 
+    List<Integer> listMrBookDetailIdByMrId(Integer id);
 }

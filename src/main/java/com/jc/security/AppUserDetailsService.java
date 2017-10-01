@@ -3,6 +3,7 @@ package com.jc.security;
 import com.google.common.collect.Lists;
 import com.jc.model.Employee;
 import com.jc.security.model.Permission;
+import com.jc.security.model.Role;
 import com.jc.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,12 +32,12 @@ public class AppUserDetailsService implements UserDetailsService {
         if (employee == null) {
             throw new UsernameNotFoundException("用户名不存在");
         }
-//        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//        //用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
-//        List<Role> roleList = employeeService.findRoleByEmployeeId(employee.getId());
-//        for (Role role : roleList) {
-//            authorities.add(new SimpleGrantedAuthority(role.getName()));
-//        }
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        //用于添加用户的权限。只要把用户权限添加到authorities 就万事大吉。
+        List<Role> roleList = employeeService.findRoleByEmployeeId(employee.getId());
+        for (Role role : roleList) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+        }
         List<Permission> permissionList = employeeService.findPermissionByEmployeeId(employee.getId());
         List<GrantedAuthority> grantedAuthorities = Lists.newArrayList();
         permissionList.stream().forEach((permission) -> {

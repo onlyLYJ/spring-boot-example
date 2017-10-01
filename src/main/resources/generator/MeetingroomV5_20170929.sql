@@ -204,7 +204,7 @@ COMMIT;
 DROP TABLE IF EXISTS `meetingroom`;
 CREATE TABLE `meetingroom` (
   `id`          INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `roomname`    VARCHAR(50)               DEFAULT NULL
+  `roomName`    VARCHAR(50)               DEFAULT NULL
   COMMENT '会议室名',
   `status`      VARCHAR(2)                DEFAULT '0'
   COMMENT '使用状态 0正常 1关闭',

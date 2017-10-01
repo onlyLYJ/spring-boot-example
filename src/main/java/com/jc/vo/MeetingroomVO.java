@@ -17,7 +17,7 @@ public class MeetingroomVO {
     private Integer id;
     @ApiModelProperty(value = "会议室名", required = true)
     @NotEmpty(message = "会议室名不能为空")
-    private String roomname;
+    private String roomName;
     @ApiModelProperty(value = "可容纳人数", required = true)
     @Min(value = 1, message = "可容纳人数必须为正整数")
     private Integer capacity;

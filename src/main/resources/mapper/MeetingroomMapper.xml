@@ -6,7 +6,7 @@
           WARNING - @mbg.generated
         -->
         <id column="id" property="id" jdbcType="INTEGER"/>
-        <result column="roomname" property="roomname" jdbcType="VARCHAR"/>
+        <result column="room_name" property="roomName" jdbcType="VARCHAR"/>
         <result column="status" property="status" jdbcType="VARCHAR"/>
         <result column="capacity" property="capacity" jdbcType="INTEGER"/>
         <result column="remark" property="remark" jdbcType="VARCHAR"/>
@@ -17,8 +17,14 @@
         <!--
           WARNING - @mbg.generated
         -->
-        id, roomname, status, capacity, remark, create_time, update_time
+        id, room_name, status, capacity, remark, create_time, update_time
     </sql>
 
+    <!--通过id将会议室状态置为：不可用'1'-->
+    <update id="cancelMeetingroomById" parameterType="java.lang.Integer">
+        UPDATE meetingroom
+        SET status = '1', update_time = now()
+        WHERE id = #{0}
+    </update>
 
 </mapper>

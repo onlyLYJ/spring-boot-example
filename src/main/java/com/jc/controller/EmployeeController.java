@@ -2,11 +2,9 @@ package com.jc.controller;
 
 import com.jc.constant.ResultModel;
 import com.jc.model.Employee;
-import com.jc.service.EmployeeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -25,8 +23,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Slf4j
 public class EmployeeController extends BaseController {
 
-    @Autowired
-    private EmployeeService employeeService;
 
     @ApiOperation(value = "增加员工")
     @PostMapping(value = "/add")

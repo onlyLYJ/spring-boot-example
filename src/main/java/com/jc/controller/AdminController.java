@@ -7,6 +7,7 @@ import com.jc.service.ActivityService;
 import com.jc.service.ApplyService;
 import com.jc.service.impl.ActivityServiceImpl;
 import io.swagger.annotations.Api;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.security.Principal;
 import java.util.Date;
 
 /**
@@ -31,7 +33,12 @@ public class AdminController extends BaseController {
     private ApplyService applyService;
 
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
-    public String index(Model model, Integer pageNum, Integer pageSize) {
+    public String index(Model model, Integer pageNum, Integer pageSize, Principal principal) {
+
+        String englishName = principal.getName();
+        if (StringUtils.isNotBlank(englishName)) {
+            model.addAttribute("englishName", englishName);
+        }
         pageNum = pageNum == null ? 1 : pageNum;
         pageSize = pageSize == null ? 10 : pageSize;
         PageInfo<Activity> pageInfo = activityService.getActivity(pageNum, pageSize);
@@ -76,4 +83,6 @@ public class AdminController extends BaseController {
         pageInfo.getList().forEach(ActivityServiceImpl::setStatus);
         return buildSuccessResponse(pageInfo);
     }
+
+
 }

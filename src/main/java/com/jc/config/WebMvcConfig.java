@@ -24,6 +24,7 @@
 
 package com.jc.config;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -43,21 +44,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:ss:mm");
-
-//    @Bean
-//    protected SpringSecurityDialect sec() {
-//        return new SpringSecurityDialect();
-//    }
-//
-//    @Bean
-//    public SpringTemplateEngine templateEngine(TemplateResolver templateResolver, SpringSecurityDialect sec) {
-//        final SpringTemplateEngine templateEngine = new SpringTemplateEngine();
-//        templateEngine.setTemplateResolver(templateResolver);
-//        templateEngine.addDialect(sec()); // Enable use of "sec"
-//        return templateEngine;
-//    }
-
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Bean
     public Converter<String, Date> addNewConvert() {
@@ -65,7 +52,8 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
             @Override
             public Date convert(String source) {
 
-                if (source.equals(""))
+                source = StringUtils.trim(source);
+                if (StringUtils.isBlank(source))
                     return null;
 
                 if (source.contains("T")) {
@@ -90,7 +78,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         return new Converter<String, String>() {
             @Override
             public String convert(String source) {
-                return source.trim();
+                return StringUtils.trim(source);
             }
         };
     }

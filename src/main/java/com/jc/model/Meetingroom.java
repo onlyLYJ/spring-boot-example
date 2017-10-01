@@ -20,7 +20,8 @@ public class Meetingroom implements Serializable {
     /**
      * 会议室名
      */
-    private String roomname;
+    @Column(name = "room_name")
+    private String roomName;
 
     /**
      * 使用状态 0正常 1关闭
@@ -53,7 +54,7 @@ public class Meetingroom implements Serializable {
     public String toString() {
         return "Meetingroom{" +
                 "id=" + id +
-                ", roomname='" + roomname + '\'' +
+                ", roomName='" + roomName + '\'' +
                 ", status='" + status + '\'' +
                 ", capacity=" + capacity +
                 ", remark='" + remark + '\'' +

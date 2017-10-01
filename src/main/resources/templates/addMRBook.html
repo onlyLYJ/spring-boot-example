@@ -1,14 +1,19 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: htmlhead" th:with="title='新增'"></head>
+<head th:include="layout :: htmlhead" th:with="title='新增'">
+    <link th:href="@{/static/css/jquery.simple-dtpicker.css}"
+          rel="stylesheet"/>
+
+</head>
+
 
 <body>
 <div th:replace="layout :: navbar-admin">(navbar)</div>
 
 <table class="table table-hover" border="0" width="50%">
-    <form id="addMrBook-form" th:action="@{/meetingroom/book/newBook/add}"
+    <form id="addMrBook-form" th:action="@{/book/newBook/apply}"
           th:object="${meetingroomBookDetailVO}" method="post">
-        <input id="employeeId" type="hidden" text="1" th:field="*{employeeId}"></input>
+        <input type="hidden" text="1" th:field="*{id}"></input>
         <thead>
         <tr>
             <th width="15%" align="left">栏目</th>
@@ -20,8 +25,8 @@
                 <td width="15%"><label>请选择会议室</label></td>
                 <td width="35%">
                     <select th:field="*{meetingroomId}">
-                        <option th:each="meetingroom : ${roomnameList}"
-                                th:value="${meetingroom.id}" th:text="${meetingroom.roomname}">...
+                        <option th:each="meetingroom : ${roomNameList}"
+                                th:value="${meetingroom.id}" th:text="${meetingroom.roomName}">...
                         </option>
                     </select>
                 </td>
@@ -48,7 +53,7 @@
         <tr>
             <div class="form-group">
                 <td width="15%"><label for="meetingBeginTime">会议开始时间</label></td>
-                <td width="35%"><input id="meetingBeginTime" type="datetime-local" value=""
+                <td width="35%"><input id="meetingBeginTime" value=""
                                        th:field="*{meetingBeginTime}"></input></td>
             </div>
         </tr>
@@ -97,8 +102,21 @@
 
 
 <div th:include="layout :: footer" id="footer">(footer)</div>
+
+<script th:src="@{/static/js/jquery.simple-dtpicker.js}"></script>
+
 <script th:inline="javascript">
-    var mbrNewBookPath = '/meetingroom/book/newBook';
+    var mbrNewBookPath = 'http://localhost:8080/book/newBook';
+
+
+    $("#meetingBeginTime").appendDtpicker({
+        "closeOnSelected": true,
+        'dateOnly': true,
+        "dateFormat": "yyyy-MM-DD hh:mm",
+        "locale": "cn",
+        "todayButton": false,
+        "autodateOnStart": false
+    });
 
     /**
      * 新增预定前检查
@@ -162,8 +180,9 @@
     $("#addMrBook-form").submit(function () {
         $.ajax({
             type: 'POST',
+            dataType: "json",
             data: $(this).serialize(),
-            url: mbrNewBookPath + "/add",
+            url: mbrNewBookPath + "/apply",
             success: function (data, status) {
                 if (data.c == '100') {
                     alert("会议室预定成功");
@@ -188,5 +207,7 @@
     }
 
 </script>
+
+
 </body>
 </html>

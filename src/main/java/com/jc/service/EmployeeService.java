@@ -50,6 +50,8 @@ public interface EmployeeService {
      */
     Employee findByEnglishName(String englishName);
 
+    Integer findIdByEnglishName(String englishName);
+
     List<Permission> findPermissionByEmployeeId(Integer id);
 
     List<Role> findRoleByEmployeeId(Integer employeeId);

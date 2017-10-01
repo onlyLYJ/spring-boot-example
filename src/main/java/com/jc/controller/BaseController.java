@@ -1,13 +1,18 @@
 package com.jc.controller;
 
 import com.jc.constant.ResultModel;
+import com.jc.exception.ApplyException;
+import com.jc.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.*;
 
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
@@ -20,19 +25,26 @@ public class BaseController {
 
     public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
+    @Autowired
+    EmployeeService employeeService;
 
-//    @Controller
-//    public class MockController {
-//        @GetMapping(value="/mock")
-//        public String mock(ModelMap model, Principal principal ) {
-//            String name = principal.getName(); //get logged in username
-//            return "mock";
-//        }
-//    }
+    Integer getEmployeeIdByPrincipal(Principal principal) {
+        String englishName = principal.getName();
+        if (StringUtils.isBlank(englishName))
+            throw new ApplyException("未登录错误！");
+        return employeeService.findIdByEnglishName(englishName);
+    }
 
     protected <T extends Serializable> ResultModel<T> buildErrorResponse(String msg) {
         ResultModel<T> model = new ResultModel<T>();
         model.setCode(ResultModel.RESULT_ERROR);
+        model.setMsg(msg);
+        return model;
+    }
+
+    protected <T extends Serializable> ResultModel<T> buildErrorResponse(String msg, String code) {
+        ResultModel<T> model = new ResultModel<T>();
+        model.setCode(code);
         model.setMsg(msg);
         return model;
     }
@@ -158,7 +170,7 @@ public class BaseController {
 //		return u;
 //	}
 
-    protected boolean isMoblieClient(HttpServletRequest request) {
+    protected boolean isMobileClient(HttpServletRequest request) {
         boolean flag = false;
         String agent = request.getHeader("user-agent");
         String[] keywords = {"Android", "iPhone", "iPod", "iPad", "Windows Phone", "MQQBrowser"};

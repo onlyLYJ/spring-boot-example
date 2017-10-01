@@ -2,6 +2,7 @@ package com.jc.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.util.Date;
 @Table(name = "meetingroom_book_detail")
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@Slf4j
 public class MeetingroomBookDetail implements Serializable {
 
     @Id
@@ -53,7 +55,8 @@ public class MeetingroomBookDetail implements Serializable {
     private Integer attendNum;
 
     /**
-     * 状态 0待审核，1审核通过，2审核不通过，3取消
+     * 审核状态
+     * 0待审核，1审核通过，2审核不通过，3取消
      */
     @Column(name = "audit_status")
     private String auditStatus;
@@ -92,10 +95,61 @@ public class MeetingroomBookDetail implements Serializable {
     private String realName;
 
     @Transient
-    private String roomname;
+    private String roomName;
 
     @Transient
     private String deptName;
+
+    /**
+     * 根据会议开始/结束时间修改状态
+     * 预定过期状态，0未过期，1过期
+     */
+    public String getStatus() {
+        String status = this.status;
+        if ("1".equals(status)) {
+            return "已取消";
+        }
+        Date now = new Date();
+        if ("0".equals(status)) {
+            if (meetingBeginTime.after(now)) {
+                return "未开始";
+            }
+            if (meetingEndTime.after(now)) {
+                return "进行中";
+            }
+            if (meetingEndTime.before(now)) {
+                return "已结束";
+            }
+        }
+        return status;
+    }
+
+
+    /**
+     * 根据audit字段返回审核状态
+     * 0待审核，1审核通过，2审核不通过，3取消
+     */
+    public String getAuditStatus() {
+
+        String auditStatus = this.auditStatus;
+
+        if (auditStatus.equals("0")) {
+            return "待审核";
+        }
+
+        if (auditStatus.equals("1")) {
+            return "审核通过";
+        }
+
+        if (auditStatus.equals("2")) {
+            return "审核不通过";
+        }
+
+        log.error("未知审核状态: " + auditStatus);
+        return "审核不通过";
+    }
+
+
 
     @Override
     public String toString() {
@@ -113,7 +167,7 @@ public class MeetingroomBookDetail implements Serializable {
                 ", updateTime=" + updateTime +
                 ", status='" + status + '\'' +
                 ", realName='" + realName + '\'' +
-                ", roomname='" + roomname + '\'' +
+                ", roomName='" + roomName + '\'' +
                 '}';
     }
 }

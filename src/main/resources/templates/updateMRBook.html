@@ -6,7 +6,7 @@
 <div th:replace="layout :: navbar-admin">(navbar)</div>
 
 <table class="table table-hover" border="0" width="50%">
-    <form id="updateMrBook-form" th:action="@{/meetingroom/book/update}"
+    <form id="updateMrBook-form" th:action="@{/book/update}"
           th:object="${updateMrBook}" method="post">
         <input id="mbdId" type="hidden" th:field="*{id}"></input>
         <!--//TODO需要修改成当前用户id-->
@@ -22,8 +22,8 @@
                 <td width="15%"><label>请选择会议室</label></td>
                 <td width="35%">
                     <select th:field="*{meetingroomId}">
-                        <option th:each="meetingroom : ${roomnameList}"
-                                th:value="${meetingroom.id}" th:text="${meetingroom.roomname}">...
+                        <option th:each="meetingroom : ${roomNameList}"
+                                th:value="${meetingroom.id}" th:text="${meetingroom.roomName}">...
                         </option>
                     </select>
                 </td>
@@ -158,9 +158,9 @@
     $("#updateMrBook-form").submit(function () {
         $.ajax({
             type: 'POST',
+            dataType: "json",
             data: $(this).serialize(),
             url: meetingroomPath + "/book/update",
-            dataType: "json",
             success: function (data, status) {
                 if (data.c == '100') {
                     alert("会议室预定更新成功");

@@ -1,14 +1,14 @@
 package com.jc.controller;
 
+import com.github.pagehelper.PageInfo;
 import com.jc.constant.ResultModel;
 import com.jc.hystrix.GetEmployeeCommand;
-import com.jc.model.Activity;
 import com.jc.model.ActivityApply;
 import com.jc.model.Employee;
+import com.jc.model.MeetingroomBookDetail;
 import com.jc.service.ActivityService;
 import com.jc.service.ApplyService;
-import com.jc.service.EmployeeService;
-import com.jc.service.impl.ActivityServiceImpl;
+import com.jc.service.MeetingroomBookDetailService;
 import com.jc.util.RateLimitUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -16,17 +16,18 @@ import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -63,29 +64,35 @@ public class IndexController extends BaseController {
     private ApplyService applyService;
     @Autowired
     private ActivityService activityService;
+
     @Autowired
-    private EmployeeService employeeService;
+    MeetingroomBookDetailService meetingroomBookDetailService;
+
     //每秒五条请求 等待1秒
     private RateLimitUtil rateLimitUtil = new RateLimitUtil(5, 1);
 //    @Resource(name = "applyRateLimitUtil")
 //    private RateLimitUtil rateLimitUtil;
 
     @RequestMapping(value = {"/", "/index"}, method = RequestMethod.GET)
-    public String index(Model model, Integer id) {
-        List<Activity> activityList = null;
-        if (id != null) {
-            Activity record = new Activity();
-            record.setId(id);
-            activityList = activityService.getActivity(record);
-        }
-        if (activityList == null || activityList.size() < 1) {
-            activityList = activityService.getCanApplyActivity();
-        }
-        //设置状态
-        activityList.forEach(ActivityServiceImpl::setStatus);
-        model.addAttribute("activityList", activityList);
-        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), DATETIME_FORMAT));
+    public String index(Model model, Integer pageNum, Integer pageSize) {
+        pageNum = pageNum == null ? 1 : pageNum;
+        pageSize = pageSize == null ? 10 : pageSize;
+        PageInfo<MeetingroomBookDetail> pageInfo = meetingroomBookDetailService.findValidMeetingroomBookDetailList(pageNum, pageSize);
+        model.addAttribute("page", pageInfo);
         return "index";
+    }
+
+
+    @GetMapping("/error")
+    public String errorPage(Model model, Principal principal) {
+
+        return "error";
+    }
+
+    @GetMapping("/dateTest")
+    public String testPage(Model model, Principal principal) {
+
+        return "/dateTest";
     }
 
     /**
@@ -174,8 +181,24 @@ public class IndexController extends BaseController {
 
     @ApiOperation(value = "登录页")
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String login(Model model) {
+    public String login(Model model, Principal principal) {
+
+        if (principal != null) {
+            String englishName = principal.getName();
+            model.addAttribute("englishName", englishName);
+        }
+
         model.addAttribute("currentTime", DateFormatUtils.format(new Date(), DATETIME_FORMAT));
         return "login";
+    }
+
+
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+        }
+        return "redirect:/login";
     }
 }

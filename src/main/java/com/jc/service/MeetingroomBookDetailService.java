@@ -15,48 +15,50 @@ public interface MeetingroomBookDetailService {
     /**
      * 增加会议预定
      *
-     * @param meetingroomBookDetailVO
+     * @param MeetingroomBookDetailVO
      * @return
      */
-    Integer addMeetingroomBookDetail(MeetingroomBookDetailVO meetingroomBookDetailVO);
+    Integer addMeetingroomBookDetail(MeetingroomBookDetailVO MeetingroomBookDetailVO);
 
     /**
      * 获得预定时间内的预定信息
      *
-     * @param meetingroomBookDetailVO
+     * @param MeetingroomBookDetailVO
      * @return
      */
-    List<MeetingroomBookDetailVO> getBookListWithinDatetimeRange(MeetingroomBookDetailVO meetingroomBookDetailVO);
+    List<MeetingroomBookDetailVO> findConflictBookList(MeetingroomBookDetailVO MeetingroomBookDetailVO);
 
     /**
      * 根据VO更新会议预定详情
      *
-     * @param meetingroomBookDetailVO
+     * @param MeetingroomBookDetailVO
      * @return
      */
-    List<MeetingroomBookDetailVO> updateMeetingroomBookDetailByVO(MeetingroomBookDetailVO meetingroomBookDetailVO);
+    List<MeetingroomBookDetailVO> updateMeetingroomBookDetailByVO(MeetingroomBookDetailVO MeetingroomBookDetailVO);
 
 
-    MeetingroomBookDetailVO getMeetingroomBookDetailById(Integer id);
+    MeetingroomBookDetailVO findMeetingroomBookDetailById(Integer id);
 
     /**
      * 根据id号更新审核状态
      *
      * @param id
      * @param auditStatus
+     * @param employeeId
      * @return
      */
-    Integer updateAuditStatusById(Integer id, String auditStatus);
+    Integer updateAuditStatusById(Integer id, String auditStatus, Integer employeeId);
 
     List<MeetingroomBookDetail> getMeetingroomBookDetail(MeetingroomBookDetail record);
 
-    PageInfo<MeetingroomBookDetail> listMeetingroomBookDetail(int pageNum, int pageSize);
+    PageInfo<MeetingroomBookDetail> getAllMeetingroomBookDetail(int pageNum, int pageSize);
 
-    PageInfo<MeetingroomBookDetail> listValidMeetingroomBookDetail(Integer pageNum, Integer pageSize);
+    PageInfo<MeetingroomBookDetail> findValidMeetingroomBookDetailList(Integer pageNum, Integer pageSize);
 
-    Integer cancelMeetingroomBookDetailById(Integer id);
+    Integer cancelMeetingroomBookDetailById(Integer id, Integer employeeId, String changeReason);
 
     Boolean isValidBook(final MeetingroomBookDetailVO mbdVO);
 
-    Integer addWeeklyBook(MeetingroomBookDetailVO meetingroomBookDetailVO);
+    Integer addWeeklyBook(MeetingroomBookDetailVO MeetingroomBookDetailVO);
+
 }

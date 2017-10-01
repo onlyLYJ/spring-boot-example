@@ -10,7 +10,7 @@ import java.util.Date;
 @Table(name = "meetingroom_book_change")
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MeetingroomBookChange implements Serializable {
+public class MeetingroomBookChange implements Serializable, Cloneable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -45,6 +45,13 @@ public class MeetingroomBookChange implements Serializable {
     @Column(name = "update_time")
     private Date updateTime;
 
+    /**
+     * 申请人id
+     */
+    @Column(name = "employee_id")
+    private Integer employeeId;
+
+
     @Override
     public String toString() {
         return "MeetingroomBookChange{" +
@@ -54,6 +61,22 @@ public class MeetingroomBookChange implements Serializable {
                 ", auditStatus='" + auditStatus + '\'' +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", employeeId='" + employeeId + '\'' +
                 '}';
     }
+
+    public MeetingroomBookChange clone() {
+
+        MeetingroomBookChange record = new MeetingroomBookChange();
+        record.setId(null);
+        record.setMeetingroomBookDetailId(null);
+        record.setChangeReason(this.changeReason);
+        record.setAuditStatus(this.auditStatus);
+        record.setCreateTime(this.getCreateTime());
+        record.setUpdateTime(this.getUpdateTime());
+        record.setEmployeeId(this.employeeId);
+        return record;
+    }
+
+
 }

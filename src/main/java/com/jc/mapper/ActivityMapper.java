@@ -2,7 +2,9 @@ package com.jc.mapper;
 
 import com.jc.model.Activity;
 import com.jc.util.mybatis.MyMapper;
+import org.springframework.stereotype.Component;
 
+@Component
 public interface ActivityMapper extends MyMapper<Activity> {
     /**
      * 增加报名人数

@@ -6,8 +6,12 @@ package com.jc.constant;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.jc.model.MeetingroomBookDetail;
+import com.jc.vo.MeetingroomBookDetailVO;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * @author kenny
@@ -71,6 +75,29 @@ public class ResultModel<T extends Serializable> implements Serializable {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+
+    /**
+     * 根据List<MeetingroomBookDetailVO>列表构造冲突信息
+     *
+     * @param conflictList
+     * @return
+     */
+    public static String buildConflictMRBookInfo(List<MeetingroomBookDetailVO> conflictList) {
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if (conflictList == null || conflictList.size() < 0)
+            return "";
+        String roomName = conflictList.get(0).getRoomName();
+        StringBuffer sb = new StringBuffer("冲突会议室: ").append(roomName + "\r");
+
+        for (MeetingroomBookDetail detail : conflictList) {
+            sb.append("预定部门： ").append(detail.getDeptName() + "\r");
+            sb.append("会议开始时间： ").append(sdf.format(detail.getMeetingBeginTime()) + "\r");
+            sb.append("会议结束时间： ").append(sdf.format(detail.getMeetingEndTime()) + "\r\r");
+        }
+        return sb.toString();
     }
 
 

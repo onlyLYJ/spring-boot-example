@@ -39,7 +39,7 @@ public class JcApplyApplicationTests {
     @Transactional
     @Test
     public void testGetValidMBD() {
-        PageInfo<MeetingroomBookDetail> list = meetingroomBookDetailService.listValidMeetingroomBookDetail(1, 10);
+        PageInfo<MeetingroomBookDetail> list = meetingroomBookDetailService.findValidMeetingroomBookDetailList(1, 10);
         Assert.assertNotNull(list.getList().size());
         System.out.println(list.getList().size());
         System.out.println(list.getList().toString());

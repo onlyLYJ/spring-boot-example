@@ -21,4 +21,13 @@
         -->
         id, department, real_name, english_name, password, create_time, update_time, extra, enable
     </sql>
+
+    <!--通过englishName查找用户id-->
+    <select id="findIdByEnglishName" resultType="java.lang.Integer">
+        SELECT id
+        FROM employee
+        WHERE enable = '0' AND english_name = #{0}
+    </select>
+
+
 </mapper>

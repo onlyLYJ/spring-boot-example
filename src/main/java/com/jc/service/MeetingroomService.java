@@ -29,10 +29,10 @@ public interface MeetingroomService {
     /**
      * 根据会议室名称查找
      *
-     * @param roomname
+     * @param roomName
      * @return
      */
-    List<Meetingroom> getMeetingroomByName(String roomname);
+    List<Meetingroom> getMeetingroomByName(String roomName);
 
     /**
      * 获取所有会议室列表
@@ -43,5 +43,5 @@ public interface MeetingroomService {
 
     List<Meetingroom> getMeetingroomById(Integer id);
 
-    Integer deleteMeetingroomById(Integer id);
+    Integer cancelMeetingroomById(Integer id, Integer employeeId, String changeReason);
 }

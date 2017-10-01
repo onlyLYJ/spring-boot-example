@@ -51,7 +51,7 @@
     <sql id="SELECT_BOOK_DETAIL">
         SELECT
             mbd.id,
-            m.roomname,
+        m.room_name roomName,
         m.id meetingroomId,
         d.dept_name deptName,
         d.id deptId,
@@ -69,7 +69,7 @@
 
     <select id="listValidMeetingroomBookDetail" resultType="com.jc.model.MeetingroomBookDetail">
         <include refid="SELECT_BOOK_DETAIL"/>
-        <![CDATA[ WHERE mbd.status = '0' AND mbd.meeting_begin_time > now()
+        <![CDATA[ WHERE mbd.status = '0' AND mbd.meeting_end_time > now() ORDER BY mbd.meeting_begin_time asc
         ]]>
     </select>
 
@@ -85,7 +85,7 @@
     <select id="getBookListWithinDatetimeRange" resultType="com.jc.vo.MeetingroomBookDetailVO">
         SELECT
         mbd.id,
-        m.roomname,
+        m.room_name roomName,
         d.id deptId,
         d.dept_name deptName,
         mbd.meeting_begin_time meetingBeginTime,
@@ -122,6 +122,14 @@
         SET status = '1', update_time = now()
         WHERE meetingroom_id = #{0}
     </update>
+
+    <!--通过会议室id取消预定-->
+    <select id="listMrBookDetailIdByMrId" resultType="java.lang.Integer">
+        SELECT id
+        FROM meetingroom_book_detail
+        WHERE meetingroom_id = #{0}
+    </select>
+
 
     <insert id="insertByBatch" parameterType="java.util.List">
         insert into meetingroom_book_detail (<include refid="Base_Column_List_WithoutId"/>)

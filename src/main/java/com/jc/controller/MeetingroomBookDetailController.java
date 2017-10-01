@@ -2,19 +2,16 @@ package com.jc.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.jc.constant.ResultModel;
-import com.jc.exception.MeetingroomBookException;
 import com.jc.model.Department;
 import com.jc.model.Meetingroom;
 import com.jc.model.MeetingroomBookDetail;
 import com.jc.service.DepartmentService;
 import com.jc.service.MeetingroomBookDetailService;
 import com.jc.service.MeetingroomService;
-import com.jc.service.impl.MeetingroomBookDetailServiceImpl;
 import com.jc.util.JacksonUtil;
 import com.jc.vo.MeetingroomBookDetailVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.time.DateFormatUtils;
@@ -29,9 +26,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+import java.security.Principal;
 import java.util.Date;
 import java.util.List;
+
+import static com.jc.constant.ResultModel.buildConflictMRBookInfo;
 
 /**
  * 会议室预定详情Controller
@@ -40,7 +41,7 @@ import java.util.List;
 
 @Api(description = "会议室预定管理接口")
 @Controller
-@RequestMapping("/meetingroom/book")
+@RequestMapping("/book")
 @Slf4j
 public class MeetingroomBookDetailController extends BaseController {
 
@@ -59,38 +60,55 @@ public class MeetingroomBookDetailController extends BaseController {
 
     @ApiOperation(value = "分页显示预定信息", notes = "未过期的")
     @GetMapping(value = {"", "/list"})
-    public String allMeetingroomBookDetail(Model model, Integer pageNum, Integer pageSize) {
+    public String allMeetingroomBookDetail(Model model, Integer pageNum, Integer pageSize, Principal principal) {
         pageNum = pageNum == null ? 1 : pageNum;
         pageSize = pageSize == null ? 10 : pageSize;
-        PageInfo<MeetingroomBookDetail> pageInfo = meetingroomBookDetailService.listValidMeetingroomBookDetail(pageNum, pageSize);
-        pageInfo.getList().forEach(MeetingroomBookDetailServiceImpl::setStatus);
-        pageInfo.getList().forEach(MeetingroomBookDetailServiceImpl::setAuditStatus);
-        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), DATETIME_FORMAT));
+        PageInfo<MeetingroomBookDetail> pageInfo = meetingroomBookDetailService.findValidMeetingroomBookDetailList(pageNum, pageSize);
+        setDeptlistAttribute(model);
+        setTimeAndUserAttribute(model, principal);
         model.addAttribute("page", pageInfo);
-        return "listMrBook";
+        return "MRBookList";
     }
 
-    @ApiOperation(value = "编辑预定")
-    @GetMapping(value = {"/edit"})
-    public String deleteMeetingroom(Model model, @RequestParam @ApiParam("通过id获取预定") @NonNull @Min(1) Integer id) {
 
-        MeetingroomBookDetail mbd = meetingroomBookDetailService.getMeetingroomBookDetailById(id);
+    @ApiOperation(value = "1号会议室极速预定")
+    @PostMapping(value = "/speedMeetingroomBook")
+    @ResponseBody
+    public ResultModel speedMeetingroomBookDetail(@RequestParam @Min(1) Integer deptId, @RequestParam @Min(1) @Max(1440) Integer minutesAfterNow, @RequestParam @Min(1) @Max(61) Integer duration, Principal principal) {
 
-        if (mbd == null) {
-            throw new MeetingroomBookException(MeetingroomBookException.INVALID_DATA);
-        }
+        Integer employeeId = getEmployeeIdByPrincipal(principal);
 
-        model.addAttribute("mbd", mbd);
-        return "editMrBook";
+        MeetingroomBookDetailVO mbdVO = buildSpeedMeetingRoomVO(employeeId, deptId, minutesAfterNow, duration);
+
+        List<MeetingroomBookDetailVO> list = meetingroomBookDetailService.findConflictBookList(mbdVO);
+
+        if (list != null && list.size() > 0)
+            return buildErrorResponse(buildConflictMRBookInfo(list), "302");
+
+        meetingroomBookDetailService.addMeetingroomBookDetail(mbdVO);
+        return buildSuccessResponse(APPLY_SUCCESS);
 
     }
+
+    @ApiOperation(value = "准备model，并跳转到新增预定页面")
+    @GetMapping("/newBook")
+    public String redirectNewBookPage(Model model, Principal principal) {
+
+        setRoomlistAttribute(model);
+        setDeptlistAttribute(model);
+        model.addAttribute("meetingroomBookDetailVO", new MeetingroomBookDetailVO());
+
+        return "addMrBook";
+    }
+
 
     @ApiOperation(value = "新增预定")
-    @PostMapping(path = "/newBook/add")
+    @PostMapping(path = "/newBook/apply")
     @ResponseBody
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
-    public ResultModel addMeetingroomBookDetail(@ModelAttribute(value = "meetingroomBookDetailVO") MeetingroomBookDetailVO meetingroomBookDetailVO) {
+    public ResultModel redirectNewBookPage(@ModelAttribute(value = "meetingroomBookDetailVO") MeetingroomBookDetailVO meetingroomBookDetailVO, Principal principal) {
 
+        meetingroomBookDetailVO.setEmployeeId(getEmployeeIdByPrincipal(principal));
         //检查是否是周期预定
         if (isWeeklyBook(meetingroomBookDetailVO)) {
 
@@ -98,27 +116,43 @@ public class MeetingroomBookDetailController extends BaseController {
                 meetingroomBookDetailService.addWeeklyBook(meetingroomBookDetailVO);
                 return buildSuccessResponse(APPLY_SUCCESS);
             }
-
             return buildErrorResponse(TIME_CONFLICT);
         }
 
         //非周期预定的情况
-        List<MeetingroomBookDetailVO> list = meetingroomBookDetailService.getBookListWithinDatetimeRange(meetingroomBookDetailVO);
+        List<MeetingroomBookDetailVO> list = meetingroomBookDetailService.findConflictBookList(meetingroomBookDetailVO);
         if (list != null && list.size() > 0) {
-            return buildErrorResponse(TIME_CONFLICT, JacksonUtil.toJSon(list));
+            return buildErrorResponse(buildConflictMRBookInfo(list), "302");
         } else {
             meetingroomBookDetailService.addMeetingroomBookDetail(meetingroomBookDetailVO);
             return buildSuccessResponse(APPLY_SUCCESS);
         }
+
     }
 
+
+    @ApiOperation(value = "取消会议预定")
+    @PostMapping(value = "/cancel")
+    @ResponseBody
+    public ResultModel cancelMeetingroomBookDetail(@RequestParam @Min(1) Integer id, @RequestParam @NotEmpty String changeReason, @NonNull Principal principal) {
+
+        Integer employeeId = getEmployeeIdByPrincipal(principal);
+
+        Integer updatedNum = meetingroomBookDetailService.cancelMeetingroomBookDetailById(id, employeeId, changeReason);
+
+        if (updatedNum == null || updatedNum < 1) {
+            return buildErrorResponse("更新失败");
+
+        }
+        return buildSuccessResponse(UPDATE_SUCCESS);
+    }
 
     @ApiOperation(value = "修改预约")
     @PostMapping(value = "/update")
     @ResponseBody
     public ResultModel updateMeetingroomBookDetail(@Valid MeetingroomBookDetailVO meetingroomBookDetailVO) {
 
-        List<MeetingroomBookDetailVO> list = meetingroomBookDetailService.getBookListWithinDatetimeRange(meetingroomBookDetailVO);
+        List<MeetingroomBookDetailVO> list = meetingroomBookDetailService.findConflictBookList(meetingroomBookDetailVO);
 
         if (list != null && list.size() > 0) {
             return buildErrorResponse(TIME_CONFLICT, JacksonUtil.toJSon(list));
@@ -132,38 +166,27 @@ public class MeetingroomBookDetailController extends BaseController {
     @ApiOperation(value = "修改审核状态")
     @PostMapping(value = "/editAudit")
     @ResponseBody
-    public ResultModel updateMeetingroomBookDetail(@RequestParam @NonNull @Min(1) Integer id, @RequestParam @NotEmpty String auditStatus) {
+    public ResultModel auditMeetingroomBookDetail(@RequestParam @Min(1) Integer id, @RequestParam @NotEmpty String auditStatus, Principal principal) {
 
-        Integer num = meetingroomBookDetailService.updateAuditStatusById(id, auditStatus);
+        Integer employeeId = getEmployeeIdByPrincipal(principal);
+        Integer num = meetingroomBookDetailService.updateAuditStatusById(id, auditStatus, employeeId);
 
-        if (num != 1) {
-            throw new MeetingroomBookException(MeetingroomBookException.INVALID_DATA);
+        if (num < 1) {
+            return buildErrorResponse("修改审核失败");
         }
 
         return buildSuccessResponse(UPDATE_SUCCESS);
     }
 
-    @ApiOperation(value = "准备model，并跳转到新增预定页面")
-    @GetMapping("/newBook")
-    public String addMeetingroomBookDetail(Model model) {
-
-        setTimeAttribute(model);
-        setRoomlistAttribute(model);
-        setDeptlistAttribute(model);
-        model.addAttribute("meetingroomBookDetailVO", new MeetingroomBookDetailVO());
-
-        return "addMrBook";
-    }
-
     @ApiOperation(value = "根据id获取预定信息，并跳转到更新页面")
     @GetMapping("/editBook")
-    public String updateMeetingroomBookDetail(Model model, @RequestParam @NonNull @Min(1) Integer id) {
+    public String editMeetingroomBookDetail(Model model, @RequestParam @NonNull @Min(1) Integer id, Principal principal) {
 
-        setTimeAttribute(model);
+        setTimeAndUserAttribute(model, principal);
         setRoomlistAttribute(model);
         setDeptlistAttribute(model);
 
-        MeetingroomBookDetail updateMrBook = meetingroomBookDetailService.getMeetingroomBookDetailById(id);
+        MeetingroomBookDetail updateMrBook = meetingroomBookDetailService.findMeetingroomBookDetailById(id);
         model.addAttribute("updateMrBook", updateMrBook);
         return "updateMrBook";
     }
@@ -172,21 +195,21 @@ public class MeetingroomBookDetailController extends BaseController {
     @GetMapping("/audit")
     @ResponseBody
     public MeetingroomBookDetailVO auditMeetingroomBookDetail(@RequestParam @NonNull @Min(1) Integer id) {
-        MeetingroomBookDetailVO auditVO = meetingroomBookDetailService.getMeetingroomBookDetailById(id);
+        MeetingroomBookDetailVO auditVO = meetingroomBookDetailService.findMeetingroomBookDetailById(id);
         return auditVO;
     }
 
-    @ApiOperation(value = "取消会议预定")
-    @PostMapping(value = "/cancel")
-    @ResponseBody
-    public ResultModel cancelMeetingroomBookDetail(@RequestParam @NonNull @Min(1) Integer id) {
-
-        Integer num = meetingroomBookDetailService.cancelMeetingroomBookDetailById(id);
-        if (num != 1) {
-            throw new MeetingroomBookException(MeetingroomBookException.INVALID_DATA);
-        }
-
-        return buildSuccessResponse(UPDATE_SUCCESS);
+    private MeetingroomBookDetailVO buildSpeedMeetingRoomVO(Integer employeeId, Integer deptId, Integer minutesAfterNow, Integer duration) {
+        MeetingroomBookDetailVO vo = new MeetingroomBookDetailVO();
+        Date date = DateUtils.addMinutes(new Date(), minutesAfterNow);
+        vo.setMeetingBeginTime(date);
+        vo.setMeetingEndTime(DateUtils.addMinutes(date, duration));
+        vo.setDeptId(deptId);
+        vo.setEmployeeId(employeeId);
+        vo.setAttendNum(10);
+        vo.setMeetingroomId(1);
+        vo.setBookReason("极速预定");
+        return vo;
     }
 
     /**
@@ -241,7 +264,8 @@ public class MeetingroomBookDetailController extends BaseController {
      *
      * @param model
      */
-    private void setTimeAttribute(Model model) {
+    private void setTimeAndUserAttribute(Model model, Principal principal) {
+        model.addAttribute("englishName", principal.getName());
         model.addAttribute("currentTime", DateFormatUtils.format(new Date(), DATETIME_FORMAT));
     }
 
@@ -251,12 +275,29 @@ public class MeetingroomBookDetailController extends BaseController {
      * @param model
      */
     private void setRoomlistAttribute(Model model) {
-        List<Meetingroom> roomnameList = meetingroomService.listMeetingroom();
-        model.addAttribute("roomnameList", roomnameList);
+        List<Meetingroom> roomNameList = meetingroomService.listMeetingroom();
+        model.addAttribute("roomNameList", roomNameList);
     }
 
     public void setDeptlistAttribute(Model model) {
         List<Department> deptList = departmentService.listValidDepartment();
         model.addAttribute("deptList", deptList);
     }
+
+
+//
+//
+//    @ApiOperation(value = "编辑预定")
+//    @GetMapping(value = {"/edit"})
+//    public String deleteMeetingroom(Model model, @RequestParam @ApiParam("通过id获取预定") @NonNull @Min(1) Integer id) {
+//
+//        MeetingroomBookDetail mbd = meetingroomBookDetailService.findMeetingroomBookDetailById(id);
+//        if (mbd == null) {
+//            throw new MeetingroomBookException(MeetingroomBookException.INVALID_DATA);
+//        }
+//        model.addAttribute("mbd", mbd);
+//        return "editMrBook";
+//    }
+
+
 }

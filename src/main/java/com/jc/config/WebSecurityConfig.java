@@ -58,21 +58,21 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 //静态文件和首页 允许所有人访问
-                .antMatchers("/index", "/webjarslocator/**", "/static/**", "/webjars/**").permitAll()
+                .antMatchers("/index", "/error", "/dateTest", "/webjarslocator/**", "/static/**", "/webjars/**").permitAll()
 //                //swagger相关链接
-                .antMatchers("/swagger-ui.html", "/v2/api-docs", "/swagger*/**", "/meetingroom/**", "/employee/**", "/department/**").permitAll()
+                .antMatchers("/swagger-ui.html", "/v2/api-docs", "/swagger*/**").permitAll()
                 //报名相关 不需要登录
-//                .antMatchers("/apply", "/cancelApply", "/addEmployee", "/getCanApply", "/meetingroom/**").permitAll()
-//                .antMatchers("/admin/**", "/meetingroom/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/apply", "/cancelApply", "/addEmployee", "/getCanApply", "/book/").permitAll()
+//                .antMatchers( "/book/**").hasAuthority("ROLE_USER")
+//                .antMatchers("/admin/**", "/meetingroom/**","/employee/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().fullyAuthenticated()
                 .and()
                 .formLogin()
-
+                //指定登录页是"/login"
                 .loginPage("/login")
-                .failureUrl("/login?error")
+                .failureUrl("/error")
                 .usernameParameter("englishName")
                 .passwordParameter("password")
-                //指定登录页是"/login"
                 .permitAll()
                 .and()
                 .logout()
@@ -81,7 +81,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logoutSuccessUrl("/")
                 .permitAll()
                 .and()
-                .rememberMe();
+                .rememberMe()
+                //30分钟免登陆
+                .tokenValiditySeconds(1800);
 
     }
 }

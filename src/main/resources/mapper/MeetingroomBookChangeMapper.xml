@@ -11,11 +11,12 @@
         <result column="audit_status" property="auditStatus" jdbcType="VARCHAR"/>
         <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
         <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="employee_id" property="employeeId" jdbcType="INTEGER"/>
     </resultMap>
     <sql id="Base_Column_List">
         <!--
           WARNING - @mbg.generated
         -->
-        id, meetingroom_book_detail_id, change_reason, audit_status, create_time, update_time
+        id, meetingroom_book_detail_id, change_reason, audit_status, create_time, update_time, employee_id
     </sql>
 </mapper>

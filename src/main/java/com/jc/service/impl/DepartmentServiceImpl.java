@@ -15,8 +15,6 @@ import java.util.List;
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
-    private static final String ENABLE_STATUS = "0";
-
     @Autowired
     private DepartmentMapper departmentMapper;
 

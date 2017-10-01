@@ -1,9 +1,12 @@
 package com.jc.service.impl;
 
+import com.jc.aop.LogMrBookChange;
 import com.jc.exception.MeetingroomException;
+import com.jc.mapper.MeetingroomBookChangeMapper;
 import com.jc.mapper.MeetingroomBookDetailMapper;
 import com.jc.mapper.MeetingroomMapper;
 import com.jc.model.Meetingroom;
+import com.jc.model.MeetingroomBookChange;
 import com.jc.service.MeetingroomService;
 import com.jc.vo.MeetingroomVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,36 +15,42 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 
 @Service
 @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 public class MeetingroomServiceImpl implements MeetingroomService {
 
     @Autowired
-    private MeetingroomMapper meetingroomMapper;
+    private MeetingroomMapper mrMapper;
 
     @Autowired
-    private MeetingroomBookDetailMapper meetingroomBookDetailMapper;
+    private MeetingroomBookDetailMapper mrBookDetailMapper;
+
+    @Autowired
+    private MeetingroomBookChangeMapper mrBookChangeMapper;
 
     @Override
     public Meetingroom addMeetingroom(MeetingroomVO meetingroomVO) {
         Meetingroom meetingroom = new Meetingroom();
-        String roomname = meetingroomVO.getRoomname();
-        meetingroom.setRoomname(roomname);
+        String roomName = meetingroomVO.getRoomName();
+        meetingroom.setRoomName(roomName);
 
-        List<Meetingroom> list = meetingroomMapper.select(meetingroom);
+        List<Meetingroom> list = mrMapper.select(meetingroom);
         if (list != null && list.size() > 0)
             throw new MeetingroomException(MeetingroomException.ALREADY_EXIST);
 
         meetingroom.setCapacity(meetingroomVO.getCapacity());
-        meetingroom.setStatus(meetingroomVO.getStatus());
+        meetingroom.setStatus("0");
         meetingroom.setRemark(meetingroomVO.getRemark());
         Date date = new Date();
         meetingroom.setCreateTime(date);
         meetingroom.setUpdateTime(date);
-        meetingroomMapper.insertUseGeneratedKeys(meetingroom);
+        mrMapper.insertUseGeneratedKeys(meetingroom);
         return meetingroom;
 
     }
@@ -52,71 +61,63 @@ public class MeetingroomServiceImpl implements MeetingroomService {
         Integer id = meetingroomVO.getId();
         if (id == null || id == 0)
             throw new MeetingroomException(MeetingroomException.NOT_EXIST);
-        Meetingroom meetingroom = meetingroomMapper.selectByPrimaryKey(id);
+        Meetingroom meetingroom = mrMapper.selectByPrimaryKey(id);
         if (meetingroom == null)
             throw new MeetingroomException(MeetingroomException.NOT_EXIST);
-        meetingroom.setRoomname(meetingroomVO.getRoomname());
+        meetingroom.setRoomName(meetingroomVO.getRoomName());
         meetingroom.setCapacity(meetingroomVO.getCapacity());
         meetingroom.setStatus(meetingroomVO.getStatus());
         meetingroom.setRemark(meetingroomVO.getRemark());
         meetingroom.setUpdateTime(new Date());
-        return meetingroomMapper.updateByPrimaryKey(meetingroom);
+        return mrMapper.updateByPrimaryKey(meetingroom);
     }
 
     @Override
-    public List<Meetingroom> getMeetingroomByName(String roomname) {
+    public List<Meetingroom> getMeetingroomByName(String roomName) {
         Meetingroom record = new Meetingroom();
-        record.setRoomname(roomname);
-        return meetingroomMapper.select(record);
+        record.setRoomName(roomName);
+        return mrMapper.select(record);
     }
 
     @Override
     public List<Meetingroom> getMeetingroomById(Integer id) {
         Meetingroom record = new Meetingroom();
         record.setId(id);
-        return meetingroomMapper.select(record);
+        return mrMapper.select(record);
     }
 
     @Override
     public List<Meetingroom> listMeetingroom() {
-        return meetingroomMapper.selectAll();
+        return mrMapper.selectAll();
     }
 
-//    @Override
-//    public Meetingroom addMeetingroom(String roomname, Integer capacity, String status, String remark) {
-//        Meetingroom meetingroom = new Meetingroom();
-//        meetingroom.setRoomname(roomname);
-//        meetingroom.setCapacity(capacity);
-//        meetingroom.setStatus(status);
-//        Date date = new Date();
-//        meetingroom.setRemark(remark);
-//        meetingroom.setCreateTime(date);
-//        meetingroom.setUpdateTime(date);
-//        meetingroomMapper.insertUseGeneratedKeys(meetingroom);
-//        return meetingroom;
-//    }
-//
-//    @Override
-//    public Integer deleteMeetingroomByName(String roomname) {
-//
-//        List<Meetingroom> list = getMeetingroomByName(roomname);
-//        int deleteNum = 0;
-//
-//        if (list == null || list.size() == 0) {
-//            return deleteNum;
-//        }
-//
-//        for (Meetingroom meetingroom : list) {
-//            deleteNum += meetingroomMapper.delete(meetingroom);
-//        }
-//
-//        return deleteNum;
-//    }
 
     @Override
-    public Integer deleteMeetingroomById(Integer id) {
-        meetingroomBookDetailMapper.cancelMeetingroomBookDetailByMeetingroomId(id);
-        return meetingroomMapper.deleteByPrimaryKey(id);
+    @LogMrBookChange
+    public Integer cancelMeetingroomById(Integer id, Integer employeeId, String changeReason) {
+        mrBookDetailMapper.cancelMeetingroomBookDetailByMeetingroomId(id);
+        insertBookChange(id, employeeId, changeReason);
+        return mrMapper.cancelMeetingroomById(id);
+    }
+
+    private void insertBookChange(Integer id, Integer employeeId, String changeReason) {
+        Date date = new Date();
+        MeetingroomBookChange record = new MeetingroomBookChange();
+        record.setId(null);
+        record.setChangeReason(MessageFormat.format("会议室id【{0}】被置为不可用 原因【{1}】", id, changeReason));
+        record.setAuditStatus("0");
+        record.setCreateTime(date);
+        record.setEmployeeId(employeeId);
+        List<Integer> bookDetailIdList = mrBookDetailMapper.listMrBookDetailIdByMrId(id);
+        if (bookDetailIdList != null && bookDetailIdList.size() > 0) {
+            List<MeetingroomBookChange> changelist = new ArrayList<>();
+            for (Integer bookDetailId : bookDetailIdList) {
+                MeetingroomBookChange bookChange = record.clone();
+                bookChange.setMeetingroomBookDetailId(bookDetailId);
+                changelist.add(bookChange);
+            }
+            mrBookChangeMapper.insertList(changelist);
+        }
     }
 
 }
