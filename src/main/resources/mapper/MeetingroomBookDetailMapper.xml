@@ -67,7 +67,7 @@
             LEFT JOIN meetingroom m ON mbd.meetingroom_id = m.id
     </sql>
 
-    <select id="listValidMeetingroomBookDetail" resultType="com.jc.model.MeetingroomBookDetail">
+    <select id="getValidMeetingroomBookDetailList" resultType="com.jc.model.MeetingroomBookDetail">
         <include refid="SELECT_BOOK_DETAIL"/>
         <![CDATA[ WHERE mbd.status = '0' AND mbd.meeting_end_time > now() ORDER BY mbd.meeting_begin_time asc
         ]]>
@@ -82,7 +82,7 @@
         查询 未过期+同一个会议室+时间冲突的 预定会议
         未通过审核的会议暂时也视为冲突
     -->
-    <select id="getBookListWithinDatetimeRange" resultType="com.jc.vo.MeetingroomBookDetailVO">
+    <select id="getConflictBookList" resultType="com.jc.vo.MeetingroomBookDetailVO">
         SELECT
         mbd.id,
         m.room_name roomName,
@@ -124,7 +124,7 @@
     </update>
 
     <!--通过会议室id取消预定-->
-    <select id="listMrBookDetailIdByMrId" resultType="java.lang.Integer">
+    <select id="getIdListByMeetingroomId" resultType="java.lang.Integer">
         SELECT id
         FROM meetingroom_book_detail
         WHERE meetingroom_id = #{0}

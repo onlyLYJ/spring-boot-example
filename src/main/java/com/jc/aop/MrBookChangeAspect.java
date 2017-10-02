@@ -11,7 +11,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.text.MessageFormat;
+import java.util.Date;
 
 /**
  * 切面处理
@@ -29,11 +29,8 @@ public class MrBookChangeAspect {
     public void annotationPointCut() {
     }
 
-    @Pointcut("@annotation(com.jc.aop.LogMrBookChange)")
-    public void annotationPointCutByVO() {
-    }
 
-    @After("annotationPointCutByVO() && args(meetingroomBookDetailVO)")
+    @After("annotationPointCut() && args(meetingroomBookDetailVO)")
     public void logyMRBookChangeByVO(MeetingroomBookDetailVO meetingroomBookDetailVO) throws Throwable {
 
         MeetingroomBookChange record = new MeetingroomBookChange();
@@ -42,10 +39,11 @@ public class MrBookChangeAspect {
         Integer employeeId = meetingroomBookDetailVO.getEmployeeId();
         record.setEmployeeId(employeeId);
         record.setChangeReason(meetingroomBookDetailVO.getBookReason());
+        record.setCreateTime(new Date());
         int updatedNum = mrBookChangeMapper.insertSelective(record);
 
         if (updatedNum < 0) {
-            throw new ApplyException(MessageFormat.format("insert meetingroom book change error: bookId[{0}],employeeId[{1}]", id, employeeId));
+            throw new ApplyException("变更预定失败");
         }
 
     }
@@ -58,11 +56,11 @@ public class MrBookChangeAspect {
         record.setMeetingroomBookDetailId(id);
         record.setEmployeeId(employeeId);
         record.setChangeReason(changeReason);
-//        record.setCreateTime(new Date());
+        record.setCreateTime(new Date());
         int updatedNum = mrBookChangeMapper.insert(record);
 
         if (updatedNum < 0) {
-            throw new ApplyException(MessageFormat.format("insert meetingroom book change error: bookId[{0}],employeeId[{1}]", id, employeeId));
+            throw new ApplyException("变更预定失败");
         }
 
     }

@@ -1,6 +1,7 @@
 package com.jc.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.jc.model.MeetingroomBookDetail;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,10 +13,11 @@ import javax.validation.constraints.Future;
 import javax.validation.constraints.Min;
 import java.util.Date;
 
+@Data
 @ApiModel(description = "会议室预定详情VO")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @EqualsAndHashCode(callSuper = false)
-@Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class MeetingroomBookDetailVO extends MeetingroomBookDetail implements Cloneable {
 
     @ApiModelProperty(value = "会议预定详情id")

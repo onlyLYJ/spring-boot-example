@@ -150,7 +150,6 @@ public class MeetingroomBookDetail implements Serializable {
     }
 
 
-
     @Override
     public String toString() {
         return "MeetingroomBookDetail{" +

@@ -145,6 +145,7 @@ public class ApplyServiceImpl implements ApplyService {
     @Override
     public PageInfo<ActivityApply> selectApply(ActivityApply record, int pageNum, int pageSize) {
         Preconditions.checkNotNull(record, "参数不能为空");
+
         PageHelper.startPage(pageNum, pageSize);
         List<ActivityApply> list = applyMapper.select(record);
         return new PageInfo<>(list);

@@ -58,13 +58,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 //静态文件和首页 允许所有人访问
-                .antMatchers("/index", "/error", "/dateTest", "/webjarslocator/**", "/static/**", "/webjars/**").permitAll()
+                .antMatchers("/index", "/dateTest", "/webjarslocator/**", "/static/**", "/webjars/**").permitAll()
 //                //swagger相关链接
                 .antMatchers("/swagger-ui.html", "/v2/api-docs", "/swagger*/**").permitAll()
                 //报名相关 不需要登录
-                .antMatchers("/apply", "/cancelApply", "/addEmployee", "/getCanApply", "/book/").permitAll()
-//                .antMatchers( "/book/**").hasAuthority("ROLE_USER")
-//                .antMatchers("/admin/**", "/meetingroom/**","/employee/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/apply", "/cancelApply", "/addEmployee", "/getCanApply", "/book/", "/book/list**").permitAll()
+//                .antMatchers("/book/**").hasAuthority("ROLE_USER")
+//                .antMatchers("/admin/**", "/meetingroom/**", "/employee/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().fullyAuthenticated()
                 .and()
                 .formLogin()

@@ -1,6 +1,5 @@
 package com.jc.service.impl;
 
-import com.jc.aop.LogMrBookChange;
 import com.jc.exception.MeetingroomException;
 import com.jc.mapper.MeetingroomBookChangeMapper;
 import com.jc.mapper.MeetingroomBookDetailMapper;
@@ -87,28 +86,32 @@ public class MeetingroomServiceImpl implements MeetingroomService {
     }
 
     @Override
-    public List<Meetingroom> listMeetingroom() {
-        return mrMapper.selectAll();
+    public List<Meetingroom> getValidMeetingroomList() {
+
+        return mrMapper.getValidMeetingroomList();
     }
 
 
     @Override
-    @LogMrBookChange
-    public Integer cancelMeetingroomById(Integer id, Integer employeeId, String changeReason) {
+    public boolean cancelMeetingroomById(Integer id, Integer employeeId, String changeReason) {
         mrBookDetailMapper.cancelMeetingroomBookDetailByMeetingroomId(id);
-        insertBookChange(id, employeeId, changeReason);
-        return mrMapper.cancelMeetingroomById(id);
+        saveBookChangeForCancelMeetingroom(id, employeeId, changeReason);
+        return mrMapper.cancelMeetingroomById(id) > 0;
     }
 
-    private void insertBookChange(Integer id, Integer employeeId, String changeReason) {
-        Date date = new Date();
+    @Override
+    public List<Meetingroom> getMeetingroomList() {
+        return mrMapper.selectAll();
+    }
+
+    private void saveBookChangeForCancelMeetingroom(Integer id, Integer employeeId, String changeReason) {
+
         MeetingroomBookChange record = new MeetingroomBookChange();
         record.setId(null);
         record.setChangeReason(MessageFormat.format("会议室id【{0}】被置为不可用 原因【{1}】", id, changeReason));
         record.setAuditStatus("0");
-        record.setCreateTime(date);
         record.setEmployeeId(employeeId);
-        List<Integer> bookDetailIdList = mrBookDetailMapper.listMrBookDetailIdByMrId(id);
+        List<Integer> bookDetailIdList = mrBookDetailMapper.getIdListByMeetingroomId(id);
         if (bookDetailIdList != null && bookDetailIdList.size() > 0) {
             List<MeetingroomBookChange> changelist = new ArrayList<>();
             for (Integer bookDetailId : bookDetailIdList) {

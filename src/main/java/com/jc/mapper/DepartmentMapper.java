@@ -8,7 +8,7 @@ import java.util.List;
 
 @Component
 public interface DepartmentMapper extends MyMapper<Department> {
-    List<Department> listValidDepartment();
+    List<Department> getValidDepartmentList();
 
 
 }

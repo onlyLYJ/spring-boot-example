@@ -26,7 +26,7 @@ public interface MeetingroomBookDetailService {
      * @param MeetingroomBookDetailVO
      * @return
      */
-    List<MeetingroomBookDetailVO> findConflictBookList(MeetingroomBookDetailVO MeetingroomBookDetailVO);
+    List<MeetingroomBookDetailVO> getConflictBookList(MeetingroomBookDetailVO MeetingroomBookDetailVO);
 
     /**
      * 根据VO更新会议预定详情
@@ -53,7 +53,7 @@ public interface MeetingroomBookDetailService {
 
     PageInfo<MeetingroomBookDetail> getAllMeetingroomBookDetail(int pageNum, int pageSize);
 
-    PageInfo<MeetingroomBookDetail> findValidMeetingroomBookDetailList(Integer pageNum, Integer pageSize);
+    PageInfo<MeetingroomBookDetail> getValidMeetingroomBookDetailList(Integer pageNum, Integer pageSize);
 
     Integer cancelMeetingroomBookDetailById(Integer id, Integer employeeId, String changeReason);
 

@@ -35,13 +35,15 @@ public interface MeetingroomService {
     List<Meetingroom> getMeetingroomByName(String roomName);
 
     /**
-     * 获取所有会议室列表
+     * 获取所有可用会议室列表
      *
      * @return
      */
-    List<Meetingroom> listMeetingroom();
+    List<Meetingroom> getValidMeetingroomList();
 
     List<Meetingroom> getMeetingroomById(Integer id);
 
-    Integer cancelMeetingroomById(Integer id, Integer employeeId, String changeReason);
+    boolean cancelMeetingroomById(Integer id, Integer employeeId, String changeReason);
+
+    List<Meetingroom> getMeetingroomList();
 }

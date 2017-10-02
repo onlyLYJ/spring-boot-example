@@ -20,7 +20,7 @@
     </sql>
 
 
-    <select id="listValidDepartment" resultType="com.jc.model.Department">
+    <select id="getValidDepartmentList" resultType="com.jc.model.Department">
         SELECT
             id,
             dept_name deptName

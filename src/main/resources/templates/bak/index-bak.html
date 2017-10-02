@@ -1,34 +1,22 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: htmlhead" th:with="title='首页'"></head>
+<head th:include="layout :: htmlhead" th:with="title='报名'"></head>
 
 <body>
 <div th:replace="layout :: navbar">(navbar)</div>
 
 <div class="container-fluid">
     <div class="starter-template">
-        <h1>会议室预定查询</h1>
+        <h1>会议室预定系统</h1>
         <p>The current time is <span th:text="${currentTime}">(time)</span></p>
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="englishName">英文名：</label>
+                <input type="text" class="form-control" id="englishName" name="englishName">
+            </div>
+            <input id="activityId" class="hidden">
+        </form>
     </div>
-
-    <li>
-        <a>
-            <select id="deptId">
-                <option th:each="dept : ${deptList}"
-                        th:value="${dept.id}" th:text="${dept.deptName}">...
-                </option>
-            </select>
-        </a>
-        <br>
-        会议开始时间：<a><input id="minutesAfterNow" type="number" max="1440" min="1" value="10"></a>分钟后
-        <br>会议时长<a><input id="duration" type="number" max="60" min="1" value="30"
-    ></input></a>分钟
-        <button type="button" class="btn btn-default" id="speedMeetingroomBook">1号会议室极速预定</button>
-    </li>
-    <div>
-        <li><a th:href="@{'/book/newBook'}"/>新增预定</li>
-    </div>
-
     <table class="table table-hover">
         <thead>
         <tr>
@@ -48,21 +36,15 @@
             <td th:text="${#dates.format(mrb.meetingBeginTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
             <td th:text="${#dates.format(mrb.meetingEndTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
             <td th:id="'status'+${mrb.status}" th:text="${mrb.status}">...</td>
-            <td class="btn btn-default"><a th:href="@{'/book/editBook?id='+${mrb.id}}"/>
-                编辑预定
-            </td>
-            <td class="cancel" th:id="'cancel'+${mrb.id}"
-                class="btn btn-danger" type="button"
-                onclick="cancelMeetingroomBook(this)">取消预定
-            </td>
+            <td>
         </tr>
         </tbody>
     </table>
     <nav aria-label="...">
         <ul class="pager">
-            <li class="previous"><a th:href="@{'/book/list?pageNum='+${page.prePage}}"><span
+            <li class="previous"><a th:href="@{'/index?pageNum='+${page.prePage}}"><span
                     aria-hidden="true">&larr;</span> 上一页</a></li>
-            <li class="next"><a th:href="@{'/book/list?pageNum='+${page.nextPage}}">下一页 <span
+            <li class="next"><a th:href="@{'/index?pageNum='+${page.nextPage}}">下一页 <span
                     aria-hidden="true">&rarr;</span></a>
             </li>
         </ul>
@@ -70,8 +52,6 @@
 </div>
 
 <div th:include="layout :: footer" id="footer">(footer)</div>
-
-<script th:src="@{/static/js/index.js}"></script>
 <script th:inline="javascript">
 
 </script>

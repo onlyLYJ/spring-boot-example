@@ -22,6 +22,12 @@ public interface EmployeeService {
      */
     Employee addEmployee(DepartmentEnum de, String realName, String englishName, String password);
 
+    /**
+     * 根据id删除员工
+     *
+     * @param id
+     * @return
+     */
     Employee deleteEmployeeById(Integer id);
 
     /**
@@ -50,6 +56,12 @@ public interface EmployeeService {
      */
     Employee findByEnglishName(String englishName);
 
+    /**
+     * 根据英文名获取员工id
+     *
+     * @param englishName
+     * @return
+     */
     Integer findIdByEnglishName(String englishName);
 
     List<Permission> findPermissionByEmployeeId(Integer id);

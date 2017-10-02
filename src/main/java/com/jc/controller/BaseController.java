@@ -1,5 +1,6 @@
 package com.jc.controller;
 
+import com.jc.constant.BaseEnumBehavior;
 import com.jc.constant.ResultModel;
 import com.jc.exception.ApplyException;
 import com.jc.service.EmployeeService;
@@ -31,7 +32,7 @@ public class BaseController {
     Integer getEmployeeIdByPrincipal(Principal principal) {
         String englishName = principal.getName();
         if (StringUtils.isBlank(englishName))
-            throw new ApplyException("未登录错误！");
+            throw new ApplyException("未登录错误");
         return employeeService.findIdByEnglishName(englishName);
     }
 
@@ -42,7 +43,7 @@ public class BaseController {
         return model;
     }
 
-    protected <T extends Serializable> ResultModel<T> buildErrorResponse(String msg, String code) {
+    protected <T extends Serializable> ResultModel<T> buildErrorResponse(String code, String msg) {
         ResultModel<T> model = new ResultModel<T>();
         model.setCode(code);
         model.setMsg(msg);
@@ -79,10 +80,10 @@ public class BaseController {
         return model;
     }
 
-    protected <T extends Serializable> ResultModel<T> buildAuthInvalidResponse(String msg) {
+    protected <T extends Serializable> ResultModel<T> buildAuthInvalidResponse() {
         ResultModel<T> model = new ResultModel<T>();
         model.setCode(ResultModel.RESULT_AUTH_INVALID);
-        model.setMsg(msg);
+        model.setMsg("您的权限验证失败，请登录后再操作！");
         return model;
     }
 
@@ -105,6 +106,14 @@ public class BaseController {
         model.setData(obj);
         return model;
     }
+
+    protected <T extends Serializable> ResultModel<T> buildResponseByEnum(BaseEnumBehavior baseEnumBehavior) {
+        ResultModel<T> model = new ResultModel<T>();
+        model.setCode(baseEnumBehavior.getCode());
+        model.setMsg(baseEnumBehavior.getMsg());
+        return model;
+    }
+
 
     private <T> Map<String, Object> parseDTO(T obj) {
         Map<String, Object> map = new HashMap<>();

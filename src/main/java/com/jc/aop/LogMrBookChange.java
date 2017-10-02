@@ -3,8 +3,8 @@ package com.jc.aop;
 import java.lang.annotation.*;
 
 /**
- * 时间统计
- * Created by jasonzhu on 2017/8/2.
+ * 记录会议室预定变更
+ * Created by onlyLYJ on 2017/9/28.
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)

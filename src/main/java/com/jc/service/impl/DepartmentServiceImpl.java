@@ -19,8 +19,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     private DepartmentMapper departmentMapper;
 
     @Override
-    public List<Department> listValidDepartment() {
-        return departmentMapper.listValidDepartment();
+    public List<Department> getValidDepartmentList() {
+        return departmentMapper.getValidDepartmentList();
     }
 
 }

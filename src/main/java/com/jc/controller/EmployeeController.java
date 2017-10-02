@@ -23,13 +23,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Slf4j
 public class EmployeeController extends BaseController {
 
-
     @ApiOperation(value = "增加员工")
     @PostMapping(value = "/add")
     @ResponseBody
     public ResultModel addEmployee(@RequestBody Employee employee) {
         enCodePassword(employee);
-        return buildSuccessResponse(employeeService.addEmployee(employee));
+        employeeService.addEmployee(employee);
+        return buildSuccessResponse("用户注册成功!");
     }
 
     private void enCodePassword(Employee employee) {

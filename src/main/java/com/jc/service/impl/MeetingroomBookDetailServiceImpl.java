@@ -41,17 +41,10 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
     private MeetingroomBookChangeMapper mrBookChangeMapper;
 
     @Override
-    @LogMrBookChange
     public Integer addMeetingroomBookDetail(MeetingroomBookDetailVO mbdVO) {
-
-        if (!isValidBook(mbdVO)) {
-            throw new MeetingroomBookException(MeetingroomBookException.TIME_CONFLICT);
-        }
 
         mbdVO.setAuditStatus("0");
         mbdVO.setStatus("0");
-//        Date date = new Date();
-//        mbdVO.setUpdateTime(date);
         return mrBookDetailMapper.insertSelective(mbdVO);
 
     }
@@ -63,7 +56,7 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
      * @return
      */
     @Override
-    public List<MeetingroomBookDetailVO> findConflictBookList(MeetingroomBookDetailVO mbdVO) {
+    public List<MeetingroomBookDetailVO> getConflictBookList(MeetingroomBookDetailVO mbdVO) {
 
         Date beginTime = mbdVO.getMeetingBeginTime();
         Date endTime = mbdVO.getMeetingEndTime();
@@ -75,12 +68,12 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
             throw new MeetingroomBookException(MeetingroomBookException.INVALID_DATA);
         }
 
-        return mrBookDetailMapper.getBookListWithinDatetimeRange(beginTime, endTime, meetingroomId, inputId);
+        return mrBookDetailMapper.getConflictBookList(beginTime, endTime, meetingroomId, inputId);
     }
 
     public Boolean isValidBook(final MeetingroomBookDetailVO mbdVO) {
 
-        List<MeetingroomBookDetailVO> list = findConflictBookList(mbdVO);
+        List<MeetingroomBookDetailVO> list = getConflictBookList(mbdVO);
 
         if (list == null || list.size() == 0)
             return true;
@@ -124,10 +117,11 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
      * @return
      */
     @Override
+    @LogMrBookChange
     public List<MeetingroomBookDetailVO> updateMeetingroomBookDetailByVO(MeetingroomBookDetailVO mbdVO) {
 
         //查询时间冲突的预定列表
-        List<MeetingroomBookDetailVO> mbdList = findConflictBookList(mbdVO);
+        List<MeetingroomBookDetailVO> mbdList = getConflictBookList(mbdVO);
 
         //冲突数量大于1，即与其他的预定时间冲突，更新失败
         if (mbdList.size() > 1) {
@@ -168,9 +162,9 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
     }
 
     @Override
-    public PageInfo<MeetingroomBookDetail> findValidMeetingroomBookDetailList(Integer pageNum, Integer pageSize) {
+    public PageInfo<MeetingroomBookDetail> getValidMeetingroomBookDetailList(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        List<MeetingroomBookDetail> list = mrBookDetailMapper.listValidMeetingroomBookDetail();
+        List<MeetingroomBookDetail> list = mrBookDetailMapper.getValidMeetingroomBookDetailList();
         return new PageInfo<>(list);
     }
 

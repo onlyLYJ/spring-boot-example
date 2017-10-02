@@ -4,16 +4,19 @@ import com.github.pagehelper.PageInfo;
 import com.jc.constant.ResultModel;
 import com.jc.hystrix.GetEmployeeCommand;
 import com.jc.model.ActivityApply;
+import com.jc.model.Department;
 import com.jc.model.Employee;
 import com.jc.model.MeetingroomBookDetail;
 import com.jc.service.ActivityService;
 import com.jc.service.ApplyService;
+import com.jc.service.DepartmentService;
 import com.jc.service.MeetingroomBookDetailService;
 import com.jc.util.RateLimitUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -28,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -67,6 +71,8 @@ public class IndexController extends BaseController {
 
     @Autowired
     MeetingroomBookDetailService meetingroomBookDetailService;
+    @Autowired
+    private DepartmentService departmentService;
 
     //每秒五条请求 等待1秒
     private RateLimitUtil rateLimitUtil = new RateLimitUtil(5, 1);
@@ -77,22 +83,26 @@ public class IndexController extends BaseController {
     public String index(Model model, Integer pageNum, Integer pageSize) {
         pageNum = pageNum == null ? 1 : pageNum;
         pageSize = pageSize == null ? 10 : pageSize;
-        PageInfo<MeetingroomBookDetail> pageInfo = meetingroomBookDetailService.findValidMeetingroomBookDetailList(pageNum, pageSize);
+        PageInfo<MeetingroomBookDetail> pageInfo = meetingroomBookDetailService.getValidMeetingroomBookDetailList(pageNum, pageSize);
+        List<Department> deptList = departmentService.getValidDepartmentList();
+        model.addAttribute("deptList", deptList);
         model.addAttribute("page", pageInfo);
         return "index";
     }
 
 
     @GetMapping("/error")
-    public String errorPage(Model model, Principal principal) {
-
+    public String errorPage(Model model, Integer pageNum, Integer pageSize) {
+        pageNum = pageNum == null ? 1 : pageNum;
+        pageSize = pageSize == null ? 10 : pageSize;
+        PageInfo<MeetingroomBookDetail> pageInfo = meetingroomBookDetailService.getValidMeetingroomBookDetailList(pageNum, pageSize);
+        model.addAttribute("page", pageInfo);
         return "error";
     }
 
-    @GetMapping("/dateTest")
-    public String testPage(Model model, Principal principal) {
-
-        return "/dateTest";
+    @GetMapping("/testDate")
+    public String testPage(Model model) {
+        return "testDate";
     }
 
     /**
@@ -180,25 +190,26 @@ public class IndexController extends BaseController {
     }
 
     @ApiOperation(value = "登录页")
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    @GetMapping(value = "/login")
     public String login(Model model, Principal principal) {
 
-        if (principal != null) {
-            String englishName = principal.getName();
-            model.addAttribute("englishName", englishName);
-        }
-
         model.addAttribute("currentTime", DateFormatUtils.format(new Date(), DATETIME_FORMAT));
-        return "login";
+
+        String englishName = "";
+        if (principal == null || StringUtils.isBlank(principal.getName()))
+            return "login";
+
+        model.addAttribute("englishName", principal.getName());
+        return "redirect:/book";
     }
 
-
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @ApiOperation(value = "登出", notes = "返回index页")
+    @GetMapping(value = "/logout")
     public String logoutPage(HttpServletRequest request, HttpServletResponse response) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null) {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
-        return "redirect:/login";
+        return "index";
     }
 }

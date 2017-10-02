@@ -1,13 +1,13 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: htmlhead" th:with="title='首页'"></head>
+<head th:include="layout :: htmlhead" th:with="title='管理'"></head>
 
 <body>
 <div th:replace="layout :: navbar">(navbar)</div>
 
 <div class="container-fluid">
     <div class="starter-template">
-        <h1>会议室预定查询</h1>
+        <h1>会议室预定管理</h1>
         <p>The current time is <span th:text="${currentTime}">(time)</span></p>
     </div>
 
@@ -55,6 +55,10 @@
                 class="btn btn-danger" type="button"
                 onclick="cancelMeetingroomBook(this)">取消预定
             </td>
+            <!--<td class="audit" data-toggle="modal" data-target="#auditMeetingroomBookModal"-->
+            <!--class="btn btn-primary" type="button" th:id="'audit'+${mrb.id}"-->
+            <!--onclick="auditMeetingroomBook(this)">审核预定-->
+            <!--</td>-->
         </tr>
         </tbody>
     </table>
@@ -70,7 +74,6 @@
 </div>
 
 <div th:include="layout :: footer" id="footer">(footer)</div>
-
 <script th:src="@{/static/js/index.js}"></script>
 <script th:inline="javascript">
 

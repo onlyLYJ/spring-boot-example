@@ -2,6 +2,47 @@
 <head th:include="layout :: htmlhead" th:with="title='Hello'"></head>
 
 <body>
-test
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>申请部门</th>
+        <th>会议室名</th>
+        <th>审核状态</th>
+        <th>会议开始时间</th>
+        <th>会议结束时间</th>
+        <th>会议状态</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="mrb : ${page.list}">
+        <td th:id="'deptName'+${mrb.deptName}" th:text="${mrb.deptName}">...</td>
+        <td th:id="'mbrRoomName'+${mrb.roomName}" th:text="${mrb.roomName}">...</td>
+        <td th:id="'auditStatus'+${mrb.auditStatus}" th:text="${mrb.auditStatus}">...</td>
+        <td th:text="${#dates.format(mrb.meetingBeginTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
+        <td th:text="${#dates.format(mrb.meetingEndTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
+        <td th:id="'status'+${mrb.status}" th:text="${mrb.status}">...</td>
+        <td class="btn btn-default"><a th:href="@{'/book/editBook?id='+${mrb.id}}"/>
+            编辑预定
+        </td>
+        <td class="cancel" th:id="'cancel'+${mrb.id}"
+            class="btn btn-danger" type="button"
+            onclick="cancelMeetingroomBook(this)">取消预定
+        </td>
+    </tr>
+    </tbody>
+</table>
+<nav aria-label="...">
+    <ul class="pager">
+        <li class="previous"><a th:href="@{'/book/list?pageNum='+${page.prePage}}"><span
+                aria-hidden="true">&larr;</span> 上一页</a></li>
+        <li class="next"><a th:href="@{'/book/list?pageNum='+${page.nextPage}}">下一页 <span
+                aria-hidden="true">&rarr;</span></a>
+        </li>
+    </ul>
+</nav>
+</div>
+
+<div th:include="layout :: footer" id="footer">(footer)</div>
 </body>
 </html>

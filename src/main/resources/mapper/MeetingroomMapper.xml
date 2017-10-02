@@ -27,4 +27,14 @@
         WHERE id = #{0}
     </update>
 
+    <!--选取所有有效会议室-->
+    <select id="getValidMeetingroomList" resultType="com.jc.model.Meetingroom">
+        SELECT
+            id,
+            room_name roomName
+        FROM meetingroom
+        WHERE status = '0'
+        ORDER BY roomName
+    </select>
+
 </mapper>
