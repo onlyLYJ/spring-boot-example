@@ -29,17 +29,18 @@ $("#speedMeetingroomBook").click(function () {
         alert("极速预定使用时间不能超过1个小时~")
         return;
     }
+
     var deptId = $("#deptId").val();
 
-    $.post(mrbPath + "/speedMeetingroomBook",
-        {
-            deptId: deptId,
-            minutesAfterNow: minutesAfterNow,
-            duration: duration
-        }, function (data, status) {
-            alert(data.m);
-        });
-    window.location.reload();
+    $.post(mrbPath + "/speedMeetingroomBook", {
+        deptId: deptId,
+        minutesAfterNow: minutesAfterNow,
+        duration: duration
+    }, function (data, status) {
+        alert(data.m);
+        window.location.reload();
+    });
+
 });
 
 
@@ -155,4 +156,19 @@ function cancelMeetingroomBook(obj) {
             alert(data.m);
         });
     window.location.reload()
+}
+
+$("#findDailyBookModal").on("hidden.bs.modal", function () {
+    $(this).removeData("bs.modal");
+});
+
+function findDailyBook() {
+    var bookDate = $("#bookDate").val();
+    $("#dailyBookTitle").html(bookDate + ' 预定信息');
+    var url = mrbPath + "/findDailyBook?bookDate=" + bookDate;
+    $("#findDailyBookModal").modal({
+        remote: url,
+        backdrop: "static",
+        keyboard: true
+    });
 }

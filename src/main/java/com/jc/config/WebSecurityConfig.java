@@ -36,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManager();
     }
 
+
     @Autowired
     public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
         authenticationManagerBuilder
@@ -58,7 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 //静态文件和首页 允许所有人访问
-                .antMatchers("/index", "/dateTest", "/webjarslocator/**", "/static/**", "/webjars/**").permitAll()
+                .antMatchers("/index", "/", "/dateTest", "/webjarslocator/**", "/static/**", "/webjars/**").permitAll()
 //                //swagger相关链接
                 .antMatchers("/swagger-ui.html", "/v2/api-docs", "/swagger*/**").permitAll()
                 //报名相关 不需要登录
@@ -77,8 +78,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .logoutUrl("/logout")
+                .permitAll()
                 .deleteCookies("remember-me")
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/index")
                 .permitAll()
                 .and()
                 .rememberMe()

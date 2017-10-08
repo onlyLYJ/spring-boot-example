@@ -1,7 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:th="http://www.w3.org/1999/xhtml"/>
-
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns="http://www.w3.org/1999/xhtml"
+>
 
 <head th:fragment="htmlhead">
 
@@ -32,16 +33,27 @@
         </div>
         <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="active"><a th:href="@{/}">首页</a></li>
-                <li><a th:href="@{/admin/index}">管理员界面</a></li>
-                <li><a href="javascript:alert('会议室管理与预定系统（试运行版）\r遇到问题请友善地与辛勤工作的管理员联系~')">关于</a></li>
-                <li><a class="active" id="username" th:if="${englishName}"
-                       th:text="${englishName}+欢迎使用会议室系统">欢迎使用会议室系统</a></li>
+                <li class="active"><a th:href="@{/index}">首页</a></li>
                 <li></li>
                 <li></li>
-                <li><a class="navbar-brand" th:href="@{/login}">登录</a></li>
                 <li></li>
-                <li><a class="navbar-brand" th:href="@{/logout}">登出</a></li>
+                <li class="active"><a th:inline="text" th:id="username" th:if="${#httpServletRequest.remoteUser}">Hello
+                    [[${#httpServletRequest.remoteUser}]],欢迎使用会议室预定系统</a>
+                    <a th:if="${#httpServletRequest.remoteUser == null}">欢迎使用会议室预定系统!</a>
+                </li>
+                <li>
+                    <ul sec:authorize="isAnonymous()" class="nav navbar-nav navbar-right">
+                        <li><a th:href="@{/login}">Login</a></li>
+                    </ul>
+                <li></li>
+                <li>
+                    <ul sec:authorize="!isAnonymous()" class="nav navbar-nav navbar-right">
+                        <li><a th:href="@{/logout}">Sign Out</a></li>
+                    </ul>
+                </li>
+                <li class="nav navbar-nav navbar-right"><a
+                        href="javascript:alert('会议室管理与预定系统（试运行版）\r遇到问题请友善地与辛勤工作的管理员联系~')">关于</a></li>
+                <li class="nav navbar-nav navbar-right"><a th:href="@{/admin/index}">管理员专用</a></li>
             </ul>
         </div>
     </div>
@@ -65,13 +77,13 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a href="javascript:">管理</a></li>
                 <li><a href="javascript:alert('会议室管理与预定系统（试运行版）\r遇到问题请友善地与辛勤工作的管理员联系~')">关于</a></li>
-                <li><a class="active" th:if="${englishName}"
-                       th:text="${englishName}+欢迎使用会议室系统">欢迎使用会议室系统</a></li>
+                <li class="active"><a th:inline="text" th:if="${#httpServletRequest.remoteUser}">[[${#httpServletRequest.remoteUser}]],
+                    Now You Rule!</a></li>
                 <li></li>
                 <li></li>
                 <li><a class="navbar-brand" data-toggle="modal" data-target="#registerModal">注册新用户</a></li>
                 <li></li>
-                <li><a class="navbar-brand" th:href="@{/logout}">登出</a></li>
+                <li><a class="nav navbar-nav navbar-right" th:href="@{/logout}">Sign Out</a></li>
             </ul>
         </div>
     </div>
@@ -84,6 +96,21 @@
 </div>
 
 <div th:fragment="footer" id="footer">
+
+    <div class="container">
+
+        <footer>
+            <!-- this is footer -->
+            © 2017 yhjs
+            <span sec:authorize="isAuthenticated()">
+                | Logged user: <span sec:authentication="name"></span> |
+                Roles: <span sec:authentication="principal.authorities"></span> |
+                <a th:href="@{/logout}">Sign Out</a>
+            </span>
+        </footer>
+    </div>
+
+
     <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="registerModal">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -259,6 +286,7 @@
                 return;
             }
             var regDepartment = $("#regDepartment").val();
+
             console.log(regDepartment);
             $.ajax({
                 type: "POST",

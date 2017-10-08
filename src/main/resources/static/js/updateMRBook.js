@@ -28,7 +28,7 @@ function updateBookCheck() {
     }
 
     if (meetingBeginTime >= meetingEndTime) {
-        alert("开始和结束时间得大于结束时间呀！");
+        alert("开始时间得怎么结束时间呀！");
         return false;
     }
 
@@ -48,11 +48,16 @@ $("#updateMrBook-form").submit(function () {
         type: 'POST',
         dataType: "json",
         data: $(this).serialize(),
-        url: meetingroomPath + "/book/update",
+        url: mrBookPath + "/update",
         success: function (data, status) {
             alert(data.m);
-            history.back(-1);
+            if (data.c == '200301') {
+                return;
+            } else {
+                history.back(-1);
+            }
         }
     });
     return false;
 });
+

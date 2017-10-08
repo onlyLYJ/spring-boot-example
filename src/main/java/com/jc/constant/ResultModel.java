@@ -73,5 +73,12 @@ public class ResultModel<T extends Serializable> implements Serializable {
         this.data = data;
     }
 
-
+    @Override
+    public String toString() {
+        return "ResultModel{" +
+                "code='" + code + '\'' +
+                ", msg='" + msg + '\'' +
+                ", data=" + data +
+                '}';
+    }
 }

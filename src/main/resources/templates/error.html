@@ -1,48 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: htmlhead" th:with="title='Hello'"></head>
-
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Error Page</title>
+    <!-- Bootstrap core CSS -->
+    <link href="/static/css/bootstrap.css" rel="stylesheet">
+    <!-- FONT AWESOME CSS -->
+    <link href="/static/css/font-awesome.min.css" rel="stylesheet"/>
+    <!--GOOGLE FONT -->
+    <link href='http://fonts.googleapis.com/css?family=Nova+Flat' rel='stylesheet' type='text/css'>
+    <!-- custom CSS here -->
+    <link href="/static/css/style.css" rel="stylesheet"/>
+</head>
 <body>
 
-<table class="table table-hover">
-    <thead>
-    <tr>
-        <th>申请部门</th>
-        <th>会议室名</th>
-        <th>审核状态</th>
-        <th>会议开始时间</th>
-        <th>会议结束时间</th>
-        <th>会议状态</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="mrb : ${page.list}">
-        <td th:id="'deptName'+${mrb.deptName}" th:text="${mrb.deptName}">...</td>
-        <td th:id="'mbrRoomName'+${mrb.roomName}" th:text="${mrb.roomName}">...</td>
-        <td th:id="'auditStatus'+${mrb.auditStatus}" th:text="${mrb.auditStatus}">...</td>
-        <td th:text="${#dates.format(mrb.meetingBeginTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
-        <td th:text="${#dates.format(mrb.meetingEndTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
-        <td th:id="'status'+${mrb.status}" th:text="${mrb.status}">...</td>
-        <td class="btn btn-default"><a th:href="@{'/book/editBook?id='+${mrb.id}}"/>
-            编辑预定
-        </td>
-        <td class="cancel" th:id="'cancel'+${mrb.id}"
-            class="btn btn-danger" type="button"
-            onclick="cancelMeetingroomBook(this)">取消预定
-        </td>
-    </tr>
-    </tbody>
-</table>
-<nav aria-label="...">
-    <ul class="pager">
-        <li class="previous"><a th:href="@{'/book/list?pageNum='+${page.prePage}}"><span
-                aria-hidden="true">&larr;</span> 上一页</a></li>
-        <li class="next"><a th:href="@{'/book/list?pageNum='+${page.nextPage}}">下一页 <span
-                aria-hidden="true">&rarr;</span></a>
-        </li>
-    </ul>
-</nav>
-</div>
 
-<div th:include="layout :: footer" id="footer">(footer)</div>
+<div class="container">
+
+    <div class="row pad-top text-center">
+        <div class="col-md-6 col-md-offset-3 text-center">
+            <h3> What have you done? </h3>
+            <h5> Now Go Back Using Below LInk</h5>
+            <span id="error-link"></span>
+            <h2>! YOU MAY HAVE NO RIGHT !</h2>
+        </div>
+    </div>
+
+    <div class="row text-center">
+        <div class="col-md-8 col-md-offset-2">
+
+            <h3><i class="fa fa-lightbulb-o fa-5x"></i></h3>
+            <a class="btn btn-default" th:href="@{/logout}">切换管理员账号</a>
+            <a class="btn btn-primary" th:href="@{/}">返回首页</a>
+        </div>
+    </div>
+
+</div>
+-->
+<script src="/static/js/jquery-1.10.2.js"></script>
+<!--bootstrap JavaScript file  -->
+<script src="/static/js/bootstrap.js"></script>
+<!--Count Number JavaScript file  -->
+<script src="/static/js/countUp.js"></script>
+<!--Custom JavaScript file  -->
+<script src="/static/js/custom.js"></script>
 </body>
 </html>

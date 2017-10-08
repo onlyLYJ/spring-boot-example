@@ -17,7 +17,6 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,7 +28,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.security.Principal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -65,12 +63,11 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 public class IndexController extends BaseController {
     @Autowired
+    MeetingroomBookDetailService meetingroomBookDetailService;
+    @Autowired
     private ApplyService applyService;
     @Autowired
     private ActivityService activityService;
-
-    @Autowired
-    MeetingroomBookDetailService meetingroomBookDetailService;
     @Autowired
     private DepartmentService departmentService;
 
@@ -85,19 +82,10 @@ public class IndexController extends BaseController {
         pageSize = pageSize == null ? 10 : pageSize;
         PageInfo<MeetingroomBookDetail> pageInfo = meetingroomBookDetailService.getValidMeetingroomBookDetailList(pageNum, pageSize);
         List<Department> deptList = departmentService.getValidDepartmentList();
+        setCurrentTimeAttribute(model);
         model.addAttribute("deptList", deptList);
         model.addAttribute("page", pageInfo);
         return "index";
-    }
-
-
-    @GetMapping("/error")
-    public String errorPage(Model model, Integer pageNum, Integer pageSize) {
-        pageNum = pageNum == null ? 1 : pageNum;
-        pageSize = pageSize == null ? 10 : pageSize;
-        PageInfo<MeetingroomBookDetail> pageInfo = meetingroomBookDetailService.getValidMeetingroomBookDetailList(pageNum, pageSize);
-        model.addAttribute("page", pageInfo);
-        return "error";
     }
 
     @GetMapping("/testDate")
@@ -193,13 +181,11 @@ public class IndexController extends BaseController {
     @GetMapping(value = "/login")
     public String login(Model model, Principal principal) {
 
-        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), DATETIME_FORMAT));
+        setCurrentTimeAttribute(model);
 
-        String englishName = "";
         if (principal == null || StringUtils.isBlank(principal.getName()))
             return "login";
 
-        model.addAttribute("englishName", principal.getName());
         return "redirect:/book";
     }
 

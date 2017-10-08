@@ -11,10 +11,8 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
-
 /**
- * 切面处理
+ * AOP会议室预定更变信息保存
  * Created by jasonzhu on 2017/8/2.
  */
 @Aspect
@@ -25,13 +23,13 @@ public class MrBookChangeAspect {
     @Autowired
     private MeetingroomBookChangeMapper mrBookChangeMapper;
 
-    @Pointcut("@annotation(com.jc.aop.LogMrBookChange)")
+    @Pointcut("@annotation(com.jc.aop.SaveMrBookChange)")
     public void annotationPointCut() {
     }
 
 
     @After("annotationPointCut() && args(meetingroomBookDetailVO)")
-    public void logyMRBookChangeByVO(MeetingroomBookDetailVO meetingroomBookDetailVO) throws Throwable {
+    public void saveMrBookChangeByVO(MeetingroomBookDetailVO meetingroomBookDetailVO) throws Throwable {
 
         MeetingroomBookChange record = new MeetingroomBookChange();
         Integer id = meetingroomBookDetailVO.getId();
@@ -39,27 +37,24 @@ public class MrBookChangeAspect {
         Integer employeeId = meetingroomBookDetailVO.getEmployeeId();
         record.setEmployeeId(employeeId);
         record.setChangeReason(meetingroomBookDetailVO.getBookReason());
-        record.setCreateTime(new Date());
         int updatedNum = mrBookChangeMapper.insertSelective(record);
 
-        if (updatedNum < 0) {
+        if (updatedNum <= 0) {
             throw new ApplyException("变更预定失败");
         }
 
     }
 
-
     @After("annotationPointCut() && args(id, employeeId, changeReason)")
-    public void logMRBookChange(Integer id, Integer employeeId, String changeReason) throws Throwable {
+    public void saveMrBookChange(Integer id, Integer employeeId, String changeReason) throws Throwable {
 
         MeetingroomBookChange record = new MeetingroomBookChange();
         record.setMeetingroomBookDetailId(id);
         record.setEmployeeId(employeeId);
         record.setChangeReason(changeReason);
-        record.setCreateTime(new Date());
-        int updatedNum = mrBookChangeMapper.insert(record);
+        int updatedNum = mrBookChangeMapper.insertSelective(record);
 
-        if (updatedNum < 0) {
+        if (updatedNum <= 0) {
             throw new ApplyException("变更预定失败");
         }
 

@@ -2,9 +2,9 @@
 function checkValidPass(s) {
     //返回'OK'表示合格
     if (s.length < 6)
-        return '少于6位的密码可不能够！';
+        return '密码至少为6位！';
     if (s.length > 20)
-        return '您的密码长度超过全国99.99%的人民，请设置小于20位~';
+        return '您的密码长度击败了超过全国99.99%的人，请设置小于20位~';
     if (!s.match(/[0-9]/))
         return '密码中必须包含数字';
     if (!s.match(/[a-zA-Z]/))

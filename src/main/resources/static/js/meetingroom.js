@@ -16,6 +16,7 @@ $("#addMeetingroom").click(function () {
         alert("会议室可容纳人数不能为空");
         return;
     }
+
     meetingroomStatusA == '不可使用' ? "1" : "0";
 
     $.ajax({
@@ -114,8 +115,6 @@ function cancelMrInfo(obj) {
             alert("原因不能为空");
             return;
         } else {
-
-            console.log(changeReason);
             $.post(meetingroomPath + "/cancel", {
                 id: id,
                 changeReason: changeReason.trim()

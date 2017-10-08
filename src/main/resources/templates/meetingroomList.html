@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: htmlhead" th:with="title='查询'"></head>
-<div th:include="layout :: footer" id="footer">(footer)</div>
+<head th:include="layout :: htmlhead" th:with="title='查询'">
+</head>
 <body>
 <div th:replace="layout :: navbar">(navbar)</div>
 
@@ -33,8 +33,12 @@
             <td th:id="'capacity'+${meetingroom.id}" th:text="${meetingroom.capacity}">...</td>
             <td th:id="'status'+${meetingroom.id}" th:text="${meetingroom.status == '1'} ? ${'不可使用'} : ${'可使用'}"></td>
             <td th:id="'remark'+${meetingroom.id}" th:text="${meetingroom.remark}">...</td>
-            <td th:text="${#dates.format(meetingroom.createTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
-            <td th:text="${#dates.format(meetingroom.updateTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
+            <td th:if="${meetingroom.createTime}"
+                th:text="${#dates.format(meetingroom.createTime,'yyyy-MM-dd HH:mm:ss')}">...
+            </td>
+            <td th:if="${meetingroom.updateTime}"
+                th:text="${#dates.format(meetingroom.updateTime,'yyyy-MM-dd HH:mm:ss')}">...
+            </td>
             <td class="edit" data-toggle="modal" data-target="#updateMeetingroomModal"
                 class="btn btn-primary" type="button" th:id="'update'+${meetingroom.id}"
                 onclick="editMrInfo(this)">编辑

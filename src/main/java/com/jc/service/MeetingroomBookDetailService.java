@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.jc.model.MeetingroomBookDetail;
 import com.jc.vo.MeetingroomBookDetailVO;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,7 +19,7 @@ public interface MeetingroomBookDetailService {
      * @param MeetingroomBookDetailVO
      * @return
      */
-    Integer addMeetingroomBookDetail(MeetingroomBookDetailVO MeetingroomBookDetailVO);
+    boolean addMeetingroomBookDetail(MeetingroomBookDetailVO MeetingroomBookDetailVO);
 
     /**
      * 获得预定时间内的预定信息
@@ -28,13 +29,15 @@ public interface MeetingroomBookDetailService {
      */
     List<MeetingroomBookDetailVO> getConflictBookList(MeetingroomBookDetailVO MeetingroomBookDetailVO);
 
+    List<MeetingroomBookDetail> findDailyBook(Date bookDate);
+
     /**
      * 根据VO更新会议预定详情
      *
      * @param MeetingroomBookDetailVO
      * @return
      */
-    List<MeetingroomBookDetailVO> updateMeetingroomBookDetailByVO(MeetingroomBookDetailVO MeetingroomBookDetailVO);
+    boolean updateMeetingroomBookDetailByVO(MeetingroomBookDetailVO MeetingroomBookDetailVO);
 
 
     MeetingroomBookDetailVO findMeetingroomBookDetailById(Integer id);
@@ -47,7 +50,7 @@ public interface MeetingroomBookDetailService {
      * @param employeeId
      * @return
      */
-    Integer updateAuditStatusById(Integer id, String auditStatus, Integer employeeId);
+    boolean updateAuditStatusById(Integer id, String auditStatus, Integer employeeId);
 
     List<MeetingroomBookDetail> getMeetingroomBookDetail(MeetingroomBookDetail record);
 
@@ -55,10 +58,8 @@ public interface MeetingroomBookDetailService {
 
     PageInfo<MeetingroomBookDetail> getValidMeetingroomBookDetailList(Integer pageNum, Integer pageSize);
 
-    Integer cancelMeetingroomBookDetailById(Integer id, Integer employeeId, String changeReason);
+    boolean cancelMeetingroomBookDetailById(Integer id, Integer employeeId, String changeReason);
 
-    Boolean isValidBook(final MeetingroomBookDetailVO mbdVO);
-
-    Integer addWeeklyBook(MeetingroomBookDetailVO MeetingroomBookDetailVO);
+    boolean addWeeklyBook(MeetingroomBookDetailVO MeetingroomBookDetailVO);
 
 }

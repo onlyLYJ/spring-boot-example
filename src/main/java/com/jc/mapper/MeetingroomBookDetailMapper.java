@@ -27,4 +27,8 @@ public interface MeetingroomBookDetailMapper extends MyMapper<MeetingroomBookDet
     MeetingroomBookDetailVO selectMeetingroomBookDetailById(Integer id);
 
     List<Integer> getIdListByMeetingroomId(Integer id);
+
+    List<MeetingroomBookDetail> findDailyBookByRoomId(
+            @Param(value = "beginTime") Date beginTime,
+            @Param(value = "endTime") Date endTime);
 }

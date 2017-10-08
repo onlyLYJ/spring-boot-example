@@ -21,9 +21,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Aspect
 @Component
 public class TimeStatisticsAspect {
-    Logger logger = LoggerFactory.getLogger(TimeStatisticsAspect.class);
     //当前时间
     public ThreadLocal<Map<String, Long>> threadLocalTime = new ThreadLocal<>();
+    Logger logger = LoggerFactory.getLogger(TimeStatisticsAspect.class);
 
     @Pointcut("@annotation(com.jc.aop.TimeStatistics)")
     public void annotationPointCut() {

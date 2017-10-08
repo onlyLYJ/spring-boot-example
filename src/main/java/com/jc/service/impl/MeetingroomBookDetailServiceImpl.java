@@ -3,9 +3,10 @@ package com.jc.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.google.common.collect.Lists;
-import com.jc.aop.LogMrBookChange;
+import com.jc.aop.SaveMrBookChange;
+import com.jc.constant.BookResultEnum;
+import com.jc.exception.BaseEnumException;
 import com.jc.exception.MeetingroomBookException;
-import com.jc.mapper.MeetingroomBookChangeMapper;
 import com.jc.mapper.MeetingroomBookDetailMapper;
 import com.jc.model.MeetingroomBookDetail;
 import com.jc.service.MeetingroomBookDetailService;
@@ -17,11 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import javax.validation.constraints.Min;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -37,20 +37,22 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
     @Autowired
     private MeetingroomBookDetailMapper mrBookDetailMapper;
 
-    @Autowired
-    private MeetingroomBookChangeMapper mrBookChangeMapper;
-
     @Override
-    public Integer addMeetingroomBookDetail(MeetingroomBookDetailVO mbdVO) {
+    public boolean addMeetingroomBookDetail(MeetingroomBookDetailVO mbdVO) {
+
+        List<MeetingroomBookDetailVO> conflictBookList = getConflictBookList(mbdVO);
+
+        if (conflictBookList != null && conflictBookList.size() > 0)
+            throw new MeetingroomBookException(conflictBookList);
 
         mbdVO.setAuditStatus("0");
         mbdVO.setStatus("0");
-        return mrBookDetailMapper.insertSelective(mbdVO);
+        return mrBookDetailMapper.insertSelective(mbdVO) > 0;
 
     }
 
     /**
-     * 获取会议室VO获取时间冲突的预定
+     * 通过会议室VO获取时间冲突的预定
      *
      * @param mbdVO
      * @return
@@ -60,25 +62,14 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
 
         Date beginTime = mbdVO.getMeetingBeginTime();
         Date endTime = mbdVO.getMeetingEndTime();
+
+        if (beginTime.after(endTime))
+            throw new MeetingroomBookException(BookResultEnum.INVALID_DATA);
+
         Integer meetingroomId = mbdVO.getMeetingroomId();
         Integer inputId = mbdVO.getId();
 
-        if (beginTime.compareTo(endTime) >= 0) {
-            log.error("开始时间不能晚于结束时间");
-            throw new MeetingroomBookException(MeetingroomBookException.INVALID_DATA);
-        }
-
         return mrBookDetailMapper.getConflictBookList(beginTime, endTime, meetingroomId, inputId);
-    }
-
-    public Boolean isValidBook(final MeetingroomBookDetailVO mbdVO) {
-
-        List<MeetingroomBookDetailVO> list = getConflictBookList(mbdVO);
-
-        if (list == null || list.size() == 0)
-            return true;
-
-        return false;
     }
 
     /**
@@ -88,14 +79,21 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
      * @return
      */
     @Override
-    public Integer addWeeklyBook(MeetingroomBookDetailVO vo) {
+    public boolean addWeeklyBook(MeetingroomBookDetailVO vo) {
+
+        List<MeetingroomBookDetailVO> weeklyConflictList = getWeeklyConflictList(vo);
+
+        if (weeklyConflictList.size() > 0)
+            throw new MeetingroomBookException(weeklyConflictList);
+
         Date weeklyBookEndDate = vo.getWeeklyBookEndDate();
         Date tempBegin = vo.getMeetingBeginTime();
         Date tempEnd = vo.getMeetingEndTime();
 
         List<MeetingroomBookDetailVO> mbdList = new ArrayList<>();
 
-        while (tempEnd.compareTo(weeklyBookEndDate) < 0) {
+        while (tempEnd.before(weeklyBookEndDate)) {
+
             MeetingroomBookDetailVO tempVo = vo.clone();
             tempVo.setId(null);
             tempVo.setMeetingBeginTime(tempBegin);
@@ -109,7 +107,51 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
             tempEnd = DateUtils.addWeeks(tempEnd, 1);
         }
 
-        return mrBookDetailMapper.insertByBatch(mbdList);
+        return mrBookDetailMapper.insertByBatch(mbdList) == mbdList.size();
+    }
+
+    /**
+     * 判断周期预定是否冲突
+     *
+     * @param vo
+     * @return
+     */
+    private List<MeetingroomBookDetailVO> getWeeklyConflictList(final MeetingroomBookDetailVO vo) {
+
+        List<MeetingroomBookDetailVO> conflictList = new ArrayList<>();
+
+        Date meetingBeginTime = vo.getMeetingBeginTime();
+        Date meetingEndTime = vo.getMeetingEndTime();
+        Date weeklyBookEndDate = vo.getWeeklyBookEndDate();
+
+        if (meetingBeginTime.after(meetingEndTime) || meetingEndTime.after(weeklyBookEndDate))
+            throw new BaseEnumException(BookResultEnum.INVALID_DATA);
+
+        MeetingroomBookDetailVO tempVO = new MeetingroomBookDetailVO();
+        tempVO.setMeetingroomId(vo.getMeetingroomId());
+        Date tempBegin = meetingBeginTime;
+        Date tempEnd = meetingEndTime;
+
+        while (tempEnd.before(weeklyBookEndDate)) {
+            tempVO.setMeetingBeginTime(tempBegin);
+            tempVO.setMeetingEndTime(tempEnd);
+
+            conflictList.addAll(getConflictBookList(tempVO));
+
+            tempBegin = DateUtils.addWeeks(tempBegin, 1);
+            tempEnd = DateUtils.addWeeks(tempEnd, 1);
+        }
+
+        return conflictList;
+    }
+
+
+    @Override
+    public List<MeetingroomBookDetail> findDailyBook(Date bookDate) {
+
+        Date endTime = DateUtils.ceiling(bookDate, Calendar.DATE);
+
+        return mrBookDetailMapper.findDailyBookByRoomId(bookDate, endTime);
     }
 
     /**
@@ -117,28 +159,17 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
      * @return
      */
     @Override
-    @LogMrBookChange
-    public List<MeetingroomBookDetailVO> updateMeetingroomBookDetailByVO(MeetingroomBookDetailVO mbdVO) {
+    @SaveMrBookChange
+    public boolean updateMeetingroomBookDetailByVO(MeetingroomBookDetailVO mbdVO) {
 
-        //查询时间冲突的预定列表
-        List<MeetingroomBookDetailVO> mbdList = getConflictBookList(mbdVO);
-
-        //冲突数量大于1，即与其他的预定时间冲突，更新失败
-        if (mbdList.size() > 1) {
-            return mbdList;
-        }
+        List<MeetingroomBookDetailVO> conflictBookList = getConflictBookList(mbdVO);
+        if (conflictBookList != null && conflictBookList.size() > 0)
+            throw new MeetingroomBookException(conflictBookList);
 
         mbdVO.setStatus("0");
-        mbdVO.setAuditStatus("1");
+        mbdVO.setAuditStatus("0");
         mbdVO.setUpdateTime(new Date());
-
-        Integer num = mrBookDetailMapper.updateByPrimaryKey(mbdVO);
-
-        if (num != 1)
-            throw new MeetingroomBookException(MeetingroomBookException.UPDATE_FAILED);
-
-        return Lists.newArrayList(mbdVO);
-
+        return mrBookDetailMapper.updateByPrimaryKey(mbdVO) > 0;
     }
 
     @Override
@@ -169,23 +200,25 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
     }
 
     @Override
-    @LogMrBookChange
-    public Integer cancelMeetingroomBookDetailById(Integer id, @Min(1) Integer employeeId, String changeReason) {
-        return mrBookDetailMapper.cancelMeetingroomBookDetailById(id);
+    @SaveMrBookChange
+    public boolean cancelMeetingroomBookDetailById(Integer id, Integer employeeId, String changeReason) {
+
+        return mrBookDetailMapper.cancelMeetingroomBookDetailById(id) > 0;
+
     }
 
     @Override
     public MeetingroomBookDetailVO findMeetingroomBookDetailById(Integer id) {
+
         return mrBookDetailMapper.selectMeetingroomBookDetailById(id);
+
     }
 
     @Override
-    public Integer updateAuditStatusById(Integer id, String auditStatus, Integer employeeId) {
+    public boolean updateAuditStatusById(Integer id, String auditStatus, Integer employeeId) {
 
-        if (id <= 0 || StringUtils.isEmpty(auditStatus))
-            throw new MeetingroomBookException(MeetingroomBookException.INVALID_DATA);
+        return mrBookDetailMapper.updateAuditStatusById(id, auditStatus) > 0;
 
-        return mrBookDetailMapper.updateAuditStatusById(id, auditStatus);
     }
 
 }

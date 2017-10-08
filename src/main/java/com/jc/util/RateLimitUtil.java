@@ -51,6 +51,13 @@ public class RateLimitUtil {
     }
 
     /**
+     * 生成唯一key
+     */
+    private static String generateKey() {
+        return new StringBuilder(new SimpleDateFormat("yyMMddHHmmssSSS").format(new Date())).append(UUID.randomUUID().toString().substring(0, 3)).toString();
+    }
+
+    /**
      * 尝试检测是否被允许
      *
      * @return
@@ -74,12 +81,5 @@ public class RateLimitUtil {
             redisTemplate.expire(key, second, TimeUnit.SECONDS);
         }
         return i <= acceptCount;
-    }
-
-    /**
-     * 生成唯一key
-     */
-    private static String generateKey() {
-        return new StringBuilder(new SimpleDateFormat("yyMMddHHmmssSSS").format(new Date())).append(UUID.randomUUID().toString().substring(0, 3)).toString();
     }
 }

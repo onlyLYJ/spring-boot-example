@@ -70,11 +70,11 @@ public class MeetingroomBookChange implements Serializable, Cloneable {
         MeetingroomBookChange record = new MeetingroomBookChange();
         record.setId(null);
         record.setMeetingroomBookDetailId(null);
+        record.setEmployeeId(this.employeeId);
         record.setChangeReason(this.changeReason);
         record.setAuditStatus(this.auditStatus);
         record.setCreateTime(this.getCreateTime());
         record.setUpdateTime(this.getUpdateTime());
-        record.setEmployeeId(this.employeeId);
         return record;
     }
 

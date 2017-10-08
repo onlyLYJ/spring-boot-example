@@ -27,6 +27,34 @@ public class ActivityServiceImpl implements ActivityService {
     @Autowired
     private ActivityMapper activityMapper;
 
+    /**
+     * 根据数据修改状态
+     *
+     * @param activity
+     */
+    public static void setStatus(Activity activity) {
+        if (activity == null) return;
+        if ("1".equals(activity.getStatus())) {
+            activity.setStatus("已取消");
+            return;
+        }
+        Date now = new Date();
+        if ("0".equals(activity.getStatus())) {
+            if (activity.getApplyBeginTime().after(now)) {
+                activity.setStatus("报名未开始");
+                return;
+            }
+            if (activity.getApplyEndTime().after(now)) {
+                activity.setStatus("报名中");
+                return;
+            }
+            if (activity.getApplyEndTime().before(now)) {
+                activity.setStatus("报名已结束");
+                return;
+            }
+        }
+    }
+
     @Override
     public Activity addActivity(Activity record) {
         Preconditions.checkNotNull(record, "参数不能为空");
@@ -107,33 +135,5 @@ public class ActivityServiceImpl implements ActivityService {
         example.orderBy("id").desc();
         List<Activity> list = activityMapper.selectByExample(example);
         return new PageInfo<>(list);
-    }
-
-    /**
-     * 根据数据修改状态
-     *
-     * @param activity
-     */
-    public static void setStatus(Activity activity) {
-        if (activity == null) return;
-        if ("1".equals(activity.getStatus())) {
-            activity.setStatus("已取消");
-            return;
-        }
-        Date now = new Date();
-        if ("0".equals(activity.getStatus())) {
-            if (activity.getApplyBeginTime().after(now)) {
-                activity.setStatus("报名未开始");
-                return;
-            }
-            if (activity.getApplyEndTime().after(now)) {
-                activity.setStatus("报名中");
-                return;
-            }
-            if (activity.getApplyEndTime().before(now)) {
-                activity.setStatus("报名已结束");
-                return;
-            }
-        }
     }
 }

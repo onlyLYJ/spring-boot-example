@@ -86,17 +86,17 @@
         SELECT
         mbd.id,
         m.room_name roomName,
-        d.id deptId,
         d.dept_name deptName,
         mbd.meeting_begin_time meetingBeginTime,
-        mbd.meeting_end_time meetingEndTime,
-        mbd.book_reason bookReason,
-        mbd.remark
+        mbd.meeting_end_time meetingEndTime
         FROM meetingroom_book_detail mbd
         LEFT JOIN department d ON mbd.dept_id = d.id
         LEFT JOIN meetingroom m ON mbd.meetingroom_id = m.id
-        <![CDATA[ WHERE mbd.meetingroom_id = #{meetingroomId} AND mbd.status = '0' AND ((#{meetingBeginTime} between mbd.meeting_begin_time AND mbd.meeting_end_time) OR
-(#{meetingEndTime} between mbd.meeting_begin_time AND mbd.meeting_end_time))]]>
+        <![CDATA[ WHERE mbd.meetingroom_id = #{meetingroomId} AND mbd.status = '0'
+        AND ((#{meetingBeginTime} between mbd.meeting_begin_time AND mbd.meeting_end_time) OR
+             (#{meetingEndTime} between mbd.meeting_begin_time AND mbd.meeting_end_time) OR
+             (#{meetingBeginTime} <= mbd.meeting_begin_time AND #{meetingEndTime} >= mbd.meeting_end_time)
+        )]]>
         <if test="inputId != null and inputId gt 0">
             AND #{inputId} != mbd.id
         </if>
@@ -143,6 +143,18 @@
             #{item.status,jdbcType=VARCHAR},#{item.deptId,jdbcType=INTEGER})
         </foreach>
     </insert>
+
+
+    <!--查找特定日期的预定情况-->
+    <select id="findDailyBookByRoomId" resultType="com.jc.model.MeetingroomBookDetail">
+        <include refid="SELECT_BOOK_DETAIL"/>
+        <![CDATA[ WHERE mbd.status = '0'
+        AND (
+              (mbd.meeting_begin_time <= #{beginTime} AND mbd.meeting_end_time >= #{beginTime})
+           OR (mbd.meeting_begin_time >= #{beginTime} AND mbd.meeting_begin_time <= #{endTime})
+        )
+        ORDER BY mbd.meeting_begin_time asc ]]>
+    </select>
 
 
 </mapper>

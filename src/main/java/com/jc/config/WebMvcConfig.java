@@ -38,23 +38,67 @@ import java.util.Date;
 @Configuration
 
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
-    private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    /**
+     * String转换器 String-->String.trim()
+     *
+     * @return
+     */
+    @Bean
+    public Converter<String, String> stringTrimConvert() {
+        return new Converter<String, String>() {
+            @Override
+            public String convert(String source) {
+                return StringUtils.trim(source);
+            }
+        };
+    }
 
+
+    /**
+     * 日期转换器 Date-->String
+     *
+     * @return
+     */
+    @Bean
+    public Converter<Date, String> dateToString() {
+        return new Converter<Date, String>() {
+            @Override
+            public String convert(Date date) {
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                return sdf.format(date);
+            }
+        };
+    }
+
+
+    /**
+     * 日期转换器 String-->Date
+     *
+     * @return
+     */
     @Bean
     public Converter<String, Date> addNewConvert() {
         return new Converter<String, Date>() {
             @Override
             public Date convert(String source) {
 
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
                 source = StringUtils.trim(source);
                 if (StringUtils.isBlank(source))
                     return null;
+
+                if (source.length() == 10)
+                    sdf = new SimpleDateFormat("yyyy-MM-dd");
 
                 if (source.contains("T")) {
                     source = source.replace('T', ' ');
@@ -72,14 +116,4 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         };
     }
 
-
-    @Bean
-    public Converter<String, String> stringTrimConvert() {
-        return new Converter<String, String>() {
-            @Override
-            public String convert(String source) {
-                return StringUtils.trim(source);
-            }
-        };
-    }
 }

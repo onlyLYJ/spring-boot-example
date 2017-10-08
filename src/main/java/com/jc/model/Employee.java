@@ -2,6 +2,8 @@ package com.jc.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -19,18 +21,21 @@ public class Employee implements Serializable {
     /**
      * 部门
      */
+    @NotBlank(message = "部门信息不能为空")
     private String department;
 
     /**
      * 姓名
      */
     @Column(name = "real_name")
+    @NotBlank(message = "真实姓名不能为空")
     private String realName;
 
     /**
      * 英文名
      */
     @Column(name = "english_name")
+    @NotBlank(message = "用户名不能为空")
     private String englishName;
 
     @Column(name = "create_time")
@@ -43,6 +48,7 @@ public class Employee implements Serializable {
      * 密码
      */
     @Column(name = "password")
+    @Length(min = 6, max = 20, message = "密码必须为6-20位")
     private String password;
 
     @Column(name = "extra")

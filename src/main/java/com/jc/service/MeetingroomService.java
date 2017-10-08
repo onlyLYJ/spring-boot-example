@@ -24,7 +24,7 @@ public interface MeetingroomService {
      * @param meetingroomVO
      * @return
      */
-    Integer updateMeetingroom(MeetingroomVO meetingroomVO);
+    boolean updateMeetingroom(MeetingroomVO meetingroomVO);
 
     /**
      * 根据会议室名称查找

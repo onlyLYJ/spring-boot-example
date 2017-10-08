@@ -1,9 +1,13 @@
 package com.jc;
 
 import lombok.Data;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * test
@@ -19,6 +23,14 @@ public class test {
         System.out.println("b = " + b);
         System.out.println(a.equals(b));
     }
+
+    @Test
+    public void testDay() {
+        Date endTime = DateUtils.ceiling(new Date(), Calendar.DATE);
+        System.out.println(endTime);
+
+    }
+
 
     @Test
     public void testPass() {

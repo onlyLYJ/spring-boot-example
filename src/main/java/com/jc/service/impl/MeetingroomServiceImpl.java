@@ -1,5 +1,6 @@
 package com.jc.service.impl;
 
+import com.jc.constant.MeetingroomResultEnum;
 import com.jc.exception.MeetingroomException;
 import com.jc.mapper.MeetingroomBookChangeMapper;
 import com.jc.mapper.MeetingroomBookDetailMapper;
@@ -41,7 +42,7 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 
         List<Meetingroom> list = mrMapper.select(meetingroom);
         if (list != null && list.size() > 0)
-            throw new MeetingroomException(MeetingroomException.ALREADY_EXIST);
+            throw new MeetingroomException(MeetingroomResultEnum.DUPLICATE_NAME);
 
         meetingroom.setCapacity(meetingroomVO.getCapacity());
         meetingroom.setStatus("0");
@@ -55,20 +56,27 @@ public class MeetingroomServiceImpl implements MeetingroomService {
     }
 
     @Override
-    public Integer updateMeetingroom(MeetingroomVO meetingroomVO) {
+    public boolean updateMeetingroom(MeetingroomVO meetingroomVO) {
 
-        Integer id = meetingroomVO.getId();
-        if (id == null || id == 0)
-            throw new MeetingroomException(MeetingroomException.NOT_EXIST);
-        Meetingroom meetingroom = mrMapper.selectByPrimaryKey(id);
-        if (meetingroom == null)
-            throw new MeetingroomException(MeetingroomException.NOT_EXIST);
+        String roomName = meetingroomVO.getRoomName();
+
+        List<Meetingroom> meetingroomList = getMeetingroomByName(roomName);
+
+        if (meetingroomList == null || meetingroomList.size() == 0)
+            throw new MeetingroomException(MeetingroomResultEnum.NOT_EXIST);
+        if (meetingroomList.get(0).getId() != meetingroomVO.getId())
+            throw new MeetingroomException(MeetingroomResultEnum.DATA_ERROR);
+        if (meetingroomList.size() > 1)
+            throw new MeetingroomException(MeetingroomResultEnum.DUPLICATE_NAME);
+
+        Meetingroom meetingroom = meetingroomList.get(0);
         meetingroom.setRoomName(meetingroomVO.getRoomName());
         meetingroom.setCapacity(meetingroomVO.getCapacity());
         meetingroom.setStatus(meetingroomVO.getStatus());
         meetingroom.setRemark(meetingroomVO.getRemark());
         meetingroom.setUpdateTime(new Date());
-        return mrMapper.updateByPrimaryKey(meetingroom);
+        return mrMapper.updateByPrimaryKey(meetingroom) > 0;
+
     }
 
     @Override

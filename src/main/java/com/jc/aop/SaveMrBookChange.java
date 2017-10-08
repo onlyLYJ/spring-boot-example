@@ -9,6 +9,7 @@ import java.lang.annotation.*;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface LogMrBookChange {
+public @interface SaveMrBookChange {
     String name() default "";
+
 }

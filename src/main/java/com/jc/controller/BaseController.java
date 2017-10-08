@@ -6,7 +6,10 @@ import com.jc.exception.ApplyException;
 import com.jc.service.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,12 +25,47 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
  * 基础Controller
  */
 @Slf4j
+@Component
 public class BaseController {
 
     public static final String DATETIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
 
     @Autowired
     EmployeeService employeeService;
+
+    /**
+     * 获得真实ip
+     *
+     * @param request
+     * @return
+     */
+    public static String getRemoteIp(HttpServletRequest request) {
+        String ip = request.getRemoteHost();
+        String realIP = request.getHeader("X-Real-IP");
+        if (isNotBlank(realIP)) {
+            ip = realIP;
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("x-forwarded-for");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        // 可是，如果通过了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP值
+        if (ip != null && ip.length() > 15) {
+            int index = ip.indexOf(",");
+            if (index > -1) {
+                ip = ip.substring(0, index);
+            }
+        }
+        return ip;
+    }
 
     Integer getEmployeeIdByPrincipal(Principal principal) {
         String englishName = principal.getName();
@@ -36,7 +74,7 @@ public class BaseController {
         return employeeService.findIdByEnglishName(englishName);
     }
 
-    protected <T extends Serializable> ResultModel<T> buildErrorResponse(String msg) {
+    public <T extends Serializable> ResultModel<T> buildErrorResponse(String msg) {
         ResultModel<T> model = new ResultModel<T>();
         model.setCode(ResultModel.RESULT_ERROR);
         model.setMsg(msg);
@@ -114,7 +152,6 @@ public class BaseController {
         return model;
     }
 
-
     private <T> Map<String, Object> parseDTO(T obj) {
         Map<String, Object> map = new HashMap<>();
         if (obj != null) {
@@ -148,17 +185,6 @@ public class BaseController {
     }
 
 
-    private Set<Field> getAllFields(Class t) {
-        Set<Field> fset = new HashSet<>();
-        Field[] deClaredFields = t.getDeclaredFields();
-        fset.addAll(Arrays.asList(deClaredFields));
-        Class c = t.getSuperclass();
-        if (c != null)
-            fset.addAll(getAllFields(c));
-        return fset;
-    }
-
-
 //    public User getUser () throws AuthException {
 //        // 校验登录状态
 //        User user = Constants.userThreadLocal.get();
@@ -179,6 +205,16 @@ public class BaseController {
 //		return u;
 //	}
 
+    private Set<Field> getAllFields(Class t) {
+        Set<Field> fset = new HashSet<>();
+        Field[] deClaredFields = t.getDeclaredFields();
+        fset.addAll(Arrays.asList(deClaredFields));
+        Class c = t.getSuperclass();
+        if (c != null)
+            fset.addAll(getAllFields(c));
+        return fset;
+    }
+
     protected boolean isMobileClient(HttpServletRequest request) {
         boolean flag = false;
         String agent = request.getHeader("user-agent");
@@ -198,52 +234,27 @@ public class BaseController {
     }
 
     /**
-     * 获得真实ip
-     *
-     * @param request
-     * @return
-     */
-    public static String getRemoteIp(HttpServletRequest request) {
-        String ip = request.getRemoteHost();
-        String realIP = request.getHeader("X-Real-IP");
-        if (isNotBlank(realIP)) {
-            ip = realIP;
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("x-forwarded-for");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        // 可是，如果通过了多级反向代理的话，X-Forwarded-For的值并不止一个，而是一串IP值
-        if (ip != null && ip.length() > 15) {
-            int index = ip.indexOf(",");
-            if (index > -1) {
-                ip = ip.substring(0, index);
-            }
-        }
-        return ip;
-    }
-
-    /**
      * 通用框架校验异常处理
      *
      * @param res
      * @return
      */
     ResultModel commonValidate(BindingResult res) {
-        if (res.getErrorCount() > 0) {
+        if (res.hasErrors()) {
             StringBuilder errorMsg = new StringBuilder();
-            res.getFieldErrors().forEach(error -> errorMsg.append("[").append(error.getDefaultMessage()).append("]"));
+            res.getFieldErrors().forEach(error -> errorMsg.append("[").append(error.getDefaultMessage()).append("]\r"));
+            log.error(errorMsg.toString());
             return buildErrorResponse(errorMsg.toString());
         }
         return null;
     }
 
+    /**
+     * 添加当前时间以及用户名到model
+     *
+     * @param model
+     */
+    protected void setCurrentTimeAttribute(Model model) {
+        model.addAttribute("currentTime", DateFormatUtils.format(new Date(), DATETIME_FORMAT));
+    }
 }

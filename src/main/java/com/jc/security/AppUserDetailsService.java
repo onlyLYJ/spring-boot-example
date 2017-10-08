@@ -5,6 +5,7 @@ import com.jc.model.Employee;
 import com.jc.security.model.Permission;
 import com.jc.security.model.Role;
 import com.jc.service.EmployeeService;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,6 +20,7 @@ import java.util.List;
 /**
  * Created by jasonzhu on 2017/7/21.
  */
+@Data
 @Service
 public class AppUserDetailsService implements UserDetailsService {
 
@@ -42,7 +44,6 @@ public class AppUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> grantedAuthorities = Lists.newArrayList();
         permissionList.stream().forEach((permission) -> {
             if (permission != null && permission.getName() != null) {
-
                 GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(permission.getName());
                 //1：此处将权限信息添加到 GrantedAuthority 对象中，在后面进行全权限验证时会使用GrantedAuthority 对象。
                 grantedAuthorities.add(grantedAuthority);

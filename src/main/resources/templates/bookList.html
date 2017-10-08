@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:include="layout :: htmlhead" th:with="title='管理'"></head>
+<head th:include="layout :: htmlhead" th:with="title='管理'">
+    <link th:href="@{/static/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" media="screen"></link>
+</head>
 
 <body>
 <div th:replace="layout :: navbar">(navbar)</div>
@@ -9,8 +11,36 @@
     <div class="starter-template">
         <h1>会议室预定管理</h1>
         <p>The current time is <span th:text="${currentTime}">(time)</span></p>
+        <br>
+        <br>
+
+        <div class="center-block">
+            <label>点击选择日期查询:</label>
+            <br>
+            <input class="input-append date form_date" data-date-format="yyyy-mm-dd"
+                   type="text" th:id="bookDate" onchange="findDailyBook()"
+            />
+
+        </div>
     </div>
 
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+         id="findDailyBookModal">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="dailyBookTitle">预定信息</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <li>
         <a>
             <select id="deptId">
@@ -28,13 +58,13 @@
     <div>
         <li><a th:href="@{'/book/newBook'}"/>新增预定</li>
     </div>
-
+    <span th:if="${page != null}">
     <table class="table table-hover">
         <thead>
         <tr>
             <th>申请部门</th>
             <th>会议室名</th>
-            <th>审核状态</th>
+            <!--<th>审核状态</th>-->
             <th>会议开始时间</th>
             <th>会议结束时间</th>
             <th>会议状态</th>
@@ -44,9 +74,9 @@
         <tr th:each="mrb : ${page.list}">
             <td th:id="'deptName'+${mrb.deptName}" th:text="${mrb.deptName}">...</td>
             <td th:id="'mbrRoomName'+${mrb.roomName}" th:text="${mrb.roomName}">...</td>
-            <td th:id="'auditStatus'+${mrb.auditStatus}" th:text="${mrb.auditStatus}">...</td>
-            <td th:text="${#dates.format(mrb.meetingBeginTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
-            <td th:text="${#dates.format(mrb.meetingEndTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
+            <!--<td th:id="'auditStatus'+${mrb.auditStatus}" th:text="${mrb.auditStatus}">...</td>-->
+            <td th:text="${#dates.format(mrb.meetingBeginTime,'yyyy-MM-dd HH:mm')}">...</td>
+            <td th:text="${#dates.format(mrb.meetingEndTime,'yyyy-MM-dd HH:mm')}">...</td>
             <td th:id="'status'+${mrb.status}" th:text="${mrb.status}">...</td>
             <td class="btn btn-default"><a th:href="@{'/book/editBook?id='+${mrb.id}}"/>
                 编辑预定
@@ -71,9 +101,26 @@
             </li>
         </ul>
     </nav>
+</span>
 </div>
 
 <div th:include="layout :: footer" id="footer">(footer)</div>
+
+
+<script type="text/javascript" src="../static/jquery/jquery-1.8.3.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript">
+    $('.form_date').datetimepicker({
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+    });
+</script>
 <script th:src="@{/static/js/index.js}"></script>
 <script th:inline="javascript">
 

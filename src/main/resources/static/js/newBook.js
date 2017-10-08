@@ -55,6 +55,11 @@ $("#newBook-form").submit(function () {
         url: mbrNewBookPath + "/apply",
         success: function (data, status) {
             alert(data.m);
+            if (data.c.substring(0, 1) > 1) {
+                return;
+            } else {
+                history.back(-1);
+            }
         }
     });
     return false;
@@ -64,10 +69,10 @@ $("#newBook-form").submit(function () {
  * 根据周期任务勾选框，显示日期时间选择框
  */
 function showWeeklyBookEndDate() {
-    var isChecked = $('#weeklyBook').is(":checked");
+    var isChecked = $('#isWeeklyBook1').is(":checked");
     if (isChecked != null && isChecked == true) {
-        document.getElementById("weeklyBookEndTime").style.display = "";//显
+        document.getElementById("weeklyBookEndDate").style.display = "";//显
     } else {
-        document.getElementById("weeklyBookEndTime").style.display = "none";//隐
+        document.getElementById("weeklyBookEndDate").style.display = "none";//隐
     }
 }

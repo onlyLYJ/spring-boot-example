@@ -1,0 +1,52 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: htmlhead" th:with="title='DailyBook'">
+</head>
+
+<body>
+<table class="table table-hover">
+    <thead>
+    <p th:if="${dailyBookList == null}" th:text="没有预定信息"></p>
+    <tr>
+        <th>申请部门</th>
+        <th>会议室名</th>
+        <!--<th>审核状态</th>-->
+        <th>会议开始时间</th>
+        <th>会议结束时间</th>
+        <th>会议状态</th>
+    </tr>
+    </thead>
+    <tbody>
+    <span th:if="${dailyBookList != null}">
+                <tr th:each="mrb : ${dailyBookList}">
+                <td th:text="${mrb.deptName}">...</td>
+                <td th:text="${mrb.roomName}">...</td>
+                    <!--<td th:text="${mrb.auditStatus}">...</td>-->
+                <td th:text="${#dates.format(mrb.meetingBeginTime,'yyyy-MM-dd HH:mm')}">...</td>
+                <td th:text="${#dates.format(mrb.meetingEndTime,'yyyy-MM-dd HH:mm')}">...</td>
+                <td th:text="${mrb.status}">...</td>
+                <td class="btn btn-default"><a th:href="@{'/book/editBook?id='+${mrb.id}}"/>
+                    编辑预定
+                </td>
+                <td class="cancel" th:id="'cancel'+${mrb.id}"
+                    class="btn btn-danger" type="button"
+                    onclick="cancelMeetingroomBook(this)">取消预定
+                </td>
+            </tr>
+            </span>
+    </tbody>
+</table>
+
+
+<script type="text/javascript" src="../static/jquery/jquery-1.8.3.min.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../static/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+<script type="text/javascript">
+
+</script>
+<script th:src="@{/static/js/index.js}"></script>
+<script th:inline="javascript">
+
+</script>
+</body>
+</html>

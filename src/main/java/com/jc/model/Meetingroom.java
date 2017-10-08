@@ -2,6 +2,7 @@ package com.jc.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -42,12 +43,14 @@ public class Meetingroom implements Serializable {
      * 创建时间
      */
     @Column(name = "create_time")
+    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
     private Date createTime;
 
     /**
      * 更新时间
      */
     @Column(name = "update_time")
+    @DateTimeFormat(pattern = "yyyy-mm-dd hh:mm:ss")
     private Date updateTime;
 
     @Override

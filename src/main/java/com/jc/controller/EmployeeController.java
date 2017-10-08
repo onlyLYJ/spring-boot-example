@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +27,7 @@ public class EmployeeController extends BaseController {
     @ApiOperation(value = "增加员工")
     @PostMapping(value = "/add")
     @ResponseBody
-    public ResultModel addEmployee(@RequestBody Employee employee) {
+    public ResultModel addEmployee(@RequestBody @Validated Employee employee) {
         enCodePassword(employee);
         employeeService.addEmployee(employee);
         return buildSuccessResponse("用户注册成功!");

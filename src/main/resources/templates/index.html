@@ -34,7 +34,7 @@
         <tr>
             <th>申请部门</th>
             <th>会议室名</th>
-            <th>审核状态</th>
+            <!--<th>审核状态</th>-->
             <th>会议开始时间</th>
             <th>会议结束时间</th>
             <th>会议状态</th>
@@ -44,9 +44,9 @@
         <tr th:each="mrb : ${page.list}">
             <td th:id="'deptName'+${mrb.deptName}" th:text="${mrb.deptName}">...</td>
             <td th:id="'mbrRoomName'+${mrb.roomName}" th:text="${mrb.roomName}">...</td>
-            <td th:id="'auditStatus'+${mrb.auditStatus}" th:text="${mrb.auditStatus}">...</td>
-            <td th:text="${#dates.format(mrb.meetingBeginTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
-            <td th:text="${#dates.format(mrb.meetingEndTime,'yyyy-MM-dd HH:mm:ss')}">...</td>
+            <!--<td th:id="'auditStatus'+${mrb.auditStatus}" th:text="${mrb.auditStatus}">...</td>-->
+            <td th:text="${#dates.format(mrb.meetingBeginTime,'yyyy-MM-dd HH:mm')}">...</td>
+            <td th:text="${#dates.format(mrb.meetingEndTime,'yyyy-MM-dd HH:mm')}">...</td>
             <td th:id="'status'+${mrb.status}" th:text="${mrb.status}">...</td>
             <td class="btn btn-default"><a th:href="@{'/book/editBook?id='+${mrb.id}}"/>
                 编辑预定

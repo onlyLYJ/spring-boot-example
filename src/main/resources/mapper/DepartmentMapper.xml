@@ -22,8 +22,8 @@
 
     <select id="getValidDepartmentList" resultType="com.jc.model.Department">
         SELECT
-            id,
-            dept_name deptName
+        id,
+        dept_name deptName
         FROM department
         WHERE enable = '0'
     </select>
