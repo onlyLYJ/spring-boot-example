@@ -1,0 +1,111 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="layout :: htmlhead" th:with="title='管理'">
+</head>
+
+<body>
+<div th:replace="layout :: navbar-admin">(navbar)</div>
+
+<div class="container-fluid">
+    <div class="starter-template">
+        <h1>员工管理</h1>
+        <p>The current time is <span th:text="${currentTime}">(time)</span></p>
+        <br>
+        <br>
+    </div>
+
+    <li>
+        <a>
+            <select id="roleId">
+                <option th:each="role : ${roleList}"
+                        th:value="${role.id}" th:text="${role.name}">...
+                </option>
+            </select>
+        </a>
+    </li>
+
+    <span th:if="${employeeList != null}">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>部门</th>
+            <th>姓名</th>
+            <th>账号</th>
+            <th>创建时间</th>
+            <th>更新时间</th>
+            <th>权限个数</th>
+            <th>权限</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="employee : ${employeeList.list}">
+            <td th:text="${employee.department}">...</td>
+            <td th:text="${employee.realName}">...</td>
+            <td th:text="${employee.englishName}">...</td>
+            <td th:text="${#dates.format(employee.createTime,'yyyy-MM-dd HH:mm')}">...</td>
+            <td th:text="${employee.roles.size()}">...</td>
+            <td>
+                <select>
+                    <option th:each="role : ${employee.roles}"
+                            th:value="${role.id}" th:text="${role.name}">...
+                    </option>
+                </select>
+            </td>
+            <td class="btn btn-default"><a th:href="@{'/employee/edit?id='+${employee.id}}"/>
+                编辑
+            </td>
+            <td class="cancel" th:id="'cancel'+${employee.id}"
+                class="btn btn-danger" type="button" onchange="cancelEmployee(this)">禁用
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <nav aria-label="...">
+        <ul class="pager">
+            <li class="previous"><a th:href="@{'/employee/list?pageNum='+${employeeList.prePage}}"><span
+                    aria-hidden="true">&larr;</span> 上一页</a></li>
+            <li class="next"><a th:href="@{'/employee/list?pageNum='+${employeeList.nextPage}}">下一页 <span
+                    aria-hidden="true">&rarr;</span></a>
+            </li>
+        </ul>
+    </nav>
+</span>
+</div>
+
+<div th:include="layout :: footer" id="footer">(footer)</div>
+<script type="text/javascript">
+</script>
+<script th:inline="javascript">
+
+    /**
+     * 禁用用户
+     * @param obj
+     */
+    function cancelEmployee(obj) {
+
+        var id = $(obj).attr("id");
+        id = id.substring(6);
+
+        if (confirm("确认要将禁用此用户？")) {
+
+            var changeReason = prompt("请输入置位原因（不能为空）:", "");
+
+            if (changeReason == null || changeReason.trim() == "") {
+                alert("原因不能为空");
+                return;
+            } else {
+                $.post(meetingroomPath + "/cancel", {
+                    id: id,
+                    changeReason: changeReason.trim()
+                }, function (data, status) {
+                    alert(data.m);
+                });
+                window.location.reload();
+            }
+        }
+        window.location.reload()
+    }
+
+</script>
+</body>
+</html>

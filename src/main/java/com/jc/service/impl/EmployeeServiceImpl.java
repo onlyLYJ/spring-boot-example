@@ -21,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by jasonzhu on 2017/7/13.
+ * Created by onlyLYJ on 2017/7/13.
  */
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
@@ -53,15 +53,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee deleteEmployeeById(Integer id) {
+    public boolean cancelEmployeeById(Integer id) {
 
         Employee record = employeeMapper.selectByPrimaryKey(id);
         if (record == null)
             throw new ApplyException(MessageFormat.format("用户不存在 ID【{0}】部门【{1}】姓名【{2}】英文名【{3}】", record.getId(), record.getDepartment(), record.getRealName(), record.getEnglishName()));
         record.setUpdateTime(new Date());
         record.setEnable("1");
-        employeeMapper.updateByPrimaryKey(record);
-        return record;
+        return employeeMapper.updateByPrimaryKey(record) > 0;
     }
 
     @Override
@@ -76,6 +75,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     public PageInfo<Employee> selectEmployee(Employee record, int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<Employee> list = employeeMapper.select(record);
+
+        for (Employee employee : list) {
+            employee.setRoles(findRoleByEmployeeId(employee.getId()));
+        }
+
         return new PageInfo<>(list);
     }
 
@@ -113,14 +117,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee addEmployee(Employee employee) {
+    public boolean addEmployee(Employee employee) {
         Employee record = findByEnglishName(employee.getEnglishName());
         if (record != null)
             throw new ApplyException(MessageFormat.format("英文名已存在 ID【{0}】部门【{1}】姓名【{2}】英文名【{3}】", record.getId(), record.getDepartment(), record.getRealName(), record.getEnglishName()));
         employee.setCreateTime(new Date());
         employee.setEnable("0");
-        employeeMapper.insertUseGeneratedKeys(employee);
-        return employee;
+        return employeeMapper.insertUseGeneratedKeys(employee) > 0;
+
     }
 
 

@@ -60,7 +60,6 @@ public class MeetingroomBookDetailController extends BaseController {
 
     }
 
-
     @ApiOperation(value = "1号会议室极速预定")
     @PostMapping(value = "/speedMeetingroomBook")
     @ResponseBody
@@ -89,7 +88,7 @@ public class MeetingroomBookDetailController extends BaseController {
     @ResponseBody
     public ResultModel applyNewBook(@ModelAttribute(value = "meetingroomBookDetailVO") @Validated MeetingroomBookDetailVO meetingroomBookDetailVO, Principal principal) {
 
-        if (!hasSetEmployeeId(meetingroomBookDetailVO, principal))
+        if (!setValidEmployeeId(meetingroomBookDetailVO, principal))
             return buildAuthInvalidResponse();
 
         //检查是否是周期预定
@@ -132,7 +131,7 @@ public class MeetingroomBookDetailController extends BaseController {
     @ResponseBody
     public ResultModel updateMeetingroomBookDetail(@Validated MeetingroomBookDetailVO meetingroomBookDetailVO, Principal principal) {
 
-        if (!hasSetEmployeeId(meetingroomBookDetailVO, principal))
+        if (!setValidEmployeeId(meetingroomBookDetailVO, principal))
             return buildAuthInvalidResponse();
 
         if (meetingroomBookDetailService.updateMeetingroomBookDetailByVO(meetingroomBookDetailVO))
@@ -269,7 +268,7 @@ public class MeetingroomBookDetailController extends BaseController {
      * @param principal
      * @return
      */
-    private boolean hasSetEmployeeId(MeetingroomBookDetailVO meetingroomBookDetailVO, Principal principal) {
+    private boolean setValidEmployeeId(MeetingroomBookDetailVO meetingroomBookDetailVO, Principal principal) {
         Integer employeeId = getEmployeeIdByPrincipal(principal);
         if (employeeId == null || employeeId < 1)
             return false;

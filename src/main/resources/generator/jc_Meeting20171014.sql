@@ -1,7 +1,7 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : sampledb
+ Source Server         : jc_apply
  Source Server Type    : MySQL
  Source Server Version : 50719
  Source Host           : localhost:3306
@@ -11,7 +11,7 @@
  Target Server Version : 50719
  File Encoding         : 65001
 
- Date: 29/09/2017 10:11:18
+ Date: 14/10/2017 16:03:50
 */
 
 SET NAMES utf8mb4;
@@ -126,21 +126,23 @@ CREATE TABLE `department` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 9
+  AUTO_INCREMENT = 11
   DEFAULT CHARSET = utf8;
 
 -- ----------------------------
 -- Records of department
 -- ----------------------------
 BEGIN;
-INSERT INTO `department` VALUES (1, '财务部', '2017-09-28 16:47:03', NULL, '0', NULL);
-INSERT INTO `department` VALUES (2, '市场部', '2017-09-28 16:47:09', NULL, '0', NULL);
-INSERT INTO `department` VALUES (3, '技术部', '2017-09-28 16:47:11', NULL, '0', NULL);
-INSERT INTO `department` VALUES (4, '销售部', '2017-09-28 16:47:12', NULL, '0', NULL);
-INSERT INTO `department` VALUES (5, '人事部', '2017-09-28 16:47:13', NULL, '0', NULL);
-INSERT INTO `department` VALUES (6, '行政部', '2017-09-28 16:47:59', NULL, '0', NULL);
-INSERT INTO `department` VALUES (7, '总经办', '2017-09-28 16:48:01', NULL, '0', NULL);
-INSERT INTO `department` VALUES (8, '其他', '2017-09-28 16:49:50', NULL, '1', NULL);
+INSERT INTO `department` VALUES (1, '总经办', '2017-09-28 16:47:03', NULL, '0', NULL);
+INSERT INTO `department` VALUES (2, '市场销售部', '2017-09-28 16:47:09', NULL, '0', NULL);
+INSERT INTO `department` VALUES (3, '运营部', '2017-09-28 16:47:11', NULL, '0', NULL);
+INSERT INTO `department` VALUES (4, '技术部', '2017-09-28 16:47:12', NULL, '0', NULL);
+INSERT INTO `department` VALUES (5, '行政部', '2017-09-28 16:47:13', NULL, '0', NULL);
+INSERT INTO `department` VALUES (6, '财务部', '2017-09-28 16:47:59', NULL, '0', NULL);
+INSERT INTO `department` VALUES (7, '产品部', '2017-09-28 16:48:01', NULL, '0', NULL);
+INSERT INTO `department` VALUES (8, '人力资源部', '2017-09-28 16:49:50', NULL, '0', NULL);
+INSERT INTO `department` VALUES (9, '供应链管理部', '2017-09-28 16:49:50', NULL, '0', NULL);
+INSERT INTO `department` VALUES (10, '设计部', '2017-09-28 16:49:50', NULL, '0', NULL);
 COMMIT;
 
 -- ----------------------------
@@ -149,11 +151,11 @@ COMMIT;
 DROP TABLE IF EXISTS `employee`;
 CREATE TABLE `employee` (
   `id`           INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `department`   VARCHAR(50)               DEFAULT '未知'
+  `department`   VARCHAR(25)               DEFAULT '未知'
   COMMENT '部门',
-  `real_name`    VARCHAR(50)               DEFAULT NULL
+  `real_name`    VARCHAR(25)               DEFAULT NULL
   COMMENT '姓名',
-  `english_name` VARCHAR(50)               DEFAULT NULL
+  `english_name` VARCHAR(25)               DEFAULT NULL
   COMMENT '英文名',
   `create_time`  DATETIME                  DEFAULT NULL,
   `update_time`  DATETIME                  DEFAULT NULL,
@@ -166,7 +168,7 @@ CREATE TABLE `employee` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 12
+  AUTO_INCREMENT = 10
   DEFAULT CHARSET = utf8
   COMMENT ='员工';
 
@@ -178,24 +180,14 @@ INSERT INTO `employee` VALUES (1, '技术部', '朱圣然', 'jasonzhu', '2017-07
                                '$2a$10$W/C4rQo9DWYy3Pz0RuJXdO5Wh0yO31UlU8lblh8SiSQBBEk62ADA6', NULL, '0');
 INSERT INTO `employee` VALUES (2, '技术部', '李一俊', 'steven', '2017-07-15 00:17:36', '2017-07-15 00:17:36',
                                '$2a$10$W/C4rQo9DWYy3Pz0RuJXdO5Wh0yO31UlU8lblh8SiSQBBEk62ADA6', NULL, '0');
-INSERT INTO `employee` VALUES (3, '技术部', '架构师A', 'jason', '2017-09-28 10:53:55', '2017-07-15 00:17:36',
-                               '$2a$10$W/C4rQo9DWYy3Pz0RuJXdO5Wh0yO31UlU8lblh8SiSQBBEk62ADA6', NULL, '0');
-INSERT INTO `employee` VALUES (4, '技术部', '架构师B', 'admin', '2017-09-28 10:53:55', NULL,
-                               '$2a$10$W/C4rQo9DWYy3Pz0RuJXdO5Wh0yO31UlU8lblh8SiSQBBEk62ADA6', NULL, '0');
-INSERT INTO `employee` VALUES (5, '技术部', '真的好~', 'steven3', '2017-09-28 14:04:47', NULL,
-                               '$2a$10$yWvG/UDOEdm/GVn/9CC/m.opkw7xWZxxNyUZeX.nFj72mbvRYcfPy', NULL, '0');
-INSERT INTO `employee` VALUES (6, '技术部', '杨广', 'yangguang', '2017-09-28 14:07:38', NULL,
+INSERT INTO `employee` VALUES (6, '技术部', '杨广', 'yangguang', '2017-09-28 14:07:38', '2017-09-28 14:07:38',
                                '$2a$10$m9KSil6QtxdQNC9iOFy7DeGEnI4nvZWJltlgLFz/A03k8GO0dxFFe', NULL, '0');
-INSERT INTO `employee` VALUES (7, '技术部', '刁林', 'diaotree', '2017-09-28 15:44:49', NULL,
+INSERT INTO `employee` VALUES (7, '技术部', '刁林', 'diaolin', '2017-09-28 15:44:49', '2017-09-28 15:44:49',
                                '$2a$10$9sRQs48aytri5dX9GN30Suh.99WL4cGiwUS1Fd/N0Ss0tarFToy7i', NULL, '0');
-INSERT INTO `employee` VALUES (8, '技术部', '丁家星', 'jackDing', '2017-09-28 17:23:46', NULL,
+INSERT INTO `employee` VALUES (8, '技术部', '丁家星', 'jackDing', '2017-09-28 17:23:46', '2017-09-28 17:23:46',
                                '$2a$10$gt16YRtH9rM/YiqidoJKGuqoq579srIfiURppjznmJDHXGjzhONx.', NULL, '0');
-INSERT INTO `employee` VALUES (9, '技术部', '李', 'steven35', '2017-09-28 18:39:47', NULL,
-                               '$2a$10$0d3cTjVtUU0x12F2jH0giennrhqEZ5YymNAflM6U7xGzta0YZ.Qhm', NULL, '0');
-INSERT INTO `employee` VALUES (10, '技术部', '123', 'steven2', '2017-09-28 18:58:01', NULL,
-                               '$2a$10$aX/r4wgmSGCo9Ad5k0BbdetE/U4DJOlAgkuvb52A0XMHo.gn5lXZa', NULL, '0');
-INSERT INTO `employee` VALUES (11, '技术部', 'sssdf', 'steven6', '2017-09-28 18:58:11', NULL,
-                               '$2a$10$l.Z7sGkwtv3KxZHrRjrPFeHFJPc3MZHNctVNFu3kDHHs15TeSistW', NULL, '0');
+INSERT INTO `employee` VALUES (9, '技术部', '123', 'steven123', '2017-10-14 15:51:41', NULL,
+                               '$2a$10$y4LonMoevOCIEmvvzA4RpekmRuJ8Dyr9KNFPBeIJtH52I17ocstpi', NULL, '0');
 COMMIT;
 
 -- ----------------------------
@@ -204,7 +196,7 @@ COMMIT;
 DROP TABLE IF EXISTS `meetingroom`;
 CREATE TABLE `meetingroom` (
   `id`          INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `roomName`    VARCHAR(50)               DEFAULT NULL
+  `room_name`   VARCHAR(50)               DEFAULT NULL
   COMMENT '会议室名',
   `status`      VARCHAR(2)                DEFAULT '0'
   COMMENT '使用状态 0正常 1关闭',
@@ -212,14 +204,14 @@ CREATE TABLE `meetingroom` (
   COMMENT '可容纳人数',
   `remark`      VARCHAR(200)              DEFAULT NULL
   COMMENT '备注',
-  `create_time` DATETIME                  DEFAULT NULL
+  `create_time` DATETIME                  DEFAULT CURRENT_TIMESTAMP
   COMMENT '创建时间',
   `update_time` DATETIME                  DEFAULT NULL
   COMMENT '更新时间',
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 42
+  AUTO_INCREMENT = 4
   DEFAULT CHARSET = utf8
   COMMENT ='会议室';
 
@@ -227,11 +219,9 @@ CREATE TABLE `meetingroom` (
 -- Records of meetingroom
 -- ----------------------------
 BEGIN;
-INSERT INTO `meetingroom` VALUES (1, '1号会议室', '0', 35, '豪华装修，配置全息投影!!', '2017-09-13 06:30:53', '2017-09-28 17:22:19');
-INSERT INTO `meetingroom` VALUES (3, '3号会议室', '0', 10, '接见领导人专用', '2017-09-26 10:03:22', '2017-09-27 13:28:27');
-INSERT INTO `meetingroom` VALUES (4, '2号会议室', '0', 100, '请不要随便删除信息好嘛~', '2017-09-27 13:27:43', '2017-09-27 13:27:43');
-INSERT INTO `meetingroom` VALUES (40, '5号会议室', '0', 88, '这次好了~', '2017-09-28 09:13:11', '2017-09-28 09:13:11');
-INSERT INTO `meetingroom` VALUES (41, '4号会议室', '0', 25, '最后来的！', '2017-09-28 17:22:39', '2017-09-28 17:22:39');
+INSERT INTO `meetingroom` VALUES (1, '1号会议室', '0', 35, '豪华，大气，上档次！！！', '2017-10-09 08:09:48', '2017-10-09 08:09:48');
+INSERT INTO `meetingroom` VALUES (2, '2号会议室', '0', 100, '接见领导人专用', '2017-10-09 08:08:26', '2017-10-14 15:24:25');
+INSERT INTO `meetingroom` VALUES (3, '3号会议室', '0', 25, '装修中', '2017-10-09 08:09:25', '2017-10-09 08:09:25');
 COMMIT;
 
 -- ----------------------------
@@ -246,10 +236,12 @@ CREATE TABLE `meetingroom_book_change` (
   COMMENT '预定变化原因',
   `audit_status`               VARCHAR(2)                DEFAULT NULL
   COMMENT '状态 0待审核，1审核通过，2审核不通过, 3取消',
-  `create_time`                DATETIME                  DEFAULT NULL
+  `create_time`                DATETIME                  DEFAULT CURRENT_TIMESTAMP
   COMMENT '创建时间',
   `update_time`                DATETIME                  DEFAULT NULL
   COMMENT '更新时间',
+  `employee_id`                INT(11)                   DEFAULT NULL
+  COMMENT '申请人id',
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
@@ -261,7 +253,7 @@ CREATE TABLE `meetingroom_book_change` (
 -- Records of meetingroom_book_change
 -- ----------------------------
 BEGIN;
-INSERT INTO `meetingroom_book_change` VALUES (1, 1, '时间冲突', '1', '2017-09-26 15:03:42', '2017-09-26 15:03:42');
+INSERT INTO `meetingroom_book_change` VALUES (1, 342, '123', NULL, '2017-10-14 15:25:16', NULL, 2);
 COMMIT;
 
 -- ----------------------------
@@ -286,8 +278,8 @@ CREATE TABLE `meetingroom_book_detail` (
   COMMENT '状态 0待审核，1审核通过，2审核不通过，3取消',
   `remark`             VARCHAR(200)              DEFAULT NULL
   COMMENT '备注',
-  `create_time`        DATETIME                  DEFAULT NULL
-  COMMENT '申请提交时间',
+  `create_time`        DATETIME                  DEFAULT CURRENT_TIMESTAMP
+  COMMENT '申请提交时间,使用mysql自动生成的时间',
   `update_time`        DATETIME                  DEFAULT NULL
   COMMENT '更新时间',
   `status`             VARCHAR(2)                DEFAULT NULL
@@ -297,7 +289,7 @@ CREATE TABLE `meetingroom_book_detail` (
   PRIMARY KEY (`id`) USING BTREE
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 232
+  AUTO_INCREMENT = 344
   DEFAULT CHARSET = utf8
   COMMENT ='会议室预定详情';
 
@@ -306,89 +298,59 @@ CREATE TABLE `meetingroom_book_detail` (
 -- ----------------------------
 BEGIN;
 INSERT INTO `meetingroom_book_detail` VALUES
-  (1, 2, 2, '2017-09-24 10:32:05', '2017-09-24 13:32:15', '架构选型说明', 12, '1', '重要！！', '2017-08-29 08:58:51',
-      '2017-09-28 09:12:25', '1', 1);
+  (1, 1, 2, '2017-09-24 10:32:05', '2017-09-24 13:32:15', '架构选型说明', 12, '1', '重要！！', '2017-08-29 08:58:51',
+      '2017-09-28 09:12:25', '0', 1);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (180, 1, 1, '2017-09-30 01:00:01', '2017-09-30 14:00:02', '讨论中秋去哪儿玩', 101, '0', '123', '2017-09-28 10:07:41',
-        '2017-09-28 13:01:59', '1', 1);
+  (325, 2, 1, '2017-10-09 11:24:18', '2017-10-09 11:54:18', '极速预定', 10, '0', NULL, '2017-10-09 11:14:17', NULL, '0', 1);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (181, 1, 1, '2017-10-07 01:00:01', '2017-10-07 14:00:02', '讨论中秋去哪儿玩', 101, '0', '123', '2017-09-28 10:07:41',
-        '2017-09-28 17:22:52', '1', 2);
+  (326, 2, 1, '2017-10-10 19:19:58', '2017-10-10 19:49:58', '极速预定', 10, '0', NULL, '2017-10-10 19:09:58', NULL, '0', 1);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (182, 2, 1, '2017-10-14 01:00:01', '2017-10-14 14:00:02', '讨论中秋去哪儿玩', 101, '1', '123', '2017-09-28 10:07:41',
-        '2017-09-28 18:44:05', '1', 2);
+  (327, 2, 1, '2017-10-10 19:51:46', '2017-10-10 20:21:46', '极速预定', 10, '0', NULL, '2017-10-10 19:11:45', NULL, '0', 1);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (183, 2, 1, '2017-10-21 01:00:01', '2017-10-21 14:00:02', '讨论中秋去哪儿玩', 101, '1', '123', '2017-09-28 10:07:41',
-        '2017-09-28 18:44:37', '0', 3);
+  (328, 2, 1, '2017-10-10 21:21:37', '2017-10-10 21:51:37', '极速预定', 10, '0', NULL, '2017-10-10 19:21:36', NULL, '0', 1);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (184, 3, 1, '2017-10-28 01:00:01', '2017-10-28 14:00:02', '讨论中秋去哪儿玩', 101, '0', '123', '2017-09-28 10:07:41',
-        '2017-09-28 10:07:41', '0', 4);
+  (329, 2, 1, '2017-10-10 21:56:15', '2017-10-10 22:26:15', '极速预定', 10, '0', NULL, '2017-10-10 19:26:15', NULL, '0', 1);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (185, 3, 1, '2017-11-04 01:00:01', '2017-11-04 14:00:02', '讨论中秋去哪儿玩', 101, '0', '123', '2017-09-28 10:07:41',
-        '2017-09-28 10:07:41', '0', 3);
+  (330, 2, 1, '2017-10-16 09:30:13', '2017-10-16 10:00:13', '周会', 25, '0', '', '2017-10-10 19:28:22',
+        '2017-10-10 19:28:22', '0', 4);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (186, 4, 1, '2017-11-11 01:00:01', '2017-11-11 14:00:02', '讨论中秋去哪儿玩', 101, '0', '123', '2017-09-28 10:07:41',
-        '2017-09-28 10:07:41', '0', 4);
+  (331, 2, 1, '2017-10-23 09:30:13', '2017-10-23 10:00:13', '周会', 25, '0', '', '2017-10-10 19:28:22',
+        '2017-10-10 19:28:22', '0', 4);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (187, 4, 1, '2017-11-18 01:00:01', '2017-11-18 14:00:02', '讨论中秋去哪儿玩', 101, '0', '123', '2017-09-28 10:07:41',
-        '2017-09-28 10:07:41', '0', 5);
+  (332, 2, 1, '2017-10-30 09:30:13', '2017-10-30 10:00:13', '周会', 25, '0', '', '2017-10-10 19:28:22',
+        '2017-10-10 19:28:22', '0', 4);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (188, 1, 1, '2017-11-25 01:00:01', '2017-11-25 14:00:02', '讨论中秋去哪儿玩', 101, '0', '123', '2017-09-28 10:07:41',
-        '2017-09-28 10:07:41', '0', 6);
+  (333, 2, 1, '2017-11-06 09:30:13', '2017-11-06 10:00:13', '周会', 25, '0', '', '2017-10-10 19:28:22',
+        '2017-10-10 19:28:22', '0', 4);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (189, 2, 1, '2017-12-02 01:00:01', '2017-12-02 14:00:02', '讨论中秋去哪儿玩', 101, '0', '123', '2017-09-28 10:07:41',
-        '2017-09-28 10:07:41', '0', 6);
+  (334, 2, 1, '2017-11-13 09:30:13', '2017-11-13 10:00:13', '周会', 25, '0', '', '2017-10-10 19:28:22',
+        '2017-10-10 19:28:22', '0', 4);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (190, 2, 1, '2017-12-09 01:00:01', '2017-12-09 14:00:02', '讨论中秋去哪儿玩', 101, '0', '123', '2017-09-28 10:07:41',
-        '2017-09-28 10:07:41', '0', 1);
+  (335, 2, 1, '2017-11-20 09:30:13', '2017-11-20 10:00:13', '周会', 25, '0', '', '2017-10-10 19:28:22',
+        '2017-10-10 19:28:22', '0', 4);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (191, 1, 3, '2017-12-31 09:00:10', '2017-12-31 13:00:01', '讨论年终发10薪还是15薪', 15, '0', '无', '2017-09-28 17:25:04',
-        '2017-09-28 17:25:04', '0', 7);
+  (336, 2, 1, '2017-11-27 09:30:13', '2017-11-27 10:00:13', '周会', 25, '0', '', '2017-10-10 19:28:22',
+        '2017-10-10 19:28:22', '0', 4);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (192, NULL, 1, '2017-09-29 05:00:05', '2017-09-29 13:00:01', '买什么福利品？', 1, '0', '哈哈', NULL, '2017-09-28 18:43:53',
-   '0', 6);
+  (337, 2, 1, '2017-12-04 09:30:13', '2017-12-04 10:00:13', '周会', 25, '0', '', '2017-10-10 19:28:22',
+        '2017-10-10 19:28:22', '0', 4);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (218, 1, 1, '2017-12-27 08:00:05', '2017-12-27 17:00:05', '124', 41, '0', '2', '2017-09-28 17:32:48',
-        '2017-09-28 17:32:48', '0', 6);
+  (338, 2, 1, '2017-12-11 09:30:13', '2017-12-11 10:00:13', '周会', 25, '0', '', '2017-10-10 19:28:22',
+        '2017-10-10 19:28:22', '0', 4);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (219, NULL, 1, '2017-09-29 01:00:01', '2017-09-29 02:00:02', '这次国庆为什么有8天？', 15, '0', '', '2017-09-28 18:42:39',
-        '2017-09-28 18:42:39', '0', 1);
+  (339, 2, 1, '2017-12-18 09:30:13', '2017-12-18 10:00:13', '周会', 25, '0', '', '2017-10-10 19:28:22',
+        '2017-10-10 19:28:22', '0', 4);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (220, NULL, 1, '2017-10-06 01:00:01', '2017-10-06 02:00:02', '这次国庆为什么有8天？', 15, '0', '', '2017-09-28 18:42:39',
-        '2017-09-28 18:42:39', '0', 1);
+  (340, 2, 1, '2017-12-25 09:30:13', '2017-12-25 10:00:13', '周会', 25, '0', '', '2017-10-10 19:28:22',
+        '2017-10-10 19:28:22', '0', 4);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (221, NULL, 1, '2017-10-13 01:00:01', '2017-10-13 02:00:02', '这次国庆为什么有8天？', 15, '0', '', '2017-09-28 18:42:39',
-        '2017-09-28 18:42:39', '0', 1);
+  (341, 2, 1, '2017-10-14 15:33:15', '2017-10-14 16:03:15', '极速预定', 10, '0', NULL, '2017-10-14 15:23:14', NULL, '0', 1);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (222, NULL, 1, '2017-10-20 01:00:01', '2017-10-20 02:00:02', '这次国庆为什么有8天？', 15, '0', '', '2017-09-28 18:42:39',
-        '2017-09-28 18:42:39', '0', 1);
+  (342, 2, 2, '2017-10-14 15:30:35', '2017-10-14 15:50:35', '开会', 10, '0', '', '2017-10-14 15:24:00',
+        '2017-10-14 15:25:16', '1', 5);
 INSERT INTO `meetingroom_book_detail` VALUES
-  (223, NULL, 1, '2017-10-27 01:00:01', '2017-10-27 02:00:02', '这次国庆为什么有8天？', 15, '0', '', '2017-09-28 18:42:39',
-        '2017-09-28 18:42:39', '0', 1);
-INSERT INTO `meetingroom_book_detail` VALUES
-  (224, NULL, 1, '2017-11-03 01:00:01', '2017-11-03 02:00:02', '这次国庆为什么有8天？', 15, '0', '', '2017-09-28 18:42:39',
-        '2017-09-28 18:42:39', '0', 1);
-INSERT INTO `meetingroom_book_detail` VALUES
-  (225, NULL, 1, '2017-11-10 01:00:01', '2017-11-10 02:00:02', '这次国庆为什么有8天？', 15, '0', '', '2017-09-28 18:42:39',
-        '2017-09-28 18:42:39', '0', 1);
-INSERT INTO `meetingroom_book_detail` VALUES
-  (226, NULL, 1, '2017-11-17 01:00:01', '2017-11-17 02:00:02', '这次国庆为什么有8天？', 15, '0', '', '2017-09-28 18:42:39',
-        '2017-09-28 18:42:39', '0', 1);
-INSERT INTO `meetingroom_book_detail` VALUES
-  (227, NULL, 1, '2017-11-24 01:00:01', '2017-11-24 02:00:02', '这次国庆为什么有8天？', 15, '0', '', '2017-09-28 18:42:39',
-        '2017-09-28 18:42:39', '0', 1);
-INSERT INTO `meetingroom_book_detail` VALUES
-  (228, NULL, 1, '2017-12-01 01:00:01', '2017-12-01 02:00:02', '这次国庆为什么有8天？', 15, '0', '', '2017-09-28 18:42:39',
-        '2017-09-28 18:42:39', '0', 1);
-INSERT INTO `meetingroom_book_detail` VALUES
-  (229, NULL, 1, '2017-12-08 01:00:01', '2017-12-08 02:00:02', '这次国庆为什么有8天？', 15, '0', '', '2017-09-28 18:42:39',
-        '2017-09-28 18:42:39', '0', 1);
-INSERT INTO `meetingroom_book_detail` VALUES
-  (230, NULL, 1, '2017-12-15 01:00:01', '2017-12-15 02:00:02', '这次国庆为什么有8天？', 15, '0', '', '2017-09-28 18:42:39',
-        '2017-09-28 18:42:39', '0', 1);
-INSERT INTO `meetingroom_book_detail` VALUES
-  (231, NULL, 1, '2017-12-22 01:00:01', '2017-12-22 02:00:02', '这次国庆为什么有8天？', 15, '0', '', '2017-09-28 18:42:39',
-        '2017-09-28 18:42:39', '0', 1);
+  (343, 2, 3, '2017-10-14 16:00:04', '2017-10-14 16:05:14', '讨论明年会上市么？', 10, '0', '', '2017-10-14 15:58:26', NULL, '0',
+   4);
 COMMIT;
 
 -- ----------------------------
@@ -408,7 +370,7 @@ CREATE TABLE `permission` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 9
+  AUTO_INCREMENT = 6
   DEFAULT CHARSET = utf8
   COMMENT ='权限表';
 
@@ -418,6 +380,9 @@ CREATE TABLE `permission` (
 BEGIN;
 INSERT INTO `permission` VALUES (1, 'P_A', '测试', '/test', 'ALL');
 INSERT INTO `permission` VALUES (2, 'ROLE_ADMIN', '管理', '/admin/index', 'ALL');
+INSERT INTO `permission` VALUES (3, 'ROLE_ADMIN', '管理', '/meetingroom/**', 'ALL');
+INSERT INTO `permission` VALUES (4, 'ROLE_ADMIN', '管理', '/employee/**', 'ALL');
+INSERT INTO `permission` VALUES (5, 'ROLE_USER', '普通用户', '/book/**', 'ALL');
 COMMIT;
 
 -- ----------------------------
@@ -432,7 +397,7 @@ CREATE TABLE `role` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 5
+  AUTO_INCREMENT = 3
   DEFAULT CHARSET = utf8
   COMMENT ='角色表';
 
@@ -457,7 +422,7 @@ CREATE TABLE `role_permission` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 17
+  AUTO_INCREMENT = 9
   DEFAULT CHARSET = utf8
   COMMENT ='角色权限表';
 
@@ -465,22 +430,11 @@ CREATE TABLE `role_permission` (
 -- Records of role_permission
 -- ----------------------------
 BEGIN;
-INSERT INTO `role_permission` VALUES (1, 1, 1);
-INSERT INTO `role_permission` VALUES (2, 1, 2);
-INSERT INTO `role_permission` VALUES (3, 1, 3);
-INSERT INTO `role_permission` VALUES (4, 1, 4);
-INSERT INTO `role_permission` VALUES (5, 2, 1);
-INSERT INTO `role_permission` VALUES (6, 2, 2);
-INSERT INTO `role_permission` VALUES (7, 2, 3);
-INSERT INTO `role_permission` VALUES (8, 2, 4);
-INSERT INTO `role_permission` VALUES (9, 3, 1);
-INSERT INTO `role_permission` VALUES (10, 3, 2);
-INSERT INTO `role_permission` VALUES (11, 3, 3);
-INSERT INTO `role_permission` VALUES (12, 3, 4);
-INSERT INTO `role_permission` VALUES (13, 3, 5);
-INSERT INTO `role_permission` VALUES (14, 3, 6);
-INSERT INTO `role_permission` VALUES (15, 3, 7);
-INSERT INTO `role_permission` VALUES (16, 1, 6);
+INSERT INTO `role_permission` VALUES (2, 2, 1);
+INSERT INTO `role_permission` VALUES (3, 2, 2);
+INSERT INTO `role_permission` VALUES (4, 2, 3);
+INSERT INTO `role_permission` VALUES (5, 2, 4);
+INSERT INTO `role_permission` VALUES (8, 1, 5);
 COMMIT;
 
 -- ----------------------------
@@ -491,7 +445,7 @@ CREATE TABLE `user` (
   `id`          INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `username`    VARCHAR(50)               DEFAULT NULL
   COMMENT '用户名',
-  `password`    VARCHAR(260)              DEFAULT NULL
+  `password`    VARCHAR(64)               DEFAULT NULL
   COMMENT '密码',
   `real_name`   VARCHAR(50)               DEFAULT NULL
   COMMENT '中文名',
@@ -508,7 +462,6 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 12
   DEFAULT CHARSET = utf8
   COMMENT ='员工';
 
@@ -525,7 +478,7 @@ CREATE TABLE `user_role` (
   PRIMARY KEY (`id`)
 )
   ENGINE = InnoDB
-  AUTO_INCREMENT = 18
+  AUTO_INCREMENT = 4
   DEFAULT CHARSET = utf8
   COMMENT ='用户角色表';
 
@@ -533,23 +486,9 @@ CREATE TABLE `user_role` (
 -- Records of user_role
 -- ----------------------------
 BEGIN;
-INSERT INTO `user_role` VALUES (1, 1, 1);
-INSERT INTO `user_role` VALUES (2, 1, 2);
-INSERT INTO `user_role` VALUES (3, 2, 1);
-INSERT INTO `user_role` VALUES (4, 2, 2);
-INSERT INTO `user_role` VALUES (5, 3, 1);
-INSERT INTO `user_role` VALUES (6, 3, 2);
-INSERT INTO `user_role` VALUES (7, 4, 1);
-INSERT INTO `user_role` VALUES (8, 4, 2);
-INSERT INTO `user_role` VALUES (9, 5, 1);
-INSERT INTO `user_role` VALUES (10, 5, 2);
-INSERT INTO `user_role` VALUES (11, 6, 1);
-INSERT INTO `user_role` VALUES (12, 6, 2);
-INSERT INTO `user_role` VALUES (13, 1, 3);
-INSERT INTO `user_role` VALUES (14, 2, 3);
-INSERT INTO `user_role` VALUES (15, 4, 3);
-INSERT INTO `user_role` VALUES (16, 5, 3);
-INSERT INTO `user_role` VALUES (17, 6, 3);
+INSERT INTO `user_role` VALUES (1, 2, 1);
+INSERT INTO `user_role` VALUES (2, 6, 1);
+INSERT INTO `user_role` VALUES (3, 2, 2);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;

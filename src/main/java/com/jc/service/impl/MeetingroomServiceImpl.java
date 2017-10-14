@@ -62,11 +62,7 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 
         List<Meetingroom> meetingroomList = getMeetingroomByName(roomName);
 
-        if (meetingroomList == null || meetingroomList.size() == 0)
-            throw new MeetingroomException(MeetingroomResultEnum.NOT_EXIST);
-        if (meetingroomList.get(0).getId() != meetingroomVO.getId())
-            throw new MeetingroomException(MeetingroomResultEnum.DATA_ERROR);
-        if (meetingroomList.size() > 1)
+        if (meetingroomList != null && meetingroomList.size() > 0 && meetingroomList.get(0).getId() != meetingroomVO.getId())
             throw new MeetingroomException(MeetingroomResultEnum.DUPLICATE_NAME);
 
         Meetingroom meetingroom = meetingroomList.get(0);

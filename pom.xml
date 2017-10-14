@@ -6,7 +6,11 @@
     <groupId>com.jc</groupId>
     <artifactId>jc_apply</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <modules>
+        <module>elasticsearch</module>
+        <module>es</module>
+    </modules>
+    <packaging>pom</packaging>
 
     <name>jc_apply</name>
     <description>spring boot完整例子</description>
@@ -245,8 +249,6 @@
         <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
         <!--<scope>provided</scope>-->
         <!--</dependency>-->
-
-
     </dependencies>
 
     <dependencyManagement>

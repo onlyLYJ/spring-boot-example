@@ -1,6 +1,7 @@
 package com.jc.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.jc.security.model.Role;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
@@ -8,6 +9,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Table
 @Data
@@ -57,6 +59,9 @@ public class Employee implements Serializable {
     @Column(name = "enable")
     private String enable;
 
+    @Transient
+    private List<Role> roles;
+
     @Override
     public String toString() {
         return "Employee{" +
@@ -68,6 +73,18 @@ public class Employee implements Serializable {
                 ", updateTime=" + updateTime +
                 ", extra='" + extra + '\'' +
                 ", enable='" + enable + '\'' +
+                ", roles=" + roles +
                 '}';
     }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
+
+
 }

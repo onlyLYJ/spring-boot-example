@@ -55,11 +55,9 @@ $("#newBook-form").submit(function () {
         url: mbrNewBookPath + "/apply",
         success: function (data, status) {
             alert(data.m);
-            if (data.c.substring(0, 1) > 1) {
-                return;
-            } else {
-                history.back(-1);
-            }
+
+            history.back(-1);
+
         }
     });
     return false;

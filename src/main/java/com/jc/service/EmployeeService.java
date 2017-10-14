@@ -23,12 +23,12 @@ public interface EmployeeService {
     Employee addEmployee(DepartmentEnum de, String realName, String englishName, String password);
 
     /**
-     * 根据id删除员工
+     * 根据id禁用员工
      *
      * @param id
      * @return
      */
-    Employee deleteEmployeeById(Integer id);
+    boolean cancelEmployeeById(Integer id);
 
     /**
      * 更新员工信息
@@ -68,5 +68,6 @@ public interface EmployeeService {
 
     List<Role> findRoleByEmployeeId(Integer employeeId);
 
-    Employee addEmployee(Employee employee);
+    boolean addEmployee(Employee employee);
+
 }
