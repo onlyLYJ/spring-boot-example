@@ -1,9 +1,9 @@
-var mrbPath = "http://localhost:8080/book"
+var mrbPath = "http://localhost:8080/book";
 
 function isLogin() {
-    var username = $("#username").val()
+    var username = $("#username").val();
     if (username == null) {
-        alert("请先登陆！")
+        alert("请先登陆！");
         return false;
     }
     return true;
@@ -12,21 +12,21 @@ function isLogin() {
 $("#speedMeetingroomBook").click(function () {
 
     if (!isLogin()) {
-        window.location.href = mrbPath
+        window.location.href = mrbPath;
         return;
     }
 
     var minutesAfterNow = $("#minutesAfterNow").val();
 
     if (minutesAfterNow > 1440) {
-        alert("一天后的预定也需要极速预定嘛？请使用新增预定功能吧~")
+        alert("一天后的预定也需要极速预定嘛？请使用新增预定功能吧~");
         return;
     }
 
     var duration = $("#duration").val();
 
     if (duration > 60) {
-        alert("极速预定使用时间不能超过1个小时~")
+        alert("极速预定使用时间不能超过1个小时~");
         return;
     }
 
@@ -51,13 +51,13 @@ $("#speedMeetingroomBook").click(function () {
 function auditMeetingroomBook(obj) {
 
     if (!isLogin()) {
-        window.location.href = mrbPath
+        window.location.href = mrbPath;
         return;
     }
 
-    var username = $("#username").val()
+    var username = $("#username").val();
     if (username == null) {
-        alert("请先登陆！")
+        alert("请先登陆！");
         return;
     }
 
@@ -86,7 +86,7 @@ function auditMeetingroomBook(obj) {
 $("#editAuditMrBook").click(function () {
 
     if (!isLogin()) {
-        window.location.href = mrbPath
+        window.location.href = mrbPath;
         return;
     }
     var auditStatusD = $("#auditStatusD").val();
@@ -111,7 +111,7 @@ $("#editAuditMrBook").click(function () {
             auditStatus: auditStatusD
         }, function (data, status) {
             if (data.m == null) {
-                alert("请先登陆")
+                alert("请先登陆");
                 return;
             }
             alert(data.m);
@@ -125,7 +125,7 @@ $("#editAuditMrBook").click(function () {
  */
 function cancelMeetingroomBook(obj) {
     if (!isLogin()) {
-        window.location.href = mrbPath
+        window.location.href = mrbPath;
         return;
     }
 
@@ -150,7 +150,7 @@ function cancelMeetingroomBook(obj) {
         }, function (data, status) {
 
             if (data.m == null) {
-                alert("请先登陆")
+                alert("请先登陆");
                 return;
             }
             alert(data.m);

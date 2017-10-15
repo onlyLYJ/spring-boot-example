@@ -42,8 +42,9 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
 
         List<MeetingroomBookDetailVO> conflictBookList = getConflictBookList(mbdVO);
 
-        if (conflictBookList != null && conflictBookList.size() > 0)
+        if (conflictBookList != null && conflictBookList.size() > 0) {
             throw new MeetingroomBookException(conflictBookList);
+        }
 
         mbdVO.setAuditStatus("0");
         mbdVO.setStatus("0");
@@ -63,8 +64,9 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
         Date beginTime = mbdVO.getMeetingBeginTime();
         Date endTime = mbdVO.getMeetingEndTime();
 
-        if (beginTime.after(endTime))
+        if (beginTime.after(endTime)) {
             throw new MeetingroomBookException(BookResultEnum.INVALID_DATA);
+        }
 
         Integer meetingroomId = mbdVO.getMeetingroomId();
         Integer inputId = mbdVO.getId();
@@ -83,8 +85,9 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
 
         List<MeetingroomBookDetailVO> weeklyConflictList = getWeeklyConflictList(vo);
 
-        if (weeklyConflictList.size() > 0)
+        if (weeklyConflictList.size() > 0) {
             throw new MeetingroomBookException(weeklyConflictList);
+        }
 
         Date weeklyBookEndDate = vo.getWeeklyBookEndDate();
         Date tempBegin = vo.getMeetingBeginTime();
@@ -124,8 +127,9 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
         Date meetingEndTime = vo.getMeetingEndTime();
         Date weeklyBookEndDate = vo.getWeeklyBookEndDate();
 
-        if (meetingBeginTime.after(meetingEndTime) || meetingEndTime.after(weeklyBookEndDate))
+        if (meetingBeginTime.after(meetingEndTime) || meetingEndTime.after(weeklyBookEndDate)) {
             throw new BaseEnumException(BookResultEnum.INVALID_DATA);
+        }
 
         MeetingroomBookDetailVO tempVO = new MeetingroomBookDetailVO();
         tempVO.setMeetingroomId(vo.getMeetingroomId());
@@ -163,8 +167,9 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
     public boolean updateMeetingroomBookDetailByVO(MeetingroomBookDetailVO mbdVO) {
 
         List<MeetingroomBookDetailVO> conflictBookList = getConflictBookList(mbdVO);
-        if (conflictBookList != null && conflictBookList.size() > 0)
+        if (conflictBookList != null && conflictBookList.size() > 0) {
             throw new MeetingroomBookException(conflictBookList);
+        }
 
         mbdVO.setStatus("0");
         mbdVO.setAuditStatus("0");
@@ -177,7 +182,9 @@ public class MeetingroomBookDetailServiceImpl implements MeetingroomBookDetailSe
         List<MeetingroomBookDetail> mbdList = Lists.newArrayList();
         if (record.getId() > 0) {
             MeetingroomBookDetail meetingroomBookDetail = mrBookDetailMapper.selectByPrimaryKey(record.getId());
-            if (meetingroomBookDetail != null) mbdList.add(meetingroomBookDetail);
+            if (meetingroomBookDetail != null) {
+                mbdList.add(meetingroomBookDetail);
+            }
             return mbdList;
         }
         return mrBookDetailMapper.select(record);

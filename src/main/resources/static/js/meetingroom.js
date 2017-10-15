@@ -1,4 +1,4 @@
-var meetingroomPath = "http://localhost:8080/meetingroom"
+var meetingroomPath = "http://localhost:8080/meetingroom";
 
 /**
  * 新增会议室检查并提交

@@ -43,8 +43,9 @@ public class EmployeeController extends BaseController {
     @ResponseBody
     public ResultModel addEmployee(@RequestBody @Validated Employee employee) {
         enCodePassword(employee);
-        if (employeeService.addEmployee(employee))
+        if (employeeService.addEmployee(employee)) {
             return buildSuccessResponse("用户注册成功!");
+        }
         return buildErrorResponse("注册失败，请稍后再试");
     }
 
@@ -76,13 +77,13 @@ public class EmployeeController extends BaseController {
     @Validated
     public ResultModel cancelEmployee(@RequestParam @Min(value = 1, message = "员工参数错误") Integer id) {
 
-        if (employeeService.cancelEmployeeById(id))
+        if (employeeService.cancelEmployeeById(id)) {
             return buildResponseByEnum(BookResultEnum.CANCEL_SUCCESS);
+        }
 
         return buildResponseByEnum(BookResultEnum.CANCEL_FAILED);
 
     }
-
 
 
 }

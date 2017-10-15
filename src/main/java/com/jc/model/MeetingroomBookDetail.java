@@ -133,15 +133,15 @@ public class MeetingroomBookDetail implements Serializable {
 
         String auditStatus = this.auditStatus;
 
-        if (auditStatus.equals("0")) {
+        if ("0".equals(auditStatus)) {
             return "待审核";
         }
 
-        if (auditStatus.equals("1")) {
+        if ("1".equals(auditStatus)) {
             return "审核通过";
         }
 
-        if (auditStatus.equals("2")) {
+        if ("2".equals(auditStatus)) {
             return "审核不通过";
         }
 

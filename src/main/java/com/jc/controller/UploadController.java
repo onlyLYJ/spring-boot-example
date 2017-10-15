@@ -20,9 +20,6 @@ import java.nio.file.Paths;
 @Controller
 public class UploadController {
 
-    //Save the uploaded file to this folder
-    private static String UPLOADED_FOLDER = "/Users/onlylyj/Desktop/spring/spring-demo/spring-boot-demo/src/test/java/resource";
-
     @GetMapping("/up")
     public String index() {
         return "upload";
@@ -41,6 +38,7 @@ public class UploadController {
 
             // Get the file and save it somewhere
             byte[] bytes = file.getBytes();
+            String UPLOADED_FOLDER = "/Users/onlylyj/Desktop/spring/spring-demo/spring-boot-demo/src/test/java/resource";
             Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
             Files.write(path, bytes);
 

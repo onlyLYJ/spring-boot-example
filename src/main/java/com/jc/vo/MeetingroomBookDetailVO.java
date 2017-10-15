@@ -19,7 +19,7 @@ import java.util.Date;
 @Data
 @ApiModel(description = "会议室预定详情VO")
 @JsonIgnoreProperties(ignoreUnknown = true)
-@EqualsAndHashCode(callSuper = false)
+@EqualsAndHashCode()
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class MeetingroomBookDetailVO extends MeetingroomBookDetail implements Cloneable {
 
@@ -117,6 +117,7 @@ public class MeetingroomBookDetailVO extends MeetingroomBookDetail implements Cl
                 '}';
     }
 
+    @Override
     public MeetingroomBookDetailVO clone() {
         MeetingroomBookDetailVO vo = new MeetingroomBookDetailVO();
 

@@ -15,6 +15,9 @@ import com.jc.security.model.Role;
 import com.jc.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.MessageFormat;
 import java.util.Date;
@@ -24,6 +27,7 @@ import java.util.List;
  * Created by onlyLYJ on 2017/7/13.
  */
 @Service
+@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
@@ -39,8 +43,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         Preconditions.checkNotNull(realName, "真是姓名不能为空");
         Preconditions.checkNotNull(englishName, "英文名不能为空");
         Employee record = findByEnglishName(englishName);
-        if (record != null)
+        if (record != null) {
             throw new ApplyException(MessageFormat.format("英文名已存在 ID【{0}】部门【{1}】姓名【{2}】英文名【{3}】", record.getId(), record.getDepartment(), record.getRealName(), record.getEnglishName()));
+        }
         record = new Employee();
         record.setDepartment(de.name());
         record.setPassword(password);
@@ -56,8 +61,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public boolean cancelEmployeeById(Integer id) {
 
         Employee record = employeeMapper.selectByPrimaryKey(id);
-        if (record == null)
+        if (record == null) {
             throw new ApplyException(MessageFormat.format("用户不存在 ID【{0}】部门【{1}】姓名【{2}】英文名【{3}】", record.getId(), record.getDepartment(), record.getRealName(), record.getEnglishName()));
+        }
         record.setUpdateTime(new Date());
         record.setEnable("1");
         return employeeMapper.updateByPrimaryKey(record) > 0;
@@ -119,8 +125,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public boolean addEmployee(Employee employee) {
         Employee record = findByEnglishName(employee.getEnglishName());
-        if (record != null)
+        if (record != null) {
             throw new ApplyException(MessageFormat.format("英文名已存在 ID【{0}】部门【{1}】姓名【{2}】英文名【{3}】", record.getId(), record.getDepartment(), record.getRealName(), record.getEnglishName()));
+        }
         employee.setCreateTime(new Date());
         employee.setEnable("0");
         return employeeMapper.insertUseGeneratedKeys(employee) > 0;

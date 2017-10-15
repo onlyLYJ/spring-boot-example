@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="layout :: htmlhead" th:with="title='管理'">
-    <link th:href="@{/static/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" media="screen"></link>
+    <link th:href="@{/static/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" media="screen"/>
 </head>
 
 <body>
@@ -52,7 +52,7 @@
         <br>
         会议开始时间：<a><input id="minutesAfterNow" type="number" max="1440" min="1" value="10"></a>分钟后
         <br>会议时长<a><input id="duration" type="number" max="60" min="1" value="30"
-    ></input></a>分钟
+    /></a>分钟
         <button type="button" class="btn btn-default" id="speedMeetingroomBook">1号会议室极速预定</button>
     </li>
     <div>

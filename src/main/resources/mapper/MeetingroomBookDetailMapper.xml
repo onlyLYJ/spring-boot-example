@@ -50,21 +50,21 @@
 
     <sql id="SELECT_BOOK_DETAIL">
         SELECT
-            mbd.id,
+        mbd.id,
         m.room_name roomName,
         m.id meetingroomId,
         d.dept_name deptName,
         d.id deptId,
-            mbd.status,
-            mbd.audit_status       auditStatus,
-            mbd.meeting_begin_time meetingBeginTime,
-            mbd.meeting_end_time   meetingEndTime,
-            mbd.book_reason        bookReason,
-            mbd.attend_num         attendNum,
-            mbd.remark
+        mbd.status,
+        mbd.audit_status auditStatus,
+        mbd.meeting_begin_time meetingBeginTime,
+        mbd.meeting_end_time meetingEndTime,
+        mbd.book_reason bookReason,
+        mbd.attend_num attendNum,
+        mbd.remark
         FROM meetingroom_book_detail mbd
         LEFT JOIN department d ON mbd.dept_id = d.id
-            LEFT JOIN meetingroom m ON mbd.meetingroom_id = m.id
+        LEFT JOIN meetingroom m ON mbd.meetingroom_id = m.id
     </sql>
 
     <select id="getValidMeetingroomBookDetailList" resultType="com.jc.model.MeetingroomBookDetail">

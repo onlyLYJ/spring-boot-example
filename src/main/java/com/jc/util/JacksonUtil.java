@@ -1,7 +1,7 @@
 package com.jc.util;
 
-/**
- * Created by Administrator on 2017/9/18.
+/*
+  Created by Administrator on 2017/9/18.
  */
 
 import com.fasterxml.jackson.core.type.TypeReference;

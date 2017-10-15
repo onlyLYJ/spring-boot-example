@@ -46,7 +46,7 @@ public class ErrorController extends BaseController {
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         StringBuilder strBuilder = new StringBuilder();
         for (ConstraintViolation<?> violation : violations) {
-            strBuilder.append(violation.getMessage() + "\n");
+            strBuilder.append(violation.getMessage()).append("\n");
         }
         log.error(strBuilder.toString());
         return buildErrorResponse(strBuilder.toString());
@@ -100,12 +100,15 @@ public class ErrorController extends BaseController {
         }
 
         log.error("未预期异常", exception);
-        if (exception.getClass() == HttpMessageNotReadableException.class)
+        if (exception.getClass() == HttpMessageNotReadableException.class) {
             return buildErrorResponse("提交的参数异常，请检查后再提交");
-        if (exception.getClass() == SQLException.class)
+        }
+        if (exception.getClass() == SQLException.class) {
             return buildErrorResponse("提交的参数不合法，请检查后再提交");
-        if (exception.getClass() == IllegalArgumentException.class)
+        }
+        if (exception.getClass() == IllegalArgumentException.class) {
             return buildErrorResponse(exception.getMessage());
+        }
         return buildErrorResponse("操作失败，请检查后再重试");
     }
 

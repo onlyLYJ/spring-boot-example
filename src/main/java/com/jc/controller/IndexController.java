@@ -137,7 +137,9 @@ public class IndexController extends BaseController {
             log.warn("查询用户【{}】失败 原因:{}", englishName, e.getMessage());
             return buildErrorResponse("查询用户失败");
         }
-        if (employee == null) return buildErrorResponse("请先注册");
+        if (employee == null) {
+            return buildErrorResponse("请先注册");
+        }
         ActivityApply apply = applyService.addApply(activityId, employee.getId(), remark);
         return buildSuccessResponse(apply);
     }
@@ -155,7 +157,9 @@ public class IndexController extends BaseController {
     public ResultModel cancelApply(@RequestParam String englishName, @RequestParam Integer activityId) {
         englishName = englishName.trim();
         Employee employee = employeeService.findByEnglishName(englishName);
-        if (employee == null) return buildErrorResponse("请先注册");
+        if (employee == null) {
+            return buildErrorResponse("请先注册");
+        }
         if (applyService.cancelApply(activityId, employee.getId())) {
             return buildSuccessResponse("取消成功");
         }
@@ -183,8 +187,9 @@ public class IndexController extends BaseController {
 
         setCurrentTimeAttribute(model);
 
-        if (principal == null || StringUtils.isBlank(principal.getName()))
+        if (principal == null || StringUtils.isBlank(principal.getName())) {
             return "login";
+        }
 
         return "redirect:/book";
     }

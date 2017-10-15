@@ -19,6 +19,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 @Service
@@ -41,8 +42,9 @@ public class MeetingroomServiceImpl implements MeetingroomService {
         meetingroom.setRoomName(roomName);
 
         List<Meetingroom> list = mrMapper.select(meetingroom);
-        if (list != null && list.size() > 0)
+        if (list != null && list.size() > 0) {
             throw new MeetingroomException(MeetingroomResultEnum.DUPLICATE_NAME);
+        }
 
         meetingroom.setCapacity(meetingroomVO.getCapacity());
         meetingroom.setStatus("0");
@@ -62,16 +64,19 @@ public class MeetingroomServiceImpl implements MeetingroomService {
 
         List<Meetingroom> meetingroomList = getMeetingroomByName(roomName);
 
-        if (meetingroomList != null && meetingroomList.size() > 0 && meetingroomList.get(0).getId() != meetingroomVO.getId())
+        if (meetingroomList != null && meetingroomList.size() > 0
+                && !Objects.equals(meetingroomList.get(0).getId(), meetingroomVO.getId())) {
             throw new MeetingroomException(MeetingroomResultEnum.DUPLICATE_NAME);
+        }
 
-        Meetingroom meetingroom = meetingroomList.get(0);
-        meetingroom.setRoomName(meetingroomVO.getRoomName());
-        meetingroom.setCapacity(meetingroomVO.getCapacity());
-        meetingroom.setStatus(meetingroomVO.getStatus());
-        meetingroom.setRemark(meetingroomVO.getRemark());
-        meetingroom.setUpdateTime(new Date());
-        return mrMapper.updateByPrimaryKey(meetingroom) > 0;
+        Meetingroom record = new Meetingroom();
+        record.setId(meetingroomVO.getId());
+        record.setRoomName(meetingroomVO.getRoomName());
+        record.setCapacity(meetingroomVO.getCapacity());
+        record.setStatus(meetingroomVO.getStatus());
+        record.setRemark(meetingroomVO.getRemark());
+        record.setUpdateTime(new Date());
+        return mrMapper.updateByPrimaryKeySelective(record) > 0;
 
     }
 

@@ -6,17 +6,17 @@
 
 <head th:fragment="htmlhead">
 
-    <meta charset="utf-8"></meta>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"></meta>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta>
-    <meta name="description" content=""></meta>
-    <meta name="author" content=""></meta>
-    <link rel="shortcut icon" type="image/png" th:href="@{/static/images/favicon.png}"></link>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <link rel="shortcut icon" type="image/png" th:href="@{/static/images/favicon.png}"/>
 
     <title th:text="${title}">(title)</title>
     <link th:href="@{/static/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" media="screen">
-    <link th:href="@{/webjarslocator/bootstrap/dist/css/bootstrap.css}" rel="stylesheet"></link>
-    <link th:href="@{/static/css/starter.css}" rel="stylesheet"></link>
+    <link th:href="@{/webjarslocator/bootstrap/dist/css/bootstrap.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/starter.css}" rel="stylesheet"/>
 </head>
 
 <body>
@@ -213,7 +213,7 @@
                     </div>
                     <div class="form-group">
                         <label>预定原因</label>
-                        <input type="text" class="form-control" id="bookReasonD"></input>
+                        <input type="text" class="form-control" id="bookReasonD"/>
                     </div>
                     <div class="form-group">
                         <label>会议开始时间</label>
@@ -229,7 +229,7 @@
                     </div>
                     <div class="form-group">
                         <label>审核状态(请输入审核意见：0待审核，1审核通过，2审核不通过)</label>
-                        <input type="text" class="form-control" id="auditStatusD"></input>
+                        <input type="text" class="form-control" id="auditStatusD"/>
                     </div>
 
                 </div>
@@ -246,7 +246,7 @@
     <script th:src="@{/webjarslocator/bootstrap/js/bootstrap.min.js}"></script>
     <script th:inline="javascript">
         var basePath = /*[[@{/}]]*/ '';
-        var employeeBasePath = "http://localhost:8080/employee"
+        var employeeBasePath = "http://localhost:8080/employee";
 
         //密码复杂要求：要求包含字母、数字。至少6位，至多20位
         function checkValidPass(s) {

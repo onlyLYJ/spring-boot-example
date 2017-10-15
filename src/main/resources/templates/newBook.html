@@ -9,7 +9,7 @@
 <table class="table table-hover" border="0" width="50%">
     <form id="newBook-form" th:action="@{/book/newBook/apply}"
           th:object="${meetingroomBookDetailVO}" method="post">
-        <input type="hidden" text="1" th:field="*{id}"></input>
+        <input type="hidden" text="1" th:field="*{id}"/>
         <thead>
         <tr>
             <th width="15%" align="left">栏目</th>
@@ -43,7 +43,7 @@
         <tr>
             <div class="form-group">
                 <td width="15%"><label>预定原因</label></td>
-                <td width="35%"><input type="text" value="" th:field="*{bookReason}"></input></td>
+                <td width="35%"><input type="text" value="" th:field="*{bookReason}"/></td>
             </div>
         </tr>
         <tr>
@@ -69,7 +69,7 @@
             <div class="form-group">
                 <td width="15%"><label>是否生成周期预定（一周）</label>
                     <input type="checkbox" value="false" onchange="showWeeklyBookEndDate()"
-                           th:field="*{isWeeklyBook}"></input>
+                           th:field="*{isWeeklyBook}"/>
                 </td>
                 <td width="30%">
                     <input style="display:none" class="controls input-append date form_datetime"
@@ -82,7 +82,7 @@
             <div class="form-group">
                 <td width="15%"><label>与会人数</label></td>
                 <td width="35%"><input type="number" max="999" min="1"
-                                       th:field="*{attendNum}"></input></td>
+                                       th:field="*{attendNum}"/></td>
             </div>
         </tr>
         <tr>

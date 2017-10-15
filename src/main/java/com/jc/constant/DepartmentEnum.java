@@ -16,8 +16,9 @@ public enum DepartmentEnum {
 
     public static DepartmentEnum match(String name) {
         for (DepartmentEnum departmentEnum : DepartmentEnum.values()) {
-            if (departmentEnum.name().equals(name))
+            if (departmentEnum.name().equals(name)) {
                 return departmentEnum;
+            }
         }
         return DepartmentEnum.其他;
     }

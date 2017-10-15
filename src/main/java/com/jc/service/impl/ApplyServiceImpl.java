@@ -51,22 +51,27 @@ public class ApplyServiceImpl implements ApplyService {
         record.setEmployeeId(employeeId);
         record.setStatus("0");
         List<ActivityApply> applyList = getApply(record);
-        if (applyList != null && applyList.size() > 0)
+        if (applyList != null && applyList.size() > 0) {
             throw new ApplyException("已报名");
+        }
         Activity activity = activityMapper.selectByPrimaryKey(activityId);
         if (activity == null) {
             throw new ApplyException("活动不存在");
         }
         Date now = new Date();
-        if (!"0".equals(activity.getStatus()))
+        if (!"0".equals(activity.getStatus())) {
             throw new ApplyException("活动已取消");
-        if (activity.getApplyBeginTime().after(now))
+        }
+        if (activity.getApplyBeginTime().after(now)) {
             throw new ApplyException(MessageFormat.format("报名未开始 报名开始时间{0}", DateFormatUtils.format(activity.getApplyBeginTime(), DATETIME_FORMAT)));
-        if (activity.getApplyEndTime().before(now))
+        }
+        if (activity.getApplyEndTime().before(now)) {
             throw new ApplyException(MessageFormat.format("报名已结束 报名结束时间{0}", DateFormatUtils.format(activity.getApplyEndTime(), DATETIME_FORMAT)));
+        }
         Employee employee = employeeMapper.selectByPrimaryKey(employeeId);
-        if (employee == null)
+        if (employee == null) {
             throw new ApplyException("未找到该员工");
+        }
         if (!addApplyNum(activityId, 1)) {
             throw new ApplyException("报名失败或已过报名时间");
         }
@@ -91,8 +96,9 @@ public class ApplyServiceImpl implements ApplyService {
         record.setEmployeeId(employeeId);
         record.setStatus("0");
         List<ActivityApply> list = getApply(record);
-        if (list == null || list.size() < 1)
+        if (list == null || list.size() < 1) {
             throw new ApplyException("未找到报名信息");
+        }
         return cancelApply(list.get(0));
     }
 
@@ -112,8 +118,9 @@ public class ApplyServiceImpl implements ApplyService {
 
     @Override
     public boolean cancelApply(ActivityApply record) {
-        if (record == null)
+        if (record == null) {
             throw new ApplyException("未找到报名信息");
+        }
         if (!addApplyNum(record.getActivityId(), -1)) {
             throw new ApplyException("取消失败或已过报名时间");
         }
@@ -129,8 +136,9 @@ public class ApplyServiceImpl implements ApplyService {
         Preconditions.checkNotNull(record, "参数不能为空");
         if (record.getId() != null) {
             record = applyMapper.selectByPrimaryKey(record.getId());
-            if (record != null)
+            if (record != null) {
                 return Lists.newArrayList(record);
+            }
         }
         return applyMapper.select(record);
     }

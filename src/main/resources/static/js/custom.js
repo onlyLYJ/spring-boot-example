@@ -29,7 +29,7 @@ Author: #
 
         }
 
-    }
+    };
     // Initializing ///
 
     $(document).ready(function () {

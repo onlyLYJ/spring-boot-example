@@ -21,7 +21,7 @@ function countUp(target, startVal, endVal, decimals, duration, options) {
         useGrouping: true, // 1,000,000 vs 1000000
         separator: ',', // character to use as a separator
         decimal: '.' // character to use as a decimal
-    }
+    };
 
     // make sure requestAnimationFrame and cancelAnimationFrame are defined
     // polyfill for browsers without native support
@@ -56,7 +56,7 @@ function countUp(target, startVal, endVal, decimals, duration, options) {
     this.d = (typeof target === 'string') ? document.getElementById(target) : target;
     this.startVal = Number(startVal);
     this.endVal = Number(endVal);
-    this.countDown = (this.startVal > this.endVal) ? true : false;
+    this.countDown = (this.startVal > this.endVal);
     this.startTime = null;
     this.timestamp = null;
     this.remaining = null;
@@ -69,7 +69,7 @@ function countUp(target, startVal, endVal, decimals, duration, options) {
     // Robert Penner's easeOutExpo
     this.easeOutExpo = function (t, b, c, d) {
         return c * (-Math.pow(2, -10 * t / d) + 1) * 1024 / 1023 + b;
-    }
+    };
     this.count = function (timestamp) {
 
         if (self.startTime === null) self.startTime = timestamp;
@@ -115,7 +115,7 @@ function countUp(target, startVal, endVal, decimals, duration, options) {
         } else {
             if (self.callback != null) self.callback();
         }
-    }
+    };
     this.start = function (callback) {
         self.callback = callback;
         // make sure values are valid
@@ -126,21 +126,21 @@ function countUp(target, startVal, endVal, decimals, duration, options) {
             self.d.innerHTML = '--';
         }
         return false;
-    }
+    };
     this.stop = function () {
         cancelAnimationFrame(self.rAF);
-    }
+    };
     this.reset = function () {
         self.startTime = null;
         cancelAnimationFrame(self.rAF);
         self.d.innerHTML = self.formatNumber(self.startVal.toFixed(self.decimals));
-    }
+    };
     this.resume = function () {
         self.startTime = null;
         self.duration = self.remaining;
         self.startVal = self.frameVal;
         requestAnimationFrame(self.count);
-    }
+    };
     this.formatNumber = function (nStr) {
         nStr += '';
         var x, x1, x2, rgx;
@@ -154,7 +154,7 @@ function countUp(target, startVal, endVal, decimals, duration, options) {
             }
         }
         return x1 + x2;
-    }
+    };
 
     // format startVal on initialization
     self.d.innerHTML = self.formatNumber(self.startVal.toFixed(self.decimals));

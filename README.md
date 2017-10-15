@@ -8,3 +8,6 @@
 - spring security基本用法
 - hystrix 服务降级基本用法
 - ehcache 缓存
+
+管理员账号：admin
+密码:admin123

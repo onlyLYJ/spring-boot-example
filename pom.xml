@@ -6,10 +6,7 @@
     <groupId>com.jc</groupId>
     <artifactId>jc_apply</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <modules>
-        <module>elasticsearch</module>
-        <module>es</module>
-    </modules>
+
     <packaging>pom</packaging>
 
     <name>jc_apply</name>
@@ -249,6 +246,38 @@
         <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
         <!--<scope>provided</scope>-->
         <!--</dependency>-->
+
+        <!--&lt;!&ndash; MQ &ndash;&gt;-->
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.cloud</groupId>-->
+        <!--<artifactId>spring-cloud-starter-stream-rabbit</artifactId>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+
     </dependencies>
 
     <dependencyManagement>

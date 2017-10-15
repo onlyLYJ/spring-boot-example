@@ -70,13 +70,15 @@ public class MeetingroomBookDetailController extends BaseController {
                                                   Principal principal) {
 
         Integer employeeId = getEmployeeIdByPrincipal(principal);
-        if (employeeId == null || employeeId < 1)
+        if (employeeId == null || employeeId < 1) {
             return buildAuthInvalidResponse();
+        }
 
         MeetingroomBookDetailVO mbdVO = buildSpeedMeetingRoomVO(employeeId, deptId, minutesAfterNow, duration);
 
-        if (meetingroomBookDetailService.addMeetingroomBookDetail(mbdVO))
+        if (meetingroomBookDetailService.addMeetingroomBookDetail(mbdVO)) {
             return buildResponseByEnum(BookResultEnum.APPLY_SUCCESS);
+        }
 
         return buildResponseByEnum(BookResultEnum.APPLY_FAILED);
 
@@ -88,21 +90,24 @@ public class MeetingroomBookDetailController extends BaseController {
     @ResponseBody
     public ResultModel applyNewBook(@ModelAttribute(value = "meetingroomBookDetailVO") @Validated MeetingroomBookDetailVO meetingroomBookDetailVO, Principal principal) {
 
-        if (!setValidEmployeeId(meetingroomBookDetailVO, principal))
+        if (!setValidEmployeeId(meetingroomBookDetailVO, principal)) {
             return buildAuthInvalidResponse();
+        }
 
         //检查是否是周期预定
         if (isWeeklyBook(meetingroomBookDetailVO)) {
 
-            if (meetingroomBookDetailService.addWeeklyBook(meetingroomBookDetailVO))
+            if (meetingroomBookDetailService.addWeeklyBook(meetingroomBookDetailVO)) {
                 return buildResponseByEnum(BookResultEnum.WEEKLY_APPLY_SUCCESS);
+            }
 
             return buildResponseByEnum(BookResultEnum.WEEKLY_APPLY_FAILED);
         }
 
         //非周期预定的情况
-        if (meetingroomBookDetailService.addMeetingroomBookDetail(meetingroomBookDetailVO))
+        if (meetingroomBookDetailService.addMeetingroomBookDetail(meetingroomBookDetailVO)) {
             return buildResponseByEnum(BookResultEnum.APPLY_SUCCESS);
+        }
 
         return buildResponseByEnum(BookResultEnum.APPLY_FAILED);
 
@@ -116,11 +121,13 @@ public class MeetingroomBookDetailController extends BaseController {
                                                    @RequestParam @NotBlank(message = "会议取消原因不能为空") String changeReason, Principal principal) {
 
         Integer employeeId = getEmployeeIdByPrincipal(principal);
-        if (employeeId == null || employeeId < 1)
+        if (employeeId == null || employeeId < 1) {
             return buildAuthInvalidResponse();
+        }
 
-        if (meetingroomBookDetailService.cancelMeetingroomBookDetailById(id, employeeId, changeReason))
+        if (meetingroomBookDetailService.cancelMeetingroomBookDetailById(id, employeeId, changeReason)) {
             return buildResponseByEnum(BookResultEnum.CANCEL_SUCCESS);
+        }
 
         return buildResponseByEnum(BookResultEnum.CANCEL_FAILED);
 
@@ -131,11 +138,13 @@ public class MeetingroomBookDetailController extends BaseController {
     @ResponseBody
     public ResultModel updateMeetingroomBookDetail(@Validated MeetingroomBookDetailVO meetingroomBookDetailVO, Principal principal) {
 
-        if (!setValidEmployeeId(meetingroomBookDetailVO, principal))
+        if (!setValidEmployeeId(meetingroomBookDetailVO, principal)) {
             return buildAuthInvalidResponse();
+        }
 
-        if (meetingroomBookDetailService.updateMeetingroomBookDetailByVO(meetingroomBookDetailVO))
+        if (meetingroomBookDetailService.updateMeetingroomBookDetailByVO(meetingroomBookDetailVO)) {
             return buildResponseByEnum(BookResultEnum.UPDATE_SUCCESS);
+        }
 
         return buildResponseByEnum(BookResultEnum.UPDATE_FAILED);
 
@@ -148,11 +157,13 @@ public class MeetingroomBookDetailController extends BaseController {
     public ResultModel auditMeetingroomBookDetail(@RequestParam @Min(value = 1, message = "审核信息不存在") Integer id, @RequestParam @Pattern(regexp = "^[0|1|2]$", message = "审核状态参数错误") String auditStatus, Principal principal) {
 
         Integer employeeId = getEmployeeIdByPrincipal(principal);
-        if (employeeId == null || employeeId < 1)
+        if (employeeId == null || employeeId < 1) {
             return buildAuthInvalidResponse();
+        }
 
-        if (meetingroomBookDetailService.updateAuditStatusById(id, auditStatus, employeeId))
+        if (meetingroomBookDetailService.updateAuditStatusById(id, auditStatus, employeeId)) {
             return buildResponseByEnum(BookResultEnum.EDIT_AUDIT_SUCCESS);
+        }
 
         return buildResponseByEnum(BookResultEnum.EDIT_AUDIT_FAILED);
     }
@@ -174,8 +185,9 @@ public class MeetingroomBookDetailController extends BaseController {
     @GetMapping("/findDailyBook")
     public String findDailyBookDetail(Model model, @RequestParam Date bookDate) {
 
-        if (bookDate == null)
+        if (bookDate == null) {
             bookDate = new Date();
+        }
 
         List<MeetingroomBookDetail> dailyPage = meetingroomBookDetailService.findDailyBook(bookDate);
         model.addAttribute("dailyBookList", dailyPage);
@@ -201,8 +213,7 @@ public class MeetingroomBookDetailController extends BaseController {
     @ResponseBody
     public MeetingroomBookDetailVO auditMeetingroomBookDetail(@RequestParam @Min(value = 1, message = "审核的预定不存在") Integer id) {
 
-        MeetingroomBookDetailVO auditVO = meetingroomBookDetailService.findMeetingroomBookDetailById(id);
-        return auditVO;
+        return meetingroomBookDetailService.findMeetingroomBookDetailById(id);
     }
 
     /**
@@ -236,9 +247,7 @@ public class MeetingroomBookDetailController extends BaseController {
      */
     private boolean isWeeklyBook(MeetingroomBookDetailVO vo) {
         Date weeklyBookEndDate = vo.getWeeklyBookEndDate();
-        if (vo.getIsWeeklyBook() == null || vo.getIsWeeklyBook() == false || weeklyBookEndDate == null)
-            return false;
-        return true;
+        return vo.getIsWeeklyBook() != null && vo.getIsWeeklyBook() && weeklyBookEndDate != null;
     }
 
     /**
@@ -270,8 +279,9 @@ public class MeetingroomBookDetailController extends BaseController {
      */
     private boolean setValidEmployeeId(MeetingroomBookDetailVO meetingroomBookDetailVO, Principal principal) {
         Integer employeeId = getEmployeeIdByPrincipal(principal);
-        if (employeeId == null || employeeId < 1)
+        if (employeeId == null || employeeId < 1) {
             return false;
+        }
 
         meetingroomBookDetailVO.setEmployeeId(employeeId);
         return true;

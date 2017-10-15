@@ -65,6 +65,7 @@ public class MeetingroomBookChange implements Serializable, Cloneable {
                 '}';
     }
 
+    @Override
     public MeetingroomBookChange clone() {
 
         MeetingroomBookChange record = new MeetingroomBookChange();

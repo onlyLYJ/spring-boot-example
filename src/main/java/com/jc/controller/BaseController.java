@@ -69,27 +69,28 @@ public class BaseController {
 
     Integer getEmployeeIdByPrincipal(Principal principal) {
         String englishName = principal.getName();
-        if (StringUtils.isBlank(englishName))
+        if (StringUtils.isBlank(englishName)) {
             throw new ApplyException("未登录错误");
+        }
         return employeeService.findIdByEnglishName(englishName);
     }
 
     public <T extends Serializable> ResultModel<T> buildErrorResponse(String msg) {
-        ResultModel<T> model = new ResultModel<T>();
+        ResultModel<T> model = new ResultModel<>();
         model.setCode(ResultModel.RESULT_ERROR);
         model.setMsg(msg);
         return model;
     }
 
     protected <T extends Serializable> ResultModel<T> buildErrorResponse(String code, String msg) {
-        ResultModel<T> model = new ResultModel<T>();
+        ResultModel<T> model = new ResultModel<>();
         model.setCode(code);
         model.setMsg(msg);
         return model;
     }
 
     protected <T extends Serializable> ResultModel<T> buildErrorResponse(String msg, T obj) {
-        ResultModel<T> model = new ResultModel<T>();
+        ResultModel<T> model = new ResultModel<>();
         model.setCode(ResultModel.RESULT_ERROR);
         model.setMsg(msg);
         model.setData(obj);
@@ -101,7 +102,7 @@ public class BaseController {
     }
 
     protected <T extends Serializable> ResultModel<T> buildNoPermissionResponse(String msg) {
-        ResultModel<T> model = new ResultModel<T>();
+        ResultModel<T> model = new ResultModel<>();
         model.setCode(ResultModel.RESULT_NOPERMISSION);
         model.setMsg(msg);
         return model;
@@ -112,21 +113,21 @@ public class BaseController {
     }
 
     protected <T extends Serializable> ResultModel<T> buildLimitResponse(String msg) {
-        ResultModel<T> model = new ResultModel<T>();
+        ResultModel<T> model = new ResultModel<>();
         model.setCode(ResultModel.RESULT_NOPERMISSION_LIMIT);
         model.setMsg(msg);
         return model;
     }
 
     protected <T extends Serializable> ResultModel<T> buildAuthInvalidResponse() {
-        ResultModel<T> model = new ResultModel<T>();
+        ResultModel<T> model = new ResultModel<>();
         model.setCode(ResultModel.RESULT_AUTH_INVALID);
         model.setMsg("您的权限验证失败，请登录后再操作！");
         return model;
     }
 
     protected <T extends Serializable> ResultModel<T> buildJCErrorResponse(String msg, T obj) {
-        ResultModel<T> model = new ResultModel<T>();
+        ResultModel<T> model = new ResultModel<>();
         model.setCode(ResultModel.RESULT_JIECAI_ERROR);
         model.setMsg(msg);
         model.setData(obj);
@@ -138,7 +139,7 @@ public class BaseController {
     }
 
     protected <T extends Serializable> ResultModel<T> buildSuccessResponse(T obj) {
-        ResultModel<T> model = new ResultModel<T>();
+        ResultModel<T> model = new ResultModel<>();
         model.setCode(ResultModel.RESULT_SUCCESS);
         model.setMsg("成功");
         model.setData(obj);
@@ -146,7 +147,7 @@ public class BaseController {
     }
 
     protected <T extends Serializable> ResultModel<T> buildResponseByEnum(BaseEnumBehavior baseEnumBehavior) {
-        ResultModel<T> model = new ResultModel<T>();
+        ResultModel<T> model = new ResultModel<>();
         model.setCode(baseEnumBehavior.getCode());
         model.setMsg(baseEnumBehavior.getMsg());
         return model;
@@ -210,8 +211,9 @@ public class BaseController {
         Field[] deClaredFields = t.getDeclaredFields();
         fset.addAll(Arrays.asList(deClaredFields));
         Class c = t.getSuperclass();
-        if (c != null)
+        if (c != null) {
             fset.addAll(getAllFields(c));
+        }
         return fset;
     }
 

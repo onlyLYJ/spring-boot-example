@@ -33,7 +33,9 @@ public class ActivityServiceImpl implements ActivityService {
      * @param activity
      */
     public static void setStatus(Activity activity) {
-        if (activity == null) return;
+        if (activity == null) {
+            return;
+        }
         if ("1".equals(activity.getStatus())) {
             activity.setStatus("已取消");
             return;
@@ -50,7 +52,6 @@ public class ActivityServiceImpl implements ActivityService {
             }
             if (activity.getApplyEndTime().before(now)) {
                 activity.setStatus("报名已结束");
-                return;
             }
         }
     }
@@ -71,8 +72,9 @@ public class ActivityServiceImpl implements ActivityService {
         re.setStartTime(record.getStartTime());
         re.setStatus("0");
         List<Activity> list = getActivity(re);
-        if (list != null && list.size() > 0)
+        if (list != null && list.size() > 0) {
             throw new ApplyException("活动已存在");
+        }
 
         activityMapper.insertUseGeneratedKeys(record);
         return record;
@@ -122,7 +124,9 @@ public class ActivityServiceImpl implements ActivityService {
         List<Activity> activities = Lists.newArrayList();
         if (record.getId() != null) {
             Activity activity = activityMapper.selectByPrimaryKey(record.getId());
-            if (activity != null) activities.add(activity);
+            if (activity != null) {
+                activities.add(activity);
+            }
             return activities;
         }
         return activityMapper.select(record);

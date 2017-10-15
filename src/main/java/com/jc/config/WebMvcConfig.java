@@ -94,11 +94,13 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
                 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
                 source = StringUtils.trim(source);
-                if (StringUtils.isBlank(source))
+                if (StringUtils.isBlank(source)) {
                     return null;
+                }
 
-                if (source.length() == 10)
+                if (source.length() == 10) {
                     sdf = new SimpleDateFormat("yyyy-MM-dd");
+                }
 
                 if (source.contains("T")) {
                     source = source.replace('T', ' ');

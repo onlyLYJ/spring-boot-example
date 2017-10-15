@@ -75,7 +75,9 @@ public class RateLimitUtil {
      * @return
      */
     private boolean tryAcquireRedis() {
-        if (redisTemplate == null) return true;
+        if (redisTemplate == null) {
+            return true;
+        }
         long i = redisTemplate.opsForValue().increment(key, 1);
         if (i == 1L) {
             redisTemplate.expire(key, second, TimeUnit.SECONDS);

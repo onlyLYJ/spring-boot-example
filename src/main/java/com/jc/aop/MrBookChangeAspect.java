@@ -45,7 +45,7 @@ public class MrBookChangeAspect {
 
     }
 
-    @After("annotationPointCut() && args(id, employeeId, changeReason)")
+    @After(value = "annotationPointCut() && args(id, employeeId, changeReason)", argNames = "id,employeeId,changeReason")
     public void saveMrBookChange(Integer id, Integer employeeId, String changeReason) throws Throwable {
 
         MeetingroomBookChange record = new MeetingroomBookChange();

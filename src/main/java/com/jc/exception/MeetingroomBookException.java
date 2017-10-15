@@ -38,19 +38,18 @@ public class MeetingroomBookException extends BaseEnumException {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
-        if (conflictList == null || conflictList.size() < 0) {
+        if (conflictList == null || conflictList.size() == 0) {
             log.error("冲突会议室查询错误！");
             return "";
         }
 
         String roomName = conflictList.get(0).getRoomName();
-        StringBuffer sb = new StringBuffer("哎呀，预定时间有冲突啦！\r详情信息：\r会议室名: ").
-                append(roomName + "\r");
+        StringBuilder sb = new StringBuilder("哎呀，预定时间有冲突啦！\r详情信息：\r会议室名: ").append(roomName).append("\r");
 
         for (MeetingroomBookDetail detail : conflictList) {
-            sb.append("预定部门： ").append(detail.getDeptName() + "\r");
-            sb.append("会议开始时间： ").append(sdf.format(detail.getMeetingBeginTime()) + "\r");
-            sb.append("会议结束时间： ").append(sdf.format(detail.getMeetingEndTime()) + "\r\r");
+            sb.append("预定部门： ").append(detail.getDeptName()).append("\r");
+            sb.append("会议开始时间： ").append(sdf.format(detail.getMeetingBeginTime())).append("\r");
+            sb.append("会议结束时间： ").append(sdf.format(detail.getMeetingEndTime())).append("\r\r");
         }
         log.info("冲突会议室信查询成功 ");
         return sb.toString();

@@ -45,7 +45,9 @@ public class AppFilterInvocationSecurityMetadataSource implements FilterInvocati
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
-        if (map == null) loadResourceDefine();
+        if (map == null) {
+            loadResourceDefine();
+        }
         HttpServletRequest request = ((FilterInvocation) o).getHttpRequest();
         AntPathRequestMatcher matcher;
         for (String key : map.keySet()) {
